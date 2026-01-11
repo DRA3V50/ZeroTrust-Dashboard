@@ -1,1 +1,16 @@
+-- Zero Trust domain coverage
+CREATE TABLE zero_trust (
+    id INTEGER PRIMARY KEY,
+    domain TEXT,
+    coverage INTEGER,        -- 0-100%
+    last_updated DATE
+);
 
+-- Optional: ISO 27001 controls
+CREATE TABLE iso27001 (
+    id INTEGER PRIMARY KEY,
+    control TEXT,
+    status TEXT,             -- Implemented / Partial / Gap
+    risk_level TEXT,         -- Low / Medium / High
+    last_checked DATE
+);
