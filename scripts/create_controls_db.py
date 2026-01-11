@@ -3,25 +3,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+DATA_DIR.mkdir(exist_ok=True)
 DB_PATH = DATA_DIR / "controls.db"
 
-# Delete invalid DB file if it exists
+# Delete old DB if exists (safety)
 if DB_PATH.exists():
     DB_PATH.unlink()
 
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
-# Create Zero Trust table
+# Create tables
 cursor.execute("""
 CREATE TABLE zero_trust (
     domain TEXT PRIMARY KEY,
     coverage INTEGER
 )
 """)
-
-# Create ISO 27001 table
 cursor.execute("""
 CREATE TABLE iso27001 (
     control TEXT PRIMARY KEY,
@@ -29,7 +27,7 @@ CREATE TABLE iso27001 (
 )
 """)
 
-# Insert sample data (you can expand later)
+# Sample data
 zero_trust_data = [
     ("Identity", 90),
     ("Device", 75),
