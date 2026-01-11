@@ -1,27 +1,37 @@
-name: Daily Dashboard Update
+name: Daily ZeroTrust Dashboard Update
 
+# Trigger schedule: twice daily in EST
 on:
   schedule:
-    - cron: '0 0 * * *'   # Every day at midnight UTC
-  workflow_dispatch:      # Optional manual run
+    # Early morning EST (7 AM) → 12:00 UTC
+    - cron: '0 12 * * *'
+    # Late night EST (11 PM) → 04:00 UTC (next day)
+    - cron: '0 4 * * *'
+  workflow_dispatch:  # allows manual run
 
 jobs:
   update_dashboard:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-    - name: Run Dashboard Update
+
+    - name: Install dependencies
+      run: pip install --upgrade pip  # optional, add more if you later need libraries like matplotlib
+
+    - name: Run Python Dashboard Script
       run: python scripts/update_dashboard.py
-    - name: Commit & Push Report
+
+    - name: Commit & Push Updated Report
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add reports/latest_report.md
-        git commit -m "Daily Zero Trust update" || echo "No changes"
+        git commit -m "Automated daily update of Zero Trust dashboard" || echo "No changes to commit"
         git push
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
