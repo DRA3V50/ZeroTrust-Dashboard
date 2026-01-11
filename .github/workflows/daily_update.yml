@@ -1,13 +1,12 @@
 name: Daily ZeroTrust Dashboard Update
 
-# Trigger schedule: twice daily in EST (converted to UTC)
 on:
   schedule:
     # Early morning EST (7 AM) → 12:00 UTC
     - cron: '0 12 * * *'
-    # Late night EST (11 PM) → 04:00 UTC (next day)
+    # Late night EST (11 PM) → 04:00 UTC
     - cron: '0 4 * * *'
-  workflow_dispatch:  # allows manual run
+  workflow_dispatch:
 
 jobs:
   update_dashboard:
@@ -25,8 +24,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        # Add other packages here if needed in the future
 
+    # ✅ Create the database dynamically if missing
+    - name: Create SQLite DB if missing
+      run: python scripts/create_controls_db.py
+
+    # Run dashboard and badge scripts
     - name: Run Python Scripts
       run: |
         python scripts/update_dashboard.py
