@@ -1,9 +1,11 @@
 import sqlite3
 from datetime import date
+from pathlib import Path
 
-# Paths
-DB_PATH = '../data/controls.db'
-REPORT_PATH = '../reports/latest_report.md'
+# Dynamically set paths
+ROOT = Path(__file__).parent.parent  # scripts/ -> repo root
+DB_PATH = ROOT / "data" / "controls.db"
+REPORT_PATH = ROOT / "reports" / "latest_report.md"
 
 def fetch_metrics():
     conn = sqlite3.connect(DB_PATH)
@@ -22,6 +24,8 @@ def fetch_metrics():
 
 def generate_report(zero_trust, iso_controls):
     today = date.today().isoformat()
+    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+
     with open(REPORT_PATH, 'w') as f:
         f.write(f"# Zero Trust Dashboard Report\n\n")
         f.write(f"**Date:** {today}\n\n")
