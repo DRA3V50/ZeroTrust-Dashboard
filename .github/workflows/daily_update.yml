@@ -22,19 +22,23 @@ jobs:
         with:
           python-version: '3.11'
 
-      # 3️⃣ Upgrade pip (no sqlite install)
-      - name: Install dependencies
+      # 3️⃣ Upgrade pip (no sqlite3 install needed)
+      - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      # 4️⃣ Update dashboard report
+      # 4️⃣ Create database if missing (Option 2)
+      - name: Create Controls DB
+        run: python scripts/create_controls_db.py
+
+      # 5️⃣ Update dashboard report
       - name: Update Dashboard
         run: python scripts/update_dashboard.py
 
-      # 5️⃣ Generate badges
+      # 6️⃣ Generate badges
       - name: Generate Badges
         run: python scripts/generate_badges.py
 
-      # 6️⃣ Commit & Push updates using PAT
+      # 7️⃣ Commit & Push updates using PAT
       - name: Commit & Push Updates
         env:
           GH_PAT: ${{ secrets.PAT_Token }}
