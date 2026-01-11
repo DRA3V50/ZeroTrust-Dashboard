@@ -1,11 +1,11 @@
 name: Daily Dashboard Update
 
-# Schedule: Twice daily in EST (UTC 10:00 & 04:00)
+# Schedule: Twice daily in EST (early morning & late night)
 on:
   schedule:
     - cron: '10 10 * * *'  # 05:00 EST
     - cron: '0 4 * * *'    # 23:00 EST
-  workflow_dispatch:       # allow manual trigger
+  workflow_dispatch:       # manual trigger
 
 jobs:
   update-dashboard:
@@ -22,11 +22,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      # 3️⃣ Upgrade pip (no sqlite3 install needed)
+      # 3️⃣ Upgrade pip
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      # 4️⃣ Create database if missing (Option 2)
+      # 4️⃣ Create database if missing
       - name: Create Controls DB
         run: python scripts/create_controls_db.py
 
@@ -38,13 +38,14 @@ jobs:
       - name: Generate Badges
         run: python scripts/generate_badges.py
 
-      # 7️⃣ Commit & Push updates using PAT
+      # 7️⃣ Commit & Push updates using PAT_TOKEN
       - name: Commit & Push Updates
         env:
-          GH_PAT: ${{ secrets.PAT_Token }}
+          GH_PAT: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add reports/latest_report.md assets/badges/*.svg
           git commit -m "Automated daily update: report + badges" || echo "No changes to commit"
-          git push https://x-access-token:${GH_PAT}@github.com/DRA3V50/ZeroTrust-Dashboard.git HEAD:main
+          git push https://x-access-token:${GH_PAT}@github.com/${{ github.repository }} HEAD:main
+
