@@ -1,41 +1,39 @@
 import sqlite3
-from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 DB_PATH = ROOT / "data" / "controls.db"
-REPORT_PATH = ROOT / "reports" / "latest_report.md"
+REPORT_FILE = ROOT / "reports" / "latest_report.md"
 
 def fetch_metrics():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
+    # Zero Trust
     cursor.execute("SELECT domain, coverage FROM zero_trust")
-    zero_trust_data = cursor.fetchall()
+    zero_trust = cursor.fetchall()
 
-    cursor.execute("SELECT control, status, risk_level FROM iso27001")
-    iso_data = cursor.fetchall()
+    # ISO 27001
+    cursor.execute("SELECT control, status FROM iso27001")
+    iso_controls = cursor.fetchall()
 
     conn.close()
-    return zero_trust_data, iso_data
+    return zero_trust, iso_controls
 
-def generate_report(zero_trust, iso_controls):
-    today = date.today().isoformat()
-    REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
+def generate_report():
+    zero_trust, iso_controls = fetch_metrics()
+    lines = ["# Zero Trust Dashboard Report\n"]
 
-    with open(REPORT_PATH, 'w') as f:
-        f.write(f"# Zero Trust Dashboard Report\n\n")
-        f.write(f"**Date:** {today}\n\n")
+    lines.append("## Zero Trust Coverage")
+    for domain, coverage in zero_trust:
+        lines.append(f"- {domain}: {coverage}%")
 
-        f.write("## Zero Trust Domain Coverage\n")
-        for domain, coverage in zero_trust:
-            f.write(f"- {domain}: {coverage}%\n")
+    lines.append("\n## ISO 27001 Controls")
+    for control, status in iso_controls:
+        lines.append(f"- {control}: {status}")
 
-        f.write("\n## ISO 27001 Control Status\n")
-        for control, status, risk in iso_controls:
-            f.write(f"- {control}: {status} (Risk: {risk})\n")
+    REPORT_FILE.write_text("\n".join(lines))
+    print("Dashboard report updated successfully.")
 
 if __name__ == "__main__":
-    zero_trust, iso_controls = fetch_metrics()
-    generate_report(zero_trust, iso_controls)
-    print("Dashboard report updated successfully.")
+    generate_report()
