@@ -1,37 +1,30 @@
 import sqlite3
 from pathlib import Path
 
-# Paths
 ROOT = Path(__file__).parent.parent
 DB_PATH = ROOT / "data" / "controls.db"
 BADGE_DIR = ROOT / "assets" / "badges"
 BADGE_DIR.mkdir(parents=True, exist_ok=True)
 
 def create_badge(name, value):
-    """
-    Create an SVG badge and save it to assets/badges.
-    Numeric values (like coverage) control color.
-    ISO 27001 status strings also have color coding.
-    """
-    # Determine numeric value for Zero Trust coverage
+    # Numeric coverage
     if isinstance(value, str) and value.endswith('%'):
         numeric_value = int(value.rstrip('%'))
-        # Color based on percentage
         color = "#4c1" if numeric_value >= 80 else "#dfb317" if numeric_value >= 50 else "#e05d44"
     elif isinstance(value, int):
         numeric_value = value
         color = "#4c1" if numeric_value >= 80 else "#dfb317" if numeric_value >= 50 else "#e05d44"
     elif isinstance(value, str):
-        # ISO 27001 status badge coloring
+        # ISO status coloring
         status_lower = value.lower()
         if "compliant" in status_lower:
-            color = "#4c1"  # green
+            color = "#4c1"
         elif "partial" in status_lower:
-            color = "#dfb317"  # yellow
+            color = "#dfb317"
         else:
-            color = "#e05d44"  # red
+            color = "#e05d44"
     else:
-        color = "#555"  # fallback
+        color = "#555"
 
     svg = f"""
 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="20">
@@ -53,7 +46,6 @@ def create_badge(name, value):
   </g>
 </svg>
 """
-    # Save badge
     file_path = BADGE_DIR / f"{name.lower().replace(' ','_').replace('/','_')}.svg"
     with open(file_path, 'w') as f:
         f.write(svg)
@@ -65,13 +57,13 @@ def generate_badges():
     # Zero Trust badges
     cursor.execute("SELECT domain, coverage FROM zero_trust")
     for domain, coverage in cursor.fetchall():
-        create_badge(domain, f"{coverage}%")  # numeric coverage
+        create_badge(domain, f"{coverage}%")
 
     # ISO 27001 badges
     cursor.execute("SELECT control, status FROM iso27001")
     for control, status in cursor.fetchall():
         short_control = control.split(":")[0] if ":" in control else control
-        create_badge(short_control, status)  # string status
+        create_badge(short_control, status)
 
     conn.close()
     print("Badges generated successfully.")
