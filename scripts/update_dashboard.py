@@ -2,8 +2,7 @@ import sqlite3
 from datetime import date
 from pathlib import Path
 
-# Dynamically set paths
-ROOT = Path(__file__).parent.parent  # scripts/ -> repo root
+ROOT = Path(__file__).parent.parent
 DB_PATH = ROOT / "data" / "controls.db"
 REPORT_PATH = ROOT / "reports" / "latest_report.md"
 
@@ -11,11 +10,9 @@ def fetch_metrics():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Zero Trust domains
     cursor.execute("SELECT domain, coverage FROM zero_trust")
     zero_trust_data = cursor.fetchall()
 
-    # ISO 27001 controls
     cursor.execute("SELECT control, status, risk_level FROM iso27001")
     iso_data = cursor.fetchall()
 
