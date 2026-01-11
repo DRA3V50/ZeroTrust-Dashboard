@@ -1,45 +1,42 @@
-name: Daily ZeroTrust Dashboard Update
+name: Daily Dashboard Update
 
+# Run twice a day in EST (convert to UTC: 05:00 & 23:00 EST → 10:00 & 04:00 UTC)
 on:
   schedule:
-    # Early morning EST (7 AM) → 12:00 UTC
-    - cron: '0 12 * * *'
-    # Late night EST (11 PM) → 04:00 UTC
-    - cron: '0 4 * * *'
-  workflow_dispatch:
+    - cron: '10 10 * * *'  # 05:00 EST
+    - cron: '0 4 * * *'    # 23:00 EST
+  workflow_dispatch:       # allow manual trigger
 
 jobs:
-  update_dashboard:
+  update-dashboard:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install sqlite3  # if needed
 
-    # ✅ Create SQLite DB if missing / remove invalid
-    - name: Create SQLite DB
-      run: python scripts/create_controls_db.py
+      - name: Update Dashboard
+        run: python scripts/update_dashboard.py
 
-    # Run dashboard and badge scripts
-    - name: Run Python Scripts
-      run: |
-        python scripts/update_dashboard.py
-        python scripts/generate_badges.py
+      - name: Generate Badges
+        run: python scripts/generate_badges.py
 
-    # Commit and push generated files
-    - name: Commit & Push Updates
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add reports/latest_report.md assets/badges/*.svg
-        git commit -m "Automated daily update: report + badges" || echo "No changes to commit"
-        git push
+      - name: Commit & Push Updates
+        env:
+          GH_PAT: ${{ secrets.PAT_Token }}
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add reports/latest_report.md assets/badges/*.svg
+          git commit -m "Automated daily update: report + badges" || echo "No changes to commit"
+          git push https://x-access-token:${GH_PAT}@github.com/DRA3V50/ZeroTrust-Dashboard.git HEAD:main
