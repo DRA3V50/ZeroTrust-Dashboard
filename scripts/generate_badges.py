@@ -1,11 +1,12 @@
 import sqlite3
 from pathlib import Path
 
-DB_PATH = '../data/controls.db'
-BADGE_DIR = '../assets/badges'
+# Dynamically set paths
+ROOT = Path(__file__).parent.parent  # scripts/ -> repo root
+DB_PATH = ROOT / "data" / "controls.db"
+BADGE_DIR = ROOT / "assets" / "badges"
 
-BADGE_DIR_PATH = Path(BADGE_DIR)
-BADGE_DIR_PATH.mkdir(parents=True, exist_ok=True)
+BADGE_DIR.mkdir(parents=True, exist_ok=True)
 
 def create_badge(name, value):
     """Generates a simple SVG badge"""
@@ -30,7 +31,7 @@ def create_badge(name, value):
   </g>
 </svg>
 """
-    file_path = BADGE_DIR_PATH / f"{name.lower().replace(' ', '_')}.svg"
+    file_path = BADGE_DIR / f"{name.lower().replace(' ', '_')}.svg"
     with open(file_path, 'w') as f:
         f.write(svg)
 
