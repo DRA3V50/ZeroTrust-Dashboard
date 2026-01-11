@@ -1,16 +1,13 @@
 import sqlite3
 from pathlib import Path
 
-# Dynamically set paths
-ROOT = Path(__file__).parent.parent  # scripts/ -> repo root
+ROOT = Path(__file__).parent.parent
 DB_PATH = ROOT / "data" / "controls.db"
 BADGE_DIR = ROOT / "assets" / "badges"
-
 BADGE_DIR.mkdir(parents=True, exist_ok=True)
 
 def create_badge(name, value):
-    """Generates a simple SVG badge"""
-    color = "#4c1" if isinstance(value, int) and value >= 80 else "#dfb317" if value >= 50 else "#e05d44"
+    color = "#4c1" if isinstance(value,int) and value>=80 else "#dfb317" if value>=50 else "#e05d44"
     svg = f"""
 <svg xmlns="http://www.w3.org/2000/svg" width="150" height="20">
   <linearGradient id="b" x2="0" y2="100%">
@@ -27,12 +24,12 @@ def create_badge(name, value):
   </g>
   <g fill="#fff" text-anchor="middle" font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11">
     <text x="45" y="14">{name}</text>
-    <text x="120" y="14">{value if isinstance(value,int) else value}</text>
+    <text x="120" y="14">{value}</text>
   </g>
 </svg>
 """
-    file_path = BADGE_DIR / f"{name.lower().replace(' ', '_')}.svg"
-    with open(file_path, 'w') as f:
+    file_path = BADGE_DIR / f"{name.lower().replace(' ','_')}.svg"
+    with open(file_path,'w') as f:
         f.write(svg)
 
 def generate_badges():
@@ -55,3 +52,4 @@ def generate_badges():
 
 if __name__ == "__main__":
     generate_badges()
+
