@@ -1,6 +1,6 @@
 from pathlib import Path
-import svgwrite
 import sqlite3
+import svgwrite
 
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
@@ -9,11 +9,31 @@ BADGES_DIR = ROOT / "assets/badges"
 BADGES_DIR.mkdir(parents=True, exist_ok=True)
 
 def create_badge(label, value, path):
-    # Determine color
-    color = "#4c1" if isinstance(value,int) and value >= 80 else "#dfb317" if value >= 50 else "#e05d44"
+    # Determine color based on value type
+    if isinstance(value, int):
+        # Zero Trust coverage percentages
+        if value >= 80:
+            color = "#4c1"        # green
+        elif value >= 50:
+            color = "#dfb317"     # yellow
+        else:
+            color = "#e05d44"     # red
+        display_value = f"{value}%"
+    else:
+        # ISO 27001 string statuses
+        val_lower = str(value).lower()
+        if val_lower == "compliant":
+            color = "#4c1"
+        elif val_lower == "partial":
+            color = "#dfb317"
+        else:  # Non-Compliant
+            color = "#e05d44"
+        display_value = value
+
+    # Create SVG badge
     dwg = svgwrite.Drawing(str(path), size=("120px", "20px"))
     dwg.add(dwg.rect(insert=(0, 0), size=("120px", "20px"), fill=color))
-    dwg.add(dwg.text(f"{label}: {value}", insert=(5, 15), fill="white", font_size="12px"))
+    dwg.add(dwg.text(f"{label}: {display_value}", insert=(5, 15), fill="white", font_size="12px"))
     dwg.save()
 
 def generate_badges():
