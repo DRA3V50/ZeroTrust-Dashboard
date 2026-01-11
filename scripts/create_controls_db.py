@@ -26,23 +26,27 @@ CREATE TABLE IF NOT EXISTS iso27001 (
 )
 """)
 
-# Insert sample data
-cursor.executemany("INSERT INTO zero_trust (domain, coverage) VALUES (?, ?)", [
-    ('Identity', 85),
-    ('Device', 75),
-    ('Network', 65),
-    ('Application', 90),
-    ('Data', 80)
-])
+# Insert sample data (only if empty)
+cursor.execute("SELECT COUNT(*) FROM zero_trust")
+if cursor.fetchone()[0] == 0:
+    cursor.executemany("INSERT INTO zero_trust (domain, coverage) VALUES (?, ?)", [
+        ('Identity', 85),
+        ('Device', 75),
+        ('Network', 65),
+        ('Application', 90),
+        ('Data', 80)
+    ])
 
-cursor.executemany("INSERT INTO iso27001 (control, status, risk_level) VALUES (?, ?, ?)", [
-    ('A.5.1 Information Security Policies','Compliant','Low'),
-    ('A.6.1 Organization of Info Security','Partial','Medium'),
-    ('A.7.2 Employee Awareness','Compliant','Low'),
-    ('A.9.2 Access Control','Partial','Medium')
-])
+cursor.execute("SELECT COUNT(*) FROM iso27001")
+if cursor.fetchone()[0] == 0:
+    cursor.executemany("INSERT INTO iso27001 (control, status, risk_level) VALUES (?, ?, ?)", [
+        ('A.5.1 Information Security Policies','Compliant','Low'),
+        ('A.6.1 Organization of Info Security','Partial','Medium'),
+        ('A.7.2 Employee Awareness','Compliant','Low'),
+        ('A.9.2 Access Control','Partial','Medium')
+    ])
 
 conn.commit()
 conn.close()
 
-print(f"Database created at {DB_PATH}")
+print(f"Database created/verified at {DB_PATH}")
