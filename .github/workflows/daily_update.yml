@@ -1,0 +1,27 @@
+name: Daily Dashboard Update
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # Every day at midnight UTC
+  workflow_dispatch:      # Optional manual run
+
+jobs:
+  update_dashboard:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    - name: Run Dashboard Update
+      run: python scripts/update_dashboard.py
+    - name: Commit & Push Report
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add reports/latest_report.md
+        git commit -m "Daily Zero Trust update" || echo "No changes"
+        git push
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
