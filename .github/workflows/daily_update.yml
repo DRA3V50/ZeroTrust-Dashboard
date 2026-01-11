@@ -3,7 +3,7 @@ name: Daily Dashboard Update
 # Schedule: Twice daily in EST (early morning & late night)
 on:
   schedule:
-    - cron: '10 10 * * *'  # 05:00 EST
+    - cron: '10 10 * * *'  # 05:10 EST
     - cron: '0 4 * * *'    # 23:00 EST
   workflow_dispatch:       # manual trigger
 
