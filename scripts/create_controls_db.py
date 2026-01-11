@@ -1,51 +1,54 @@
 import sqlite3
 from pathlib import Path
 
-# Paths
 ROOT = Path(__file__).parent.parent
-DB_PATH = ROOT / "data" / "controls.db"
-DB_PATH.parent.mkdir(parents=True, exist_ok=True)  # ensure data/ exists
+DATA_DIR = ROOT / "data"
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+DB_PATH = DATA_DIR / "controls.db"
 
-# Remove invalid/placeholder DB if it exists
+# Delete invalid DB file if it exists
 if DB_PATH.exists():
-    DB_PATH.unlink()  # DELETE the file if it exists
+    DB_PATH.unlink()
 
-# Create new SQLite database
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
-# Create tables
+# Create Zero Trust table
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS zero_trust (
-    domain TEXT,
+CREATE TABLE zero_trust (
+    domain TEXT PRIMARY KEY,
     coverage INTEGER
 )
 """)
 
+# Create ISO 27001 table
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS iso27001 (
-    control TEXT,
-    status TEXT,
-    risk_level TEXT
+CREATE TABLE iso27001 (
+    control TEXT PRIMARY KEY,
+    status TEXT
 )
 """)
 
-# Insert sample data
-cursor.executemany("INSERT INTO zero_trust (domain, coverage) VALUES (?, ?)", [
-    ('Identity', 85),
-    ('Device', 75),
-    ('Network', 65),
-    ('Application', 90),
-    ('Data', 80)
-])
+# Insert sample data (you can expand later)
+zero_trust_data = [
+    ("Identity", 90),
+    ("Device", 75),
+    ("Network", 60),
+    ("Application", 85),
+    ("Data", 80)
+]
 
-cursor.executemany("INSERT INTO iso27001 (control, status, risk_level) VALUES (?, ?, ?)", [
-    ('A.5.1 Information Security Policies','Compliant','Low'),
-    ('A.6.1 Organization of Info Security','Partial','Medium'),
-    ('A.7.2 Employee Awareness','Compliant','Low'),
-    ('A.9.2 Access Control','Partial','Medium')
-])
+iso_data = [
+    ("A.5.1 Information security policies", "Compliant"),
+    ("A.6.1 Organization of information security", "Partial"),
+    ("A.7.2 Employee awareness", "Non-Compliant"),
+    ("A.9.2 Access control", "Compliant")
+]
+
+cursor.executemany("INSERT INTO zero_trust(domain, coverage) VALUES (?, ?)", zero_trust_data)
+cursor.executemany("INSERT INTO iso27001(control, status) VALUES (?, ?)", iso_data)
 
 conn.commit()
 conn.close()
-print(f"Database created at {DB_PATH}")
+
+print(f"Database created successfully at {DB_PATH}")
