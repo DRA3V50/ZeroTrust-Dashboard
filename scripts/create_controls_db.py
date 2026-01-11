@@ -3,10 +3,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
-DATA_DIR.mkdir(exist_ok=True)
+DATA_DIR.mkdir(parents=True, exist_ok=True)  # create data/ if missing
 DB_PATH = DATA_DIR / "controls.db"
 
-# Delete old DB if exists (safety)
+# Remove old DB if exists
 if DB_PATH.exists():
     DB_PATH.unlink()
 
