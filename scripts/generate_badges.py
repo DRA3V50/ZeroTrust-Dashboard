@@ -52,4 +52,3 @@ def generate_badges():
 
 if __name__ == "__main__":
     generate_badges()
-
