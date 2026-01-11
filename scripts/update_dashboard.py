@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import date
 
+# Paths
 DB_PATH = '../data/controls.db'
 REPORT_PATH = '../reports/latest_report.md'
 
@@ -8,9 +9,11 @@ def fetch_metrics():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
+    # Zero Trust domains
     cursor.execute("SELECT domain, coverage FROM zero_trust")
     zero_trust_data = cursor.fetchall()
 
+    # ISO 27001 controls
     cursor.execute("SELECT control, status, risk_level FROM iso27001")
     iso_data = cursor.fetchall()
 
@@ -34,3 +37,4 @@ def generate_report(zero_trust, iso_controls):
 if __name__ == "__main__":
     zero_trust, iso_controls = fetch_metrics()
     generate_report(zero_trust, iso_controls)
+    print("Dashboard report updated successfully.")
