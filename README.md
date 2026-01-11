@@ -27,3 +27,18 @@ Designed to showcase skills in **data analysis, automation, and security monitor
 1. Metrics stored in `data/controls.db` (SQLite)  
 2. `scripts/update_dashboard.py` fetches metrics and generates `reports/latest_report.md`  
 3. GitHub Action runs daily, updating the dashboard automatically
+
+---
+
+## Zero Trust Badges
+
+![Identity](assets/badges/identity.svg)
+![Device](assets/badges/device.svg)
+![Network](assets/badges/network.svg)
+![Application](assets/badges/application.svg)
+![Data](assets/badges/data.svg)
+
+## ISO 27001 Control Badges
+
+![A.5.1 Information Security Policies](assets/badges/a.5.1_information_security_policies.svg)
+![A.6.1 Organization of Information Security](assets/badges/a.6.1_organization_of_information_security.svg)
