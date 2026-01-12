@@ -3,7 +3,7 @@
 ---
 
 ## 🔎 Overview
-The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. By leveraging **Python**, **SQLite**, and **GitHub Actions**, this system ensures metrics, reports, and visualizations are updated twice daily, supporting informed security decision-making.
+The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. By leveraging **Python**, **SQLite**, and **GitHub Actions**, this system ensures metrics, reports, badges, and visualizations are updated twice daily, supporting informed security decision-making.
 
 - Provides consistent, auditable insights for operational and federal security teams.  
 - Supports ongoing monitoring without manual intervention.  
@@ -14,7 +14,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ## 🛡️ Targeted Features
 - **Zero Trust Posture Evaluation**: Continuous assessment across five critical domains—Identity, Device, Network, Application, and Data.  
 - **ISO 27001 Compliance Monitoring**: Tracks coverage of critical controls, highlighting gaps and compliance levels.  
-- **Automated Daily Updates**: All graphs, badges, and reports are refreshed twice daily to reflect the latest data.  
+- **Automated Daily Updates**: Graphs, badges, and reports are refreshed twice daily to reflect the latest data.  
 - **Data-Driven Insights**: Supports actionable decision-making through real-time metrics.  
 - **Demonstration and Testing**: Graphs and badges are generated with dynamic or randomized data for testing, without affecting production outputs.  
 
@@ -43,14 +43,15 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 - **Visualizations**:  
   - **Graphs**: Dynamic visual representation of Zero Trust and ISO-27001 coverage. Updated daily, showing the latest results without overwriting previous data.  
   - **Badges**: Real-time visual summaries of individual controls.  
-- Graphs feature a professional dark theme with smaller, readable sizes (~330px width) for dashboards or executive briefings.  
 
-> **⚠️ Note**: Graphs are updated twice daily to reflect the latest data, without overwriting previous outputs.  
+> **⚠️ Note**: Graphs and badges are updated twice daily to reflect the latest data.
+
+Graphs use a professional dark theme and are sized for readability (~295px wide) on dashboards and reports.
 
 ---
 
 ## 📝 Security Monitoring and Audit Support
-The dashboard supports operational monitoring, compliance tracking, and audit readiness:
+The dashboard supports operational monitoring, compliance tracking, and audit readiness:  
 
 - **Track Compliance**: Monitor controls across domains and ISO 27001 standards.  
 - **Identify Gaps**: Highlight areas of insufficient security or non-compliance.  
@@ -60,36 +61,37 @@ The dashboard supports operational monitoring, compliance tracking, and audit re
 
 ---
 
-## 📊 Dashboards and Badges 📇
+## 📊 Dashboards and Badges
 
 ### Latest Zero Trust Posture
 - Visual representation of domain scores updated daily.  
 - Provides actionable insight for analysts and leadership.  
-![Zero Trust Posture](outputs/graphs/zero_trust_posture_YYYYMMDD_HHMM.png)
+![Zero Trust Posture](assets/graphs/zero_trust_posture.png)
 
 ### Latest ISO 27001 Control Coverage
 - Daily updated visual representation of control compliance.  
 - Highlights strengths and areas needing attention.  
-![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage_YYYYMMDD_HHMM.png)
+![ISO 27001 Control Coverage](assets/graphs/iso_27001_coverage.png)
 
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.  
-![A.5.1](outputs/badges/A.5.1_YYYYMMDD_HHMM.svg)  
-![A.6.1](outputs/badges/A.6.1_YYYYMMDD_HHMM.svg)  
-![A.8.2](outputs/badges/A.8.2_YYYYMMDD_HHMM.svg)  
-![A.9.2](outputs/badges/A.9.2_YYYYMMDD_HHMM.svg)
+![A.5.1](assets/badges/A.5.1.svg)  
+![A.6.1](assets/badges/A.6.1.svg)  
+![A.8.2](assets/badges/A.8.2.svg)  
+![A.9.2](assets/badges/A.9.2.svg)
 
 ### 🗂 Metrics Table
-> Note: This table is automatically updated daily by the workflow, reflecting the latest Zero Trust and ISO 27001 control scores.
+| Control ID | Domain | Score (%) |
+|-----------|--------|-----------|
+| A.5.1 | Policy | 85 |
+| A.6.1 | Access Control | 75 |
+| A.8.2 | Assets | 90 |
+| A.9.2 | Monitoring | 60 |
 
-| Control ID | Domain   | Score (%) |
-|------------|---------|-----------|
-| A.5.1      | Policy   | 85        |
-| A.6.1      | Access   | 75        |
-| A.8.2      | Risk     | 90        |
-| A.9.2      | Monitoring | 60      |
+> **Note:** This table is automatically updated daily by the workflow, reflecting the latest Zero Trust and ISO 27001 control scores.
 
 ---
 
 ## 📜 License
 This project is released under the **MIT License**.
+
