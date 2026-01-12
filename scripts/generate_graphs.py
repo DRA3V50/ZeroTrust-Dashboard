@@ -2,7 +2,7 @@ import os
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
-from pybadges import badge as pybadge  # safe import for badges
+from pybadges import badge as pybadge
 
 # Paths
 DB_PATH = 'data/controls.db'
@@ -44,13 +44,24 @@ def fetch_controls():
 
 def generate_zero_trust_graph(df):
     plt.style.use('dark_background')
-    plt.figure(figsize=(10,6))
-    plt.bar(df['domain'], df['score'], color='#1f77b4')
-    plt.xlabel('Security Domain', fontsize=12, color='white')
-    plt.ylabel('Score', fontsize=12, color='white')
-    plt.title('Zero Trust Posture', fontsize=14, color='white')
-    plt.xticks(rotation=30, fontsize=10)
-    plt.yticks(fontsize=10)
+    fig, ax = plt.subplots(figsize=(14,8))
+    bars = ax.bar(df['domain'], df['score'], color='#1f77b4', width=0.6)
+
+    ax.set_xlabel('Security Domain', fontsize=14, color='white')
+    ax.set_ylabel('Score', fontsize=14, color='white')
+    ax.set_title('Zero Trust Posture', fontsize=16, color='white')
+    
+    # Rotate labels and wrap text if too long
+    ax.set_xticklabels(df['domain'], rotation=35, ha='right', fontsize=11)
+    ax.set_yticks(range(0, 101, 10))
+    ax.tick_params(axis='y', labelsize=11)
+    
+    # Add value labels on top of bars
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2, height + 1,
+                f'{height}', ha='center', fontsize=10, color='white')
+
     plt.tight_layout()
     path = os.path.join(GRAPH_DIR, 'zero_trust_posture.png')
     plt.savefig(path, dpi=150)
@@ -59,13 +70,24 @@ def generate_zero_trust_graph(df):
 
 def generate_iso_27001_graph(df):
     plt.style.use('dark_background')
-    plt.figure(figsize=(10,6))
-    plt.bar(df['control_id'], df['score'], color='#ff7f0e')
-    plt.xlabel('ISO 27001 Control', fontsize=12, color='white')
-    plt.ylabel('Score', fontsize=12, color='white')
-    plt.title('ISO 27001 Coverage', fontsize=14, color='white')
-    plt.xticks(rotation=30, fontsize=10)
-    plt.yticks(fontsize=10)
+    fig, ax = plt.subplots(figsize=(14,8))
+    bars = ax.bar(df['control_id'], df['score'], color='#ff7f0e', width=0.6)
+
+    ax.set_xlabel('ISO 27001 Control', fontsize=14, color='white')
+    ax.set_ylabel('Score', fontsize=14, color='white')
+    ax.set_title('ISO 27001 Coverage', fontsize=16, color='white')
+    
+    # Rotate labels
+    ax.set_xticklabels(df['control_id'], rotation=35, ha='right', fontsize=11)
+    ax.set_yticks(range(0, 101, 10))
+    ax.tick_params(axis='y', labelsize=11)
+
+    # Add value labels
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2, height + 1,
+                f'{height}', ha='center', fontsize=10, color='white')
+
     plt.tight_layout()
     path = os.path.join(GRAPH_DIR, 'iso_27001_coverage.png')
     plt.savefig(path, dpi=150)
@@ -73,9 +95,8 @@ def generate_iso_27001_graph(df):
     print(f"[DEBUG] ISO 27001 graph saved: {path}")
 
 def generate_control_badge(control_id, domain, score):
-    text = f"{control_id}: {domain} = {score}"
-    # pybadges only supports left/right, no 'label' or 'color' argument in your version
-    svg = pybadge(left=text, right=str(score))
+    text = f"{control_id}: {domain}"
+    svg = pybadge(text, str(score))
     path = os.path.join(BADGE_DIR, f"{control_id}.svg")
     with open(path, "w") as f:
         f.write(svg)
