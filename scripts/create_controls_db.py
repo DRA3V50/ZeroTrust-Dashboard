@@ -1,46 +1,57 @@
-from pathlib import Path
 import sqlite3
+from pathlib import Path
 
-DB_PATH = Path("data/controls.db")
-DB_PATH.parent.mkdir(exist_ok=True)  # Ensure 'data/' folder exists
+# Ensure data folder exists
+DATA_DIR = Path("data")
+DATA_DIR.mkdir(exist_ok=True)
 
-conn = sqlite3.connect(DB_PATH)
-cursor = conn.cursor()
+DB_PATH = DATA_DIR / "controls.db"
 
-# Create tables if not exist
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS zero_trust (
-    domain TEXT PRIMARY KEY,
-    coverage INTEGER
-)
-""")
+def create_db():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS iso_controls (
-    control TEXT PRIMARY KEY,
-    coverage INTEGER
-)
-""")
+    # Drop tables if exist (optional, for reset)
+    cursor.execute("DROP TABLE IF EXISTS zero_trust")
+    cursor.execute("DROP TABLE IF EXISTS iso_27001")
 
-# Optional: seed with initial values (can be empty or placeholders)
-zero_trust_samples = [
-    ("Identity", 70),
-    ("Network", 85),
-    ("Device", 60),
-    ("Application", 90),
-    ("Data", 50)
-]
+    # Create Zero Trust table
+    cursor.execute("""
+        CREATE TABLE zero_trust (
+            domain TEXT PRIMARY KEY,
+            coverage INTEGER
+        )
+    """)
 
-iso_controls_samples = [
-    ("A.5.1 Information security policies", 75),
-    ("A.6.1 Organization of information security", 80),
-    ("A.7.2 Employee awareness", 65),
-    ("A.9.2 Access control", 70)
-]
+    # Create ISO 27001 table
+    cursor.execute("""
+        CREATE TABLE iso_27001 (
+            control TEXT PRIMARY KEY,
+            coverage INTEGER
+        )
+    """)
 
-cursor.executemany("INSERT OR REPLACE INTO zero_trust (domain, coverage) VALUES (?, ?)", zero_trust_samples)
-cursor.executemany("INSERT OR REPLACE INTO iso_controls (control, coverage) VALUES (?, ?)", iso_controls_samples)
+    # Sample initial data
+    zero_trust_data = [
+        ("Identity", 80),
+        ("Device", 70),
+        ("Network", 60),
+        ("Application", 90),
+        ("Data", 85)
+    ]
+    iso_data = [
+        ("A.5.1 Information security policies", 75),
+        ("A.6.1 Organization of information security", 80),
+        ("A.7.2 Employee awareness", 70),
+        ("A.9.2 Access control", 65)
+    ]
 
-conn.commit()
-conn.close()
-print(f"Database created/updated at {DB_PATH}")
+    cursor.executemany("INSERT INTO zero_trust VALUES (?,?)", zero_trust_data)
+    cursor.executemany("INSERT INTO iso_27001 VALUES (?,?)", iso_data)
+
+    conn.commit()
+    conn.close()
+    print(f"Database created at {DB_PATH}")
+
+if __name__ == "__main__":
+    create_db()
