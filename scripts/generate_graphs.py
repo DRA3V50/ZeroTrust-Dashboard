@@ -2,7 +2,7 @@ import os
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
-from pybadges import badge
+import pybadges
 
 # Paths
 DB_PATH = 'data/controls.db'
@@ -43,11 +43,10 @@ def fetch_controls():
     conn.close()
     return df
 
-# Generate badges
+# Generate badges (compatible with all pybadges versions)
 def generate_control_badge(control_id, domain, score):
-    control_text = f"{control_id}: {domain}"
-    score_text = str(score)
-    svg = badge(left=control_text, right=score_text)  # Only left/right supported by pybadges v1.3+
+    text = f"{control_id}: {domain} = {score}"
+    svg = pybadges.badge(label=text, value="")  # use label only
     badge_path = os.path.join(BADGE_DIR, f"{control_id}.svg")
     with open(badge_path, "w") as f:
         f.write(svg)
@@ -61,7 +60,7 @@ def generate_zero_trust_graph(df):
     plt.title('Zero Trust Posture', color='white')
     plt.xticks(rotation=20, ha='right', color='white')
     plt.yticks(color='white')
-    plt.gca().set_facecolor('#2b2b2b')  # dark background
+    plt.gca().set_facecolor('#2b2b2b')
     plt.gcf().patch.set_facecolor('#2b2b2b')
     plt.tight_layout()
     plt.savefig(os.path.join(GRAPH_DIR, 'zero_trust_posture.png'))
@@ -75,13 +74,13 @@ def generate_iso_27001_graph(df):
     plt.title('ISO 27001 Control Coverage', color='white')
     plt.xticks(rotation=20, ha='right', color='white')
     plt.yticks(color='white')
-    plt.gca().set_facecolor('#2b2b2b')  # dark background
+    plt.gca().set_facecolor('#2b2b2b')
     plt.gcf().patch.set_facecolor('#2b2b2b')
     plt.tight_layout()
     plt.savefig(os.path.join(GRAPH_DIR, 'iso_27001_coverage.png'))
     plt.close()
 
-# Main execution
+# Main
 if __name__ == "__main__":
     create_controls_db()
     df = fetch_controls()
