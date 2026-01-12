@@ -1,30 +1,37 @@
 import sqlite3
+import os
+import pandas as pd
 
 DB_PATH = 'data/controls.db'
 
+# Ensure data folder exists
+os.makedirs('data', exist_ok=True)
+
 def create_controls_db():
+    print("Creating/updating SQLite database...")
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Create table if not exists
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS controls (
-            control_id TEXT PRIMARY KEY,
-            domain TEXT,
-            score INTEGER
-        )
-    """)
+    # Create table if it doesn't exist
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS controls (
+        control_id TEXT PRIMARY KEY,
+        domain TEXT NOT NULL,
+        score INTEGER
+    )
+    ''')
 
-    # Optional: insert example controls if empty
-    cursor.execute("SELECT COUNT(*) FROM controls")
+    # Populate table if empty
+    cursor.execute('SELECT COUNT(*) FROM controls')
     if cursor.fetchone()[0] == 0:
+        print("Populating database with sample data...")
         sample_data = [
-            ('A.5.1', 'Policy', 80),
-            ('A.6.1', 'Organization', 75),
-            ('A.7.2', 'Asset Management', 90),
+            ('A.5.1', 'Information Security Policies', 80),
+            ('A.6.1', 'Organization of Information Security', 75),
+            ('A.8.2', 'Risk Management', 90),
             ('A.9.2', 'Access Control', 85)
         ]
-        cursor.executemany("INSERT INTO controls (control_id, domain, score) VALUES (?, ?, ?)", sample_data)
+        cursor.executemany('INSERT INTO controls VALUES (?, ?, ?)', sample_data)
 
     conn.commit()
     conn.close()
