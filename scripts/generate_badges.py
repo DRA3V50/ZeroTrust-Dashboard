@@ -17,18 +17,18 @@ def fetch_controls():
 def generate_control_badges():
     df = fetch_controls()
     for _, row in df.iterrows():
-        control_text = f"{row['control_id']}: {row['domain']}"
+        control_text = row['control_id']
         score_text = str(row['score'])
-
-        # POSITONAL ONLY, no keywords
-        # This will work on any pybadges version
-        svg = pybadges.badge(control_text, score_text)
-
-        badge_path = os.path.join(BADGE_DIR, f"{row['control_id']}.svg")
-        with open(badge_path, "w") as f:
+        print(f"Generating badge for {control_text}...")
+        svg = pybadges.badge(
+            left_text=control_text,
+            right_text=score_text,
+            right_color="blue"
+        )
+        path = os.path.join(BADGE_DIR, f"{control_text}.svg")
+        with open(path, "w") as f:
             f.write(svg)
-        print(f"Badge saved: {badge_path}")
+        print(f"Badge saved for {control_text}")
 
 if __name__ == "__main__":
     generate_control_badges()
-
