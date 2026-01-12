@@ -1,54 +1,52 @@
-name: Daily ZeroTrust Dashboard Update
+name: Daily Zero-Trust Dashboard Update
 
 on:
   schedule:
-    - cron: '0 7 * * *'   # 7 AM EST
-    - cron: '0 23 * * *'  # 11 PM EST
-  workflow_dispatch:
-
-env:
-  PAT_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
+    # Runs at 06:00 AM and 10:00 PM EST (UTC-5)
+    - cron: '0 11 * * *'  # 06:00 AM EST
+    - cron: '0 3 * * *'   # 10:00 PM EST
+  workflow_dispatch:      # Allows manual trigger
 
 jobs:
-  update-dashboard:
+  update_dashboard:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
 
-      - name: Set up Python
+    steps:
+      # 1️⃣ Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Setup Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: '3.11'
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt || pip install svgwrite
+          pip install svgwrite
 
-      - name: Ensure data folder exists
-        run: |
-          mkdir -p data
-          touch data/.gitkeep
+      # 4️⃣ Create / update SQLite database
+      - name: Create Controls DB
+        run: python scripts/create_controls_db.py
 
-      - name: Create SQLite DB
-        run: |
-          python scripts/create_controls_db.py
+      # 5️⃣ Update Markdown report
+      - name: Update Dashboard Report
+        run: python scripts/update_dashboard.py
 
-      - name: Update dashboard
-        run: |
-          python scripts/update_dashboard.py
+      # 6️⃣ Generate SVG badges
+      - name: Generate Badges
+        run: python scripts/generate_badges.py
 
-      - name: Generate badges
-        run: |
-          python scripts/generate_badges.py
-
+      # 7️⃣ Commit & Push changes using PAT
       - name: Commit and push changes
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_Sim_Token }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add reports/latest_report.md assets/badges/
           git commit -m "Automated daily update: report + badges" || echo "No changes to commit"
-          git push https://x-access-token:${PAT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:main
+          git push https://${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:main
