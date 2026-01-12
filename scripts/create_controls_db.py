@@ -1,29 +1,31 @@
 import sqlite3
+import os
 
-# Create SQLite DB
-conn = sqlite3.connect("data/controls.db")
+DB_PATH = "data/controls.db"
+os.makedirs("data", exist_ok=True)
+
+conn = sqlite3.connect(DB_PATH)
 c = conn.cursor()
 
-# Drop table if exists
-c.execute("DROP TABLE IF EXISTS controls")
-
-# Create controls table
+# Create table
 c.execute("""
-CREATE TABLE controls (
-    control_id TEXT,
+CREATE TABLE IF NOT EXISTS controls (
+    control_id TEXT PRIMARY KEY,
     domain TEXT,
     score INTEGER
 )
 """)
 
-# Insert sample data
+# Populate sample data
 controls = [
-    ("A.5.1", "Identity", 80),
-    ("A.6.1", "Device", 70),
-    ("A.8.2", "Network", 60),
-    ("A.9.2", "Data", 90)
+    ("A.5.1", "Application", 90),
+    ("A.6.1", "Data", 80),
+    ("A.7.2", "Identity", 70),
+    ("A.9.2", "Network", 60)
 ]
-c.executemany("INSERT INTO controls VALUES (?, ?, ?)", controls)
+
+c.executemany("INSERT OR REPLACE INTO controls VALUES (?, ?, ?)", controls)
 conn.commit()
 conn.close()
-print("[DEBUG] Database created/populated at data/controls.db")
+
+print(f"[DEBUG] Database created/populated at {DB_PATH}")
