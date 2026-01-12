@@ -1,22 +1,19 @@
 import os
-import pybadges
 
-os.makedirs("assets/badges", exist_ok=True)
+BADGE_DIR = "assets/badges"
+os.makedirs(BADGE_DIR, exist_ok=True)
 
 def generate_badge(control_id, domain, score):
-    score_text = f"{score}%"
-    control_text = f"{control_id} | {domain}"
+    bg = "#1e1e1e"
+    text = "#ffffff"
 
-    svg_content = pybadges.badge(
-        left_text=control_text,
-        right_text=score_text,
-        left_color="#1f77b4",  # dimmer blue
-        right_color="#d62728",  # dim red
-        height=20,               # smaller to reduce overlap
-        font_size=10             # smaller font
-    )
+    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="340" height="42">
+  <rect width="340" height="42" rx="6" fill="{bg}"/>
+  <text x="12" y="26" fill="{text}" font-size="14" font-family="Arial">
+    {control_id} • {domain} • {score}%
+  </text>
+</svg>
+"""
 
-    filename = f"assets/badges/{control_id.replace('.', '_')}.svg"
-    with open(filename, "w") as f:
-        f.write(svg_content)
-    print(f"[DEBUG] Badge saved: {filename}")
+    with open(f"{BADGE_DIR}/{control_id}.svg", "w") as f:
+        f.write(svg)
