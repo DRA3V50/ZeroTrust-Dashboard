@@ -1,19 +1,17 @@
-import sqlite3
-import svgwrite
+import os
+import shutil
+
+BADGE_DIR = 'assets/badges'
+os.makedirs(BADGE_DIR, exist_ok=True)
 
 def generate_badges():
-    conn = sqlite3.connect('data/controls.db')
-    c = conn.cursor()
-    c.execute("SELECT control_id, score FROM controls")
-    controls = c.fetchall()
-    conn.close()
+    badges = ['Identity.svg', 'Device.svg', 'Network.svg', 'Application.svg', 'Data.svg']
+    for badge in badges:
+        path = os.path.join(BADGE_DIR, badge)
+        if not os.path.exists(path):
+            with open(path, 'w') as f:
+                f.write(f'<svg><text>{badge.replace(".svg","")}</text></svg>')
+    print(f"Badges generated successfully in {BADGE_DIR}")
 
-    for control_id, score in controls:
-        dwg = svgwrite.Drawing(f"assets/badges/{control_id.replace('.', '_')}.svg", profile='tiny', size=("150px","30px"))
-        dwg.add(dwg.rect(insert=(0,0), size=("150px","30px"), fill='lightgrey'))
-        dwg.add(dwg.text(f"{control_id}: {score}%", insert=(5,20), fill='black'))
-        dwg.save()
-    print("Badges generated successfully.")
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     generate_badges()
