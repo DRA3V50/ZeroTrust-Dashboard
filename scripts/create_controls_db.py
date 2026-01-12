@@ -1,53 +1,35 @@
 import sqlite3
-from pathlib import Path
 
-# Define database path
-DB_PATH = Path("data/controls.db")
-DB_PATH.parent.mkdir(exist_ok=True)  # create 'data' folder if it doesn't exist
+def create_db():
+    conn = sqlite3.connect('data/controls.db')
+    c = conn.cursor()
 
-# Remove old file if corrupt
-if DB_PATH.exists():
-    DB_PATH.unlink()
+    # Create table if it doesn't exist
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS controls (
+            control_id TEXT PRIMARY KEY,
+            domain TEXT,
+            score INTEGER
+        )
+    ''')
 
-# Connect to database
-conn = sqlite3.connect(DB_PATH)
-cursor = conn.cursor()
+    # Sample data (update/add real controls as needed)
+    sample_controls = [
+        ('A.5.1', 'Information Security Policies', 85),
+        ('A.6.1', 'Organization of Information Security', 90),
+        ('A.7.2', 'Employee Awareness', 75),
+        ('A.9.2', 'Access Control', 80)
+    ]
 
-# Create tables
-cursor.execute("""
-CREATE TABLE zero_trust (
-    domain TEXT PRIMARY KEY,
-    coverage INTEGER
-)
-""")
+    for control in sample_controls:
+        c.execute('''
+            INSERT OR REPLACE INTO controls (control_id, domain, score)
+            VALUES (?, ?, ?)
+        ''', control)
 
-cursor.execute("""
-CREATE TABLE iso_controls (
-    control_id TEXT PRIMARY KEY,
-    coverage INTEGER
-)
-""")
+    conn.commit()
+    conn.close()
+    print("Controls database created/updated successfully.")
 
-# Example data
-zero_trust_data = [
-    ("Identity", 90),
-    ("Device", 85),
-    ("Network", 75),
-    ("Application", 80),
-    ("Data", 70),
-]
-
-iso_controls_data = [
-    ("A.5.1", 80),
-    ("A.6.1", 75),
-    ("A.7.2", 65),
-    ("A.9.2", 70),
-]
-
-cursor.executemany("INSERT INTO zero_trust(domain, coverage) VALUES (?, ?)", zero_trust_data)
-cursor.executemany("INSERT INTO iso_controls(control_id, coverage) VALUES (?, ?)", iso_controls_data)
-
-conn.commit()
-conn.close()
-
-print("Controls database created/updated successfully.")
+if __name__ == '__main__':
+    create_db()
