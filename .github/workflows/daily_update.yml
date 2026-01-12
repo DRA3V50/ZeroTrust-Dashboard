@@ -1,41 +1,45 @@
-name: Generate Graphs & Badges
+name: Daily Update Dashboard
 
 on:
   schedule:
-    # Twice daily at 00:00 and 12:00 UTC
-    - cron: '0 0,12 * * *'
-  workflow_dispatch: # Allows manual run
+    - cron: '0 0,12 * * *' # runs twice daily at 00:00 and 12:00 UTC
+  workflow_dispatch:
 
 jobs:
-  generate:
+  update-dashboard:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pandas matplotlib pybadges==3.0.1  # latest working version
+    - name: Upgrade pip
+      run: python -m pip install --upgrade pip
 
-      - name: Create/Populate Database
-        run: python scripts/create_controls_db.py
+    - name: Install dependencies
+      run: |
+        python -m pip install pandas matplotlib pybadges==3.0.1
 
-      - name: Generate Graphs & Badges
-        run: python scripts/generate_graphs.py
+    - name: Create/Populate Database
+      run: python scripts/create_controls_db.py
 
-      - name: Commit & Push updates
-        env:
-          GITHUB_TOKEN: ${{ secrets.ZT_DASHBOARD_PAT }}
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/ reports/
-          git commit -m "Automated update: graphs, badges, report" || echo "No changes to commit"
-          git push https://DRA3V50:${GITHUB_TOKEN}@github.com/DRA3V50/ZeroTrust-Dashboard.git main
+    - name: Generate Graphs and Badges
+      run: python -m scripts.generate_graphs
+
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Commit and Push Changes
+      env:
+        PAT: ${{ secrets.ZeroTrust_PAT }}
+      run: |
+        git add assets/ graphs/ badges/ reports/
+        git commit -m "Automated daily update: graphs, badges, report" || echo "No changes to commit"
+        git push https://$PAT@github.com/${{ github.repository }} HEAD:main
