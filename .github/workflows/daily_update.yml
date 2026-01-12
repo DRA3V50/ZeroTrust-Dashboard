@@ -3,8 +3,8 @@ name: Daily Update Dashboard
 on:
   schedule:
     # 8:00 AM and 8:00 PM EST -> 13:00 UTC and 01:00 UTC
-    - cron: '13  * * * *'  # 8:00 AM EST
-    - cron: '01  * * * *'  # 8:00 PM EST
+    - cron: '13 * * * *'  # 8:00 AM EST
+    - cron: '01 * * * *'  # 8:00 PM EST
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pandas matplotlib svgwrite
+          pip install pandas svgwrite
 
       - name: Create/Update Controls DB
         run: python scripts/create_controls_db.py
@@ -35,15 +35,12 @@ jobs:
       - name: Generate Badges
         run: python scripts/generate_badges.py
 
-      - name: Generate Graphs
-        run: python scripts/generate_graphs.py
-
       - name: Commit & Push Updates
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/badges/*.svg assets/graphs/*.png reports/latest_report.md
-          git commit -m "Automated update: report + badges + graphs" || echo "No changes to commit"
+          git add assets/badges/*.svg reports/latest_report.md
+          git commit -m "Automated update: report + badges" || echo "No changes to commit"
           git push origin main
