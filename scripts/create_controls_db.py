@@ -11,7 +11,7 @@ def create_controls_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Create the controls table if it doesn't exist
+    # Create table if not exists
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS controls (
         control_id TEXT PRIMARY KEY,
@@ -28,12 +28,7 @@ def create_controls_db():
             ('A.5.1', 'Information Security Policies', 80),
             ('A.6.1', 'Organization of Information Security', 75),
             ('A.8.2', 'Risk Management', 90),
-            ('A.9.2', 'Access Control', 85),
-            ('Identity', 'Identity', 90),
-            ('Device', 'Device', 85),
-            ('Network', 'Network', 75),
-            ('Application', 'Application', 80),
-            ('Data', 'Data', 70)
+            ('A.9.2', 'Access Control', 85)
         ]
         cursor.executemany('INSERT INTO controls VALUES (?, ?, ?)', sample_data)
 
