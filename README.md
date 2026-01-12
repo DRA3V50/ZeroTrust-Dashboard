@@ -1,57 +1,65 @@
-# ZeroTrust-Dashboard 🛡️
+# ZeroTrust-Dashboard 🔐
 
-**Dynamic enterprise security dashboard tracking Zero Trust posture and ISO 27001 control coverage in real-time.**  
-This dashboard consolidates security metrics, generates badges, and displays live graphs for enterprise-ready visibility.
-
----
-
-## 🔐 Zero Trust Posture & ISO 27001 Coverage
-**Visual Summary:** Live metrics for Identity, Device, Network, Application, Data domains & ISO 27001 controls A.5–A.18.  
-**Goal:** Give security teams and executives immediate insight into compliance and risk posture.
+Dynamic **enterprise Zero Trust posture** and **ISO 27001 control coverage** dashboard with live daily updates.
 
 ---
 
-## 📊 Live Metrics & Visuals
-**Zero Trust Domains:**  
-![Identity](assets/badges/Identity.svg)  
-![Device](assets/badges/Device.svg)  
-![Network](assets/badges/Network.svg)  
-![Application](assets/badges/Application.svg)  
-![Data](assets/badges/Data.svg)
+## 📊 Zero Trust Posture
+Live visual assessment across all enterprise domains:
 
-**ISO 27001 Control Coverage:**  
-![A5.1 Information Security Policies](assets/badges/A_5_1.svg)  
-![A6.1 Organization of Information Security](assets/badges/A_6_1.svg)  
-![A7.2 Employee Awareness](assets/badges/A_7_2.svg)  
-![A9.2 Access Control](assets/badges/A_9_2.svg)  
+- Identity 🗂️  
+- Device 🔒  
+- Network 🌐  
+- Application 🖥️  
+- Data 📁  
 
-**Enterprise Security Graphs (Live Charts):**  
-![Zero Trust Bar Chart](assets/graphs/zero_trust_posture.png)  
-![ISO 27001 Control Coverage Chart](assets/graphs/iso27001_coverage.png)  
+Graphs update daily with the latest metrics.
 
-> ⚠️ Graphs update automatically daily via GitHub Actions; badges refresh in real-time while this text remains static.
+![Zero Trust Posture](assets/graphs/zero_trust_posture.png)
 
 ---
 
-## 🗂️ Data Sources
-- Metrics stored in `data/controls.db` (SQLite)  
-- Daily updates generated from Python scripts: `update_dashboard.py`, `generate_badges.py`, `generate_graphs.py`  
+## 📝 ISO 27001 Control Coverage
+Track your ISO 27001 compliance progress with coverage percentages for each control:
+
+- A.5.1 Information Security Policies 📄  
+- A.6.1 Organization of Information Security 🏢  
+- A.7.2 Employee Awareness 👥  
+- A.9.2 Access Control 🔑  
+
+![ISO 27001 Coverage](assets/graphs/iso27001_coverage.png)
 
 ---
 
-## ⚙️ Automation
-- Fully automated via GitHub Actions workflow  
-- Pulls metrics, updates graphs and badges, pushes changes without overwriting static content  
-- Uses `PAT_SIM_TOKEN` for authenticated repository updates  
+## 🛠️ How It Works
+1. **Data Collection** – Metrics stored in `data/controls.db`.  
+2. **Report Generation** – `scripts/update_dashboard.py` updates `reports/latest_report.md`.  
+3. **Badges & Graphs** – `scripts/generate_badges.py` & `scripts/generate_graphs.py` produce visuals for live display.  
+4. **Automation** – GitHub Actions updates everything daily, preserving README layout and visuals.
 
 ---
 
-## 🔍 Analyst Insights
-- Quickly identify high-risk domains and ISO 27001 gaps  
-- Track changes over time via badges and bar/column charts  
-- Perfect for executives, analysts, and compliance teams needing fast, visual security metrics
+## 📂 Files & Assets
+- `assets/badges/` – Daily badges for Zero Trust domains and ISO controls  
+- `assets/graphs/` – Daily bar charts for posture and compliance  
+- `data/controls.db` – SQLite database of metrics  
+- `reports/latest_report.md` – Latest numeric report  
 
 ---
 
-**License:** MIT  
-**Repository:** [ZeroTrust-Dashboard](https://github.com/DRA3V50/ZeroTrust-Dashboard)
+## 👨‍💻 Focus & Skills Demonstrated
+- Enterprise security metrics: Zero Trust, ISO 27001  
+- Python automation & SQLite database management  
+- Data visualization with **Matplotlib** & **SVG badges**  
+- Daily CI/CD automation with **GitHub Actions**
+
+---
+
+## ⚡ Usage
+Clone the repository and run scripts manually or rely on automated daily updates via GitHub Actions:
+
+```bash
+python scripts/create_controls_db.py
+python scripts/update_dashboard.py
+python scripts/generate_badges.py
+python scripts/generate_graphs.py
