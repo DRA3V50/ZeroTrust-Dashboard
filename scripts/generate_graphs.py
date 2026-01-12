@@ -2,11 +2,14 @@ import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+from datetime import datetime
 from generate_badges import generate_badge
 
 DB_PATH = "data/controls.db"
 GRAPH_DIR = "outputs/graphs"
+BADGE_DIR = "outputs/badges"
 os.makedirs(GRAPH_DIR, exist_ok=True)
+os.makedirs(BADGE_DIR, exist_ok=True)
 
 def fetch():
     conn = sqlite3.connect(DB_PATH)
@@ -16,42 +19,31 @@ def fetch():
 
 def zero_trust_graph(df):
     plt.style.use("dark_background")
-    fig, ax = plt.subplots(figsize=(6, 4))
-    ax.set_facecolor("#111111")
-    
-    # narrower, softer bars
-    bar_colors = ["#5DADE2", "#5DADE2", "#5DADE2", "#5DADE2"]  # lighter blue
-    ax.bar(df["control_id"], df["score"], color=bar_colors, width=0.4)
-    
-    ax.set_ylim(0, 100)
-    ax.set_ylabel("Score (%)", color="#cccccc")
-    ax.set_title("Zero Trust Posture", color="#ffffff")
-    ax.grid(True, color="#333333", linestyle="--", linewidth=0.5)
-
+    # Convert 330px width to inches: 330px / 150 dpi ~ 2.2 inches (height scaled proportionally)
+    plt.figure(figsize=(2.2, 1.5))  
+    plt.bar(df["control_id"], df["score"], color="#3498db")
+    plt.ylim(0, 100)
+    plt.ylabel("Score (%)", fontsize=8)
+    plt.title("Zero Trust Posture", fontsize=10)
     plt.tight_layout()
-    plt.savefig(f"{GRAPH_DIR}/zero_trust_posture.png", dpi=150)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    plt.savefig(f"{GRAPH_DIR}/zero_trust_posture_{timestamp}.png", dpi=150)
     plt.close()
-    print("[OK] Zero Trust graph")
+    print("[OK] Zero Trust graph generated")
 
 def iso_graph(df):
     plt.style.use("dark_background")
-    fig, ax = plt.subplots(figsize=(6, 4))
-    ax.set_facecolor("#111111")
-    
-    # narrower, softer bars
-    bar_colors = ["#E59866", "#E59866", "#E59866", "#E59866"]  # softer orange
-    ax.bar(df["domain"], df["score"], color=bar_colors, width=0.4)
-    
-    ax.set_ylim(0, 100)
-    ax.set_ylabel("Compliance (%)", color="#cccccc")
-    ax.set_title("ISO 27001 Coverage", color="#ffffff")
-    ax.set_xticklabels(df["domain"], rotation=30, ha="right", color="#cccccc")
-    ax.grid(True, color="#333333", linestyle="--", linewidth=0.5)
-
+    plt.figure(figsize=(2.2, 1.5))  # same width ~330px
+    plt.bar(df["domain"], df["score"], color="#e67e22")
+    plt.xticks(rotation=30, ha="right", fontsize=8)
+    plt.ylim(0, 100)
+    plt.ylabel("Compliance (%)", fontsize=8)
+    plt.title("ISO 27001 Coverage", fontsize=10)
     plt.tight_layout()
-    plt.savefig(f"{GRAPH_DIR}/iso_27001_coverage.png", dpi=150)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    plt.savefig(f"{GRAPH_DIR}/iso_27001_coverage_{timestamp}.png", dpi=150)
     plt.close()
-    print("[OK] ISO graph")
+    print("[OK] ISO 27001 graph generated")
 
 if __name__ == "__main__":
     df = fetch()
