@@ -27,8 +27,5 @@ jobs:
       - name: Run generate_graphs.py
         run: python scripts/generate_graphs.py
 
-      - name: Run generate_badges.py
-        run: python scripts/generate_badges.py
-
       - name: Run update_dashboard.py
         run: python scripts/update_dashboard.py
