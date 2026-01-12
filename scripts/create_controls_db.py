@@ -1,7 +1,6 @@
 import sqlite3
 import os
 
-# Path to the database
 DB_PATH = 'data/controls.db'
 
 # Ensure data folder exists
@@ -21,7 +20,7 @@ def create_controls_db():
     )
     ''')
 
-    # Populate with sample data if the table is empty
+    # Populate with sample data if empty
     cursor.execute('SELECT COUNT(*) FROM controls')
     if cursor.fetchone()[0] == 0:
         print("Populating the database with sample data...")
@@ -29,7 +28,12 @@ def create_controls_db():
             ('A.5.1', 'Information Security Policies', 80),
             ('A.6.1', 'Organization of Information Security', 75),
             ('A.8.2', 'Risk Management', 90),
-            ('A.9.2', 'Access Control', 85)
+            ('A.9.2', 'Access Control', 85),
+            ('Identity', 'Identity', 90),
+            ('Device', 'Device', 85),
+            ('Network', 'Network', 75),
+            ('Application', 'Application', 80),
+            ('Data', 'Data', 70)
         ]
         cursor.executemany('INSERT INTO controls VALUES (?, ?, ?)', sample_data)
 
