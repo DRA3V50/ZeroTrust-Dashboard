@@ -4,6 +4,7 @@ import os
 
 DB_PATH = 'data/controls.db'
 REPORT_PATH = 'reports/latest_report.md'
+
 os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)
 
 def update_dashboard():
@@ -11,11 +12,8 @@ def update_dashboard():
     conn = sqlite3.connect(DB_PATH)
     df = pd.read_sql_query("SELECT * FROM controls", conn)
     conn.close()
-    try:
-        df.to_markdown(REPORT_PATH, index=False)
-    except Exception:
-        df.to_csv(REPORT_PATH, index=False)
-    print(f"[DEBUG] Dashboard updated at {REPORT_PATH}")
+    df.to_markdown(buf=REPORT_PATH, index=False)
+    print(f"[DEBUG] Dashboard updated: {REPORT_PATH}")
 
 if __name__ == "__main__":
     update_dashboard()
