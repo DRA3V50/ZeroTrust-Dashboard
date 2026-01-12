@@ -41,12 +41,12 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 - **Data Storage**: Security metrics stored in a structured **SQLite database** (`data/controls.db`).  
 - **Report Generation**: Produces structured reports summarizing current security posture and compliance.  
 - **Visualizations**:  
-  - **Graphs**: Dynamic visual representation of Zero Trust and ISO-27001 coverage. Updated daily, showing the latest results without overwriting previous outputs.  
+  - **Graphs**: Dynamic visual representation of Zero Trust and ISO-27001 coverage.  
   - **Badges**: Real-time visual summaries of individual controls.  
 
-Graphs feature a professional dark theme with smaller, readable sizes for dashboards or executive briefings.  
+> **⚠️ Note:** Graphs are updated twice daily to reflect the latest data, without overwriting previous outputs.  
 
-> **⚠️ Note**: Graphs are updated twice daily to reflect the latest data, without overwriting previous outputs.  
+Graphs feature a professional dark theme with smaller, readable sizes for dashboards or executive briefings.  
 
 ---
 
@@ -64,34 +64,37 @@ The dashboard supports operational monitoring, compliance tracking, and audit re
 ## 📊 Dashboards and Badges 📇
 
 ### Latest Zero Trust Posture
-- Visual representation of domain scores updated daily.  
+- Visual representation of domain scores updated daily.
 - Provides actionable insight for analysts and leadership.  
-![Zero Trust Posture](assets/graphs/zero_trust_posture.png)
+![Zero Trust Posture](outputs/graphs/zero_trust_posture.png)
 
 ### Latest ISO 27001 Control Coverage
-- Daily updated visual representation of control compliance.  
+- Daily updated visual representation of control compliance.
 - Highlights strengths and areas needing attention.  
-![ISO 27001 Control Coverage](assets/graphs/iso_27001_coverage.png)
+![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage.png)
 
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.  
-![A.5.1](assets/badges/A.5.1.svg)  
-![A.6.1](assets/badges/A.6.1.svg)  
-![A.7.2](assets/badges/A.7.2.svg)  
-![A.9.2](assets/badges/A.9.2.svg)
+![A.5.1](outputs/badges/A.5.1.svg)  
+![A.6.1](outputs/badges/A.6.1.svg)  
+![A.7.2](outputs/badges/A.7.2.svg)  
+![A.9.2](outputs/badges/A.9.2.svg)
 
----
+### 🗂 Metrics Table
+| Control ID | Domain          | Score (%) |
+|------------|----------------|-----------|
+| A.5.1      | Policy          | 85        |
+| A.6.1      | Access Control  | 75        |
+| A.8.2      | Assets          | 90        |
+| A.9.2      | Monitoring      | 60        |
 
-## 🗂 Metrics Table
-
-<!-- METRICS_TABLE_START -->
-<!-- METRICS_TABLE_END -->
-
-> **Note:** This table is automatically updated daily by the workflow, reflecting the latest Zero Trust and ISO 27001 control scores.  
+> **Note:** This table is automatically updated daily by the workflow, reflecting the latest Zero Trust and ISO 27001 control scores.
 
 ---
 
 ## 📜 License
-This project is released under the **MIT License**.  
+This project is released under the **MIT License**.
+
+---
 
 ---
