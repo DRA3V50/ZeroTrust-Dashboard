@@ -23,7 +23,7 @@ plt.savefig("assets/graphs/zero_trust_posture.png")
 plt.close()
 print("[DEBUG] Zero Trust graph saved")
 
-# ISO 27001 Coverage graph (sample)
+# ISO 27001 Coverage graph
 plt.figure(figsize=(6,4))
 plt.bar(df['domain'], df['score'], color='dimgray')
 plt.ylim(0,100)
