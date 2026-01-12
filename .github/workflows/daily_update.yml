@@ -1,18 +1,20 @@
-name: Daily Update Dashboard
+name: Daily ZeroTrust Dashboard Update
 
 on:
   schedule:
-    # Runs twice daily: 06:00 and 22:00 EST
-    - cron: "0 11,03 * * *" # UTC times for 06:00 & 22:00 EST
+    - cron: '0 7 * * *'   # 7 AM EST
+    - cron: '0 23 * * *'  # 11 PM EST
   workflow_dispatch:
 
-jobs:
-  update_dashboard:
-    runs-on: ubuntu-latest
+env:
+  PAT_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
 
+jobs:
+  update-dashboard:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -20,23 +22,33 @@ jobs:
           python-version: 3.11
 
       - name: Install dependencies
-        run: pip install --upgrade pip svgwrite
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || pip install svgwrite
 
-      - name: Create database if missing
-        run: python scripts/create_controls_db.py
+      - name: Ensure data folder exists
+        run: |
+          mkdir -p data
+          touch data/.gitkeep
 
-      - name: Update dashboard report
-        run: python scripts/update_dashboard.py
+      - name: Create SQLite DB
+        run: |
+          python scripts/create_controls_db.py
+
+      - name: Update dashboard
+        run: |
+          python scripts/update_dashboard.py
 
       - name: Generate badges
-        run: python scripts/generate_badges.py
+        run: |
+          python scripts/generate_badges.py
 
-      - name: Commit & push changes
+      - name: Commit and push changes
         env:
-          PAT_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add reports latest_report.md assets/badges/*.svg
+          git add reports/latest_report.md assets/badges/
           git commit -m "Automated daily update: report + badges" || echo "No changes to commit"
-          git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }} HEAD:main
+          git push https://x-access-token:${PAT_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:main
