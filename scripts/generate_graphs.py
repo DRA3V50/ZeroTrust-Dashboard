@@ -54,13 +54,13 @@ def generate_iso_27001_graph(df):
 def generate_control_badge(control_id, domain, score):
     print(f"Generating badge for {control_id}...")
 
-    # Adjust the badge function to use 'left' and 'right'
+    # Adjust the badge function to use the correct arguments: 'label' and 'value'
     badge_file = os.path.join(BADGE_DIR, f'{control_id}.svg')
 
     svg = badge(
-        left=domain,         # Domain is now on the left
-        right=f"{score}%",   # Score is now on the right
-        color="blue"         # Set a badge color (you can customize this)
+        label=domain,         # Domain is now the label
+        value=f"{score}%",    # Score is now the value
+        color="blue"          # Set a badge color (you can customize this)
     )
 
     # Save badge as SVG
