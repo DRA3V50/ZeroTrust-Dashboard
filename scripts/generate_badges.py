@@ -1,26 +1,27 @@
+# scripts/generate_badges.py
+
 import pybadges
+import os
 
-def generate_badge(control_id, domain, score, output_path="assets/badges"):
-    """
-    Generate a single badge using pybadges 3.x
-    """
-    import os
-    os.makedirs(output_path, exist_ok=True)
+ASSETS_DIR = "assets/badges"
 
-    # combine text for left side
-    left_text = f"{control_id}: {domain}"
-    right_text = str(score)
+os.makedirs(ASSETS_DIR, exist_ok=True)
 
-    # badge with dark blue background
+def generate_badge(control_id: str, domain: str, score: int):
+    # Construct the text on the badge
+    text = f"{control_id} | {domain} | Score: {score}"
+
+    # pybadges 3.x uses `label` and `value` as separate, `left`/`right` removed
     svg_content = pybadges.badge(
-        left_text=left_text,
-        right_text=right_text,
-        left_color="#1f2937",   # dark gray for left
-        right_color="#2563eb",  # bright blue for score
-        style="flat",           # flat style prevents text overlap
-        font_size=11            # smaller font
+        label=text,       # main label
+        value="",         # no separate value
+        color="#1f4e79", # dark blue
+        label_color="#ffffff", # white text
+        style="flat",     # flat style supported
+        format="svg"      # output format
     )
 
-    file_name = f"{control_id.replace('.', '_')}.svg"
-    with open(f"{output_path}/{file_name}", "w") as f:
+    # Save badge
+    filename = f"{ASSETS_DIR}/{control_id.replace('.', '_')}.svg"
+    with open(filename, "w") as f:
         f.write(svg_content)
