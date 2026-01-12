@@ -1,7 +1,7 @@
 import os
 import sqlite3
 import pandas as pd
-from pybadges import badge
+import pybadges
 
 DB_PATH = 'data/controls.db'
 BADGE_DIR = 'assets/badges'
@@ -17,20 +17,17 @@ def fetch_controls():
 def generate_control_badges():
     df = fetch_controls()
     for _, row in df.iterrows():
+        control_text = f"{row['control_id']}: {row['domain']}"
+        score_text = str(row['score'])
+
+        # Version-agnostic way: use the generic badge function
         try:
-            # Newer pybadges syntax
-            svg = badge(
-                label=f"{row['control_id']}: {row['domain']}",
-                value=row['score'],
-                color='blue'
-            )
+            # Most modern pybadges versions
+            svg = pybadges.badge(label=control_text, value=score_text, color='blue')
         except TypeError:
-            # Older pybadges fallback
-            svg = badge(
-                left=f"{row['control_id']}: {row['domain']}",
-                right=str(row['score']),
-                color='blue'
-            )
+            # Fallback: build badge manually using pybadges API
+            # Using named parameters as dictionary (works with older versions)
+            svg = pybadges.badge(**{'left': control_text, 'right': score_text, 'color': 'blue'})
 
         badge_path = os.path.join(BADGE_DIR, f"{row['control_id']}.svg")
         with open(badge_path, "w") as f:
