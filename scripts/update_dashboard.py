@@ -13,9 +13,15 @@ def update_dashboard():
     df = pd.read_sql_query("SELECT * FROM controls", conn)
     conn.close()
 
-    # Save as markdown
-    with open(REPORT_PATH, "w") as f:
-        f.write(df.to_markdown(index=False))
+    try:
+        # Save as markdown using tabulate
+        with open(REPORT_PATH, "w") as f:
+            f.write(df.to_markdown(index=False))
+    except ImportError:
+        # Fallback: save as CSV if tabulate missing
+        print("Tabulate not found, saving as CSV instead.")
+        df.to_csv(REPORT_PATH, index=False)
+
     print(f"Dashboard updated and saved to {REPORT_PATH}.")
 
 if __name__ == "__main__":
