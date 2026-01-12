@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pybadges import badge
 
-# Paths
+# Path to the database and the badges/graphs directories
 DB_PATH = 'data/controls.db'
 GRAPH_DIR = 'assets/graphs'
 BADGE_DIR = 'assets/badges'
@@ -13,6 +13,7 @@ BADGE_DIR = 'assets/badges'
 os.makedirs(GRAPH_DIR, exist_ok=True)
 os.makedirs(BADGE_DIR, exist_ok=True)
 
+# Create or update the controls database
 def create_controls_db():
     print("[DEBUG] Creating/updating SQLite database...")
     conn = sqlite3.connect(DB_PATH)
@@ -28,7 +29,7 @@ def create_controls_db():
 
     cursor.execute('SELECT COUNT(*) FROM controls')
     if cursor.fetchone()[0] == 0:
-        print("[DEBUG] Populating database with sample data...")
+        print("[DEBUG] Populating the database with sample data...")
         sample_data = [
             ('A.5.1', 'Information Security Policies', 80),
             ('A.6.1', 'Organization of Information Security', 75),
@@ -41,6 +42,7 @@ def create_controls_db():
     conn.close()
     print("[DEBUG] Database ready.")
 
+# Fetch control data from the database
 def fetch_controls():
     print("[DEBUG] Fetching data from SQLite DB...")
     conn = sqlite3.connect(DB_PATH)
@@ -50,59 +52,46 @@ def fetch_controls():
     print(f"[DEBUG] Retrieved {len(df)} records.")
     return df
 
+# Generate badge for a control using positional args (no keywords)
 def generate_control_badge(control_id, domain, score):
     print(f"[DEBUG] Generating badge for {control_id}...")
-    # pybadges usage updated for latest API
-    svg = badge(left=control_id + ": " + domain, right=str(score), color='blue')
+    left_text = f"{control_id}: {domain}"
+    right_text = str(score)
+    # Use positional arguments only to avoid TypeError
+    svg = badge(left_text, right_text, 'blue')
 
     badge_path = os.path.join(BADGE_DIR, f"{control_id}.svg")
     with open(badge_path, "w") as f:
         f.write(svg)
     print(f"[DEBUG] Badge saved: {badge_path}")
 
+# Generate Zero Trust Posture graph
 def generate_zero_trust_graph(df):
     print("[DEBUG] Generating Zero Trust Posture graph...")
-    plt.style.use('dark_background')
-
-    fig, ax = plt.subplots(figsize=(10, 6))
-    bars = ax.bar(df['domain'], df['score'], color='#3b82f6')  # nice blue
-
-    ax.set_xlabel('Security Domain', fontsize=12, color='white')
-    ax.set_ylabel('Score', fontsize=12, color='white')
-    ax.set_title('Zero Trust Posture', fontsize=16, color='white')
-
-    plt.xticks(rotation=30, ha='right', fontsize=10, color='white')
-    plt.yticks(fontsize=10, color='white')
-
-    # Adjust margins so text doesn't overlap
+    plt.figure(figsize=(10, 6))
+    plt.bar(df['domain'], df['score'], color='skyblue')
+    plt.xlabel('Security Domain')
+    plt.ylabel('Score')
+    plt.title('Zero Trust Posture')
     plt.tight_layout()
+    plt.savefig(os.path.join(GRAPH_DIR, 'zero_trust_posture.png'))
+    plt.close()
+    print(f"[DEBUG] Zero Trust graph saved: {os.path.join(GRAPH_DIR, 'zero_trust_posture.png')}")
 
-    save_path = os.path.join(GRAPH_DIR, 'zero_trust_posture.png')
-    plt.savefig(save_path, dpi=150, facecolor=fig.get_facecolor())
-    plt.close(fig)
-    print(f"[DEBUG] Zero Trust graph saved: {save_path}")
-
+# Generate ISO 27001 Coverage graph
 def generate_iso_27001_graph(df):
     print("[DEBUG] Generating ISO 27001 Coverage graph...")
-    plt.style.use('dark_background')
-
-    fig, ax = plt.subplots(figsize=(10, 6))
-    bars = ax.bar(df['control_id'], df['score'], color='#f59e0b')  # amber/orange
-
-    ax.set_xlabel('ISO 27001 Control', fontsize=12, color='white')
-    ax.set_ylabel('Compliance Score', fontsize=12, color='white')
-    ax.set_title('ISO 27001 Control Coverage', fontsize=16, color='white')
-
-    plt.xticks(fontsize=10, color='white')
-    plt.yticks(fontsize=10, color='white')
-
+    plt.figure(figsize=(10, 6))
+    plt.bar(df['control_id'], df['score'], color='orange')
+    plt.xlabel('ISO 27001 Control')
+    plt.ylabel('Compliance Score')
+    plt.title('ISO 27001 Control Coverage')
     plt.tight_layout()
+    plt.savefig(os.path.join(GRAPH_DIR, 'iso_27001_coverage.png'))
+    plt.close()
+    print(f"[DEBUG] ISO 27001 graph saved: {os.path.join(GRAPH_DIR, 'iso_27001_coverage.png')}")
 
-    save_path = os.path.join(GRAPH_DIR, 'iso_27001_coverage.png')
-    plt.savefig(save_path, dpi=150, facecolor=fig.get_facecolor())
-    plt.close(fig)
-    print(f"[DEBUG] ISO 27001 graph saved: {save_path}")
-
+# Main execution
 if __name__ == "__main__":
     create_controls_db()
     controls_data = fetch_controls()
@@ -110,5 +99,5 @@ if __name__ == "__main__":
     generate_zero_trust_graph(controls_data)
     generate_iso_27001_graph(controls_data)
 
-    for idx, row in controls_data.iterrows():
+    for _, row in controls_data.iterrows():
         generate_control_badge(row['control_id'], row['domain'], row['score'])
