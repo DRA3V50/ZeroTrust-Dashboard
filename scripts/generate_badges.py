@@ -1,50 +1,51 @@
+import sqlite3
 from pathlib import Path
 import svgwrite
-import sqlite3
 
 DB_PATH = Path("data/controls.db")
 BADGES_DIR = Path("assets/badges")
+BADGES_DIR.mkdir(parents=True, exist_ok=True)
 
-def fetch_metrics():
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("SELECT domain, coverage FROM zero_trust")
-    zero_trust = [(row[0], int(row[1])) for row in cursor.fetchall()]
-    cursor.execute("SELECT control, coverage FROM iso_controls")
-    iso_controls = [(row[0], int(row[1])) for row in cursor.fetchall()]
-    conn.close()
-    return zero_trust + iso_controls
-
-def create_badge(label, value, file_path):
-    """Creates a simple SVG badge"""
-    # Convert value to int if needed
+def create_badge(label, value, filename):
+    # Ensure value is int
     try:
-        value = int(value)
-    except:
-        value = 0
+        value_int = int(value)
+    except ValueError:
+        value_int = 0
 
-    # Determine color
-    if value >= 80:
+    # Set color based on coverage
+    if value_int >= 80:
         color = "#4c1"
-    elif value >= 50:
+    elif value_int >= 50:
         color = "#dfb317"
     else:
         color = "#e05d44"
 
-    dwg = svgwrite.Drawing(str(file_path), size=("120px", "20px"))
-    dwg.add(dwg.rect(insert=(0, 0), size=("120px", "20px"), rx=3, ry=3, fill=color))
-    dwg.add(dwg.text(f"{label}: {value}%", insert=(10, 14), fill="#fff", font_size="12px", font_family="Verdana"))
+    dwg = svgwrite.Drawing(filename, size=("150px", "20px"))
+    dwg.add(dwg.rect(insert=(0,0), size=("150px","20px"), fill="#555"))
+    dwg.add(dwg.rect(insert=("70px",0), size=("80px","20px"), fill=color))
+    dwg.add(dwg.text(label, insert=(5,14), fill="#fff", font_size="11px"))
+    dwg.add(dwg.text(f"{value_int}%", insert=(75,14), fill="#fff", font_size="11px"))
     dwg.save()
 
 def generate_badges():
-    metrics = fetch_metrics()
-    BADGES_DIR.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
 
-    for label, value in metrics:
-        safe_label = label.replace(" ", "_").replace("/", "_").replace(".", "_")
-        create_badge(safe_label, value, BADGES_DIR / f"{safe_label}.svg")
-    
-    print("Badges generated successfully.")
+    # Zero Trust badges
+    cursor.execute("SELECT domain, coverage FROM zero_trust")
+    for domain, coverage in cursor.fetchall():
+        safe_label = domain.replace(" ", "_")
+        create_badge(safe_label, coverage, BADGES_DIR / f"{safe_label}.svg")
+
+    # ISO 27001 badges
+    cursor.execute("SELECT control, coverage FROM iso_27001")
+    for control, coverage in cursor.fetchall():
+        safe_label = control.replace(" ", "_").replace(".", "")
+        create_badge(safe_label, coverage, BADGES_DIR / f"{safe_label}.svg")
+
+    conn.close()
+    print("All badges generated successfully.")
 
 if __name__ == "__main__":
     generate_badges()
