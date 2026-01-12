@@ -1,40 +1,45 @@
-name: Generate Graphs and Badges
+name: ZeroTrust Dashboard Update
 
 on:
-  push:
-    branches:
-      - main
   schedule:
-    # Every day at 6 AM UTC (1 AM EST)
-    - cron: '0 6 * * *'
+    # EST 06:00 and 18:00 => UTC 11:00 and 23:00
+    - cron: '0 11 * * *'
+    - cron: '0 23 * * *'
+  workflow_dispatch:
 
 jobs:
-  build:
+  update_dashboard:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: 3.11
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas matplotlib pybadges
+          pip install -r requirements.txt
 
-      - name: Generate graphs and badges
-        run: python scripts/generate_graphs.py
+      - name: Run scripts
+        run: |
+          python scripts/create_controls_db.py
+          python scripts/generate_graphs.py
+          python scripts/update_dashboard.py
 
-      - name: Commit and push updates
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push changes
         env:
           GITHUB_TOKEN: ${{ secrets.ZeroTrust_PAT }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/graphs/ assets/badges/
-          git commit -m "Automated update: graphs and badges" || echo "No changes to commit"
-          git push https://DRA3V50:${GITHUB_TOKEN}@github.com/DRA3V50/ZeroTrust-Dashboard.git HEAD:main
+          git add assets/graphs/ assets/badges/ reports/latest_report.md
+          git commit -m "Automated update: graphs, badges, report" || echo "No changes to commit"
+          git push origin main
