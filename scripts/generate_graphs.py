@@ -1,9 +1,10 @@
-# scripts/generate_graphs.py
-
 import pandas as pd
 import matplotlib.pyplot as plt
 from generate_badges import generate_badge
 import sqlite3
+import os
+
+os.makedirs("assets/graphs", exist_ok=True)
 
 def fetch_controls():
     conn = sqlite3.connect("data/controls.db")
