@@ -20,14 +20,8 @@ def generate_control_badges():
         control_text = f"{row['control_id']}: {row['domain']}"
         score_text = str(row['score'])
 
-        # Version-agnostic way: use the generic badge function
-        try:
-            # Most modern pybadges versions
-            svg = pybadges.badge(label=control_text, value=score_text, color='blue')
-        except TypeError:
-            # Fallback: build badge manually using pybadges API
-            # Using named parameters as dictionary (works with older versions)
-            svg = pybadges.badge(**{'left': control_text, 'right': score_text, 'color': 'blue'})
+        # Positional arguments only (works on all versions)
+        svg = pybadges.badge(control_text, score_text, color='blue')
 
         badge_path = os.path.join(BADGE_DIR, f"{row['control_id']}.svg")
         with open(badge_path, "w") as f:
