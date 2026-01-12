@@ -15,15 +15,18 @@ def fetch():
     return df
 
 def zero_trust_graph(df):
-    # smaller figure, dark background, dimmer grid
     plt.style.use("dark_background")
-    fig, ax = plt.subplots(figsize=(6, 4))  # smaller figure
-    ax.set_facecolor("#111111")  # even darker background
-    ax.bar(df["control_id"], df["score"], color="#3498db")
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.set_facecolor("#111111")
+    
+    # narrower, softer bars
+    bar_colors = ["#5DADE2", "#5DADE2", "#5DADE2", "#5DADE2"]  # lighter blue
+    ax.bar(df["control_id"], df["score"], color=bar_colors, width=0.4)
+    
     ax.set_ylim(0, 100)
     ax.set_ylabel("Score (%)", color="#cccccc")
     ax.set_title("Zero Trust Posture", color="#ffffff")
-    ax.grid(True, color="#333333", linestyle="--", linewidth=0.5)  # dimmer grid
+    ax.grid(True, color="#333333", linestyle="--", linewidth=0.5)
 
     plt.tight_layout()
     plt.savefig(f"{GRAPH_DIR}/zero_trust_posture.png", dpi=150)
@@ -32,9 +35,13 @@ def zero_trust_graph(df):
 
 def iso_graph(df):
     plt.style.use("dark_background")
-    fig, ax = plt.subplots(figsize=(6, 4))  # smaller figure
-    ax.set_facecolor("#111111")  # darker background
-    ax.bar(df["domain"], df["score"], color="#e67e22")
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.set_facecolor("#111111")
+    
+    # narrower, softer bars
+    bar_colors = ["#E59866", "#E59866", "#E59866", "#E59866"]  # softer orange
+    ax.bar(df["domain"], df["score"], color=bar_colors, width=0.4)
+    
     ax.set_ylim(0, 100)
     ax.set_ylabel("Compliance (%)", color="#cccccc")
     ax.set_title("ISO 27001 Coverage", color="#ffffff")
