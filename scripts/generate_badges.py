@@ -1,19 +1,20 @@
 import pybadges
 import os
 
-BADGE_PATH = 'assets/badges/'
-os.makedirs(BADGE_PATH, exist_ok=True)
+ASSET_DIR = "assets/badges"
+os.makedirs(ASSET_DIR, exist_ok=True)
 
-def generate_control_badge(control_id, domain, score):
-    control_text = f"{control_id}: {domain}"
-    score_text = str(score)
-    svg = pybadges.badge(left_text=control_text, right_text=score_text, color='darkblue')
-    file_name = f"{control_id.replace('.', '_')}.svg"
-    path = os.path.join(BADGE_PATH, file_name)
+def generate_badge(control_id, domain, score):
+    svg = pybadges.badge(
+        label=f"{control_id} | {domain}",
+        value=str(score),
+        color="darkblue"
+    )
+    path = os.path.join(ASSET_DIR, f"{control_id}.svg")
     with open(path, "w") as f:
         f.write(svg)
     print(f"[DEBUG] Badge generated: {path}")
 
 if __name__ == "__main__":
-    # Example run
-    generate_control_badge("A.5.1", "Identity", 85)
+    # sample call
+    generate_badge("A.5.1", "Identity", 80)
