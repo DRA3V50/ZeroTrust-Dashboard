@@ -27,14 +27,15 @@ jobs:
       - run: python scripts/generate_graphs.py
       - run: python scripts/update_dashboard.py
 
-      # 5️⃣ Commit & push updates
+      # 5️⃣ Commit & push updates using PAT
       - name: Commit & Push
         env:
-          GITHUB_TOKEN: ${{ secrets.Zero_Trust_PAT }}
+          PAT: ${{ secrets.Zero_Trust_PAT }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Add the correct updated paths
           git add outputs/graphs outputs/badges reports data
           git commit -m "Automated update: $(date +'%Y-%m-%d %H:%M')" || echo "No changes to commit"
-          git push
+          # Set remote URL with PAT for authentication
+          git remote set-url origin https://$PAT@github.com/DRA3V50/ZeroTrust-Dashboard.git
+          git push origin main
