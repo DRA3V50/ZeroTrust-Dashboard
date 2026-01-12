@@ -1,13 +1,16 @@
-name: Daily Update
+name: Daily Update Dashboard
 
 on:
   schedule:
-    - cron: '0 9 * * *' # every day at 09:00 UTC
+    # 8:00 AM and 8:00 PM EST -> 13:00 UTC and 01:00 UTC
+    - cron: '13  * * * *'  # 8:00 AM EST
+    - cron: '01  * * * *'  # 8:00 PM EST
   workflow_dispatch:
 
 jobs:
   update_dashboard:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
@@ -16,24 +19,31 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install pandas svgwrite matplotlib
+          pip install pandas matplotlib svgwrite
 
-      - name: Generate badges and graphs
-        run: |
-          python scripts/create_controls_db.py
-          python scripts/update_dashboard.py
-          python scripts/generate_badges.py
-          python scripts/generate_graphs.py  # NEW: bar/column chart generator
+      - name: Create/Update Controls DB
+        run: python scripts/create_controls_db.py
 
-      - name: Commit and push updates
+      - name: Update Dashboard Report
+        run: python scripts/update_dashboard.py
+
+      - name: Generate Badges
+        run: python scripts/generate_badges.py
+
+      - name: Generate Graphs
+        run: python scripts/generate_graphs.py
+
+      - name: Commit & Push Updates
         env:
-          PAT_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/badges/ reports/latest_report.md assets/graphs/
-          git commit -m "Automated daily update: badges + graphs" || echo "No changes to commit"
-          git push https://x-access-token:${PAT_TOKEN}@github.com/${{ github.repository }} HEAD:main
+          git add assets/badges/*.svg assets/graphs/*.png reports/latest_report.md
+          git commit -m "Automated update: report + badges + graphs" || echo "No changes to commit"
+          git push origin main
