@@ -2,8 +2,8 @@ name: Daily Update
 
 on:
   schedule:
-    - cron: '0 8,20 * * *'  # Runs twice a day at 8 AM and 8 PM UTC
-  workflow_dispatch:  # Allows for manual triggering
+    - cron: '0 13,1 * * *'  # 8 AM & 8 PM EST in UTC
+  workflow_dispatch:
 
 jobs:
   update_dashboard:
@@ -18,14 +18,16 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
-      - name: Run create_controls_db.py
+      - name: Create SQLite database
         run: python scripts/create_controls_db.py
 
-      - name: Run generate_graphs.py
+      - name: Generate graphs
         run: python scripts/generate_graphs.py
 
-      - name: Run update_dashboard.py
+      - name: Generate badges
+        run: python scripts/generate_badges.py
+
+      - name: Update dashboard
         run: python scripts/update_dashboard.py
