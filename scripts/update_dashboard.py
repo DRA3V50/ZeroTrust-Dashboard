@@ -2,18 +2,20 @@ import sqlite3
 import pandas as pd
 import os
 
-DB_PATH = 'data/controls.db'
-REPORT_PATH = 'reports/latest_report.md'
-
-os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)
+os.makedirs("reports", exist_ok=True)
+DB_PATH = "data/controls.db"
 
 def update_dashboard():
-    print("[DEBUG] Generating latest report...")
     conn = sqlite3.connect(DB_PATH)
     df = pd.read_sql_query("SELECT * FROM controls", conn)
     conn.close()
-    df.to_markdown(buf=REPORT_PATH, index=False)
-    print(f"[DEBUG] Dashboard updated: {REPORT_PATH}")
+    
+    report_path = "reports/latest_report.md"
+    df.to_markdown(index=False)
+    with open(report_path, "w") as f:
+        f.write("# Latest Zero Trust Dashboard Report\n\n")
+        f.write(df.to_markdown(index=False))
+    print(f"[DEBUG] Latest report saved: {report_path}")
 
 if __name__ == "__main__":
     update_dashboard()
