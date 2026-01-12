@@ -3,8 +3,8 @@ name: Daily Zero-Trust Dashboard Update
 on:
   schedule:
     # Run at 6:00 AM and 11:00 PM EST
-    - cron: '0 11,4 * * *'  # UTC 11:00 and 04:00 corresponds to 6 AM and 11 PM EST
-  workflow_dispatch:  # Allows manual run
+    - cron: '0 11,4 * * *'  # UTC
+  workflow_dispatch:
 
 jobs:
   update_dashboard:
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # IMPORTANT: disables default GITHUB_TOKEN for push
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -36,13 +38,15 @@ jobs:
       - name: Generate Badges
         run: python scripts/generate_badges.py
 
-      - name: Configure Git for Push
+      - name: Configure Git
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit and Push Changes
+      - name: Commit changes
         run: |
           git add reports/latest_report.md assets/badges/*.svg
-          git commit -m "Automated daily update: report + badges" || echo "No changes to commit"
-          git push https://x-access-token:$PAT@github.com/DRA3V50/ZeroTrust-Dashboard.git HEAD:main
+          git diff --cached --quiet || git commit -m "Automated daily update: report + badges"
+
+      - name: Push changes using PAT
+        run: git push https://$PAT@github.com/DRA3V50/ZeroTrust-Dashboard.git HEAD:main
