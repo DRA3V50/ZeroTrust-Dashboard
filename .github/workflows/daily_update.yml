@@ -1,32 +1,40 @@
-name: ZeroTrust Update
+name: Daily Zero Trust Update
 
 on:
   schedule:
-    - cron: '0 13 * * *'   # 8 AM EST
-    - cron: '0 1 * * *'    # 8 PM EST
+    - cron: '0 10,22 * * *' # Runs twice daily at 10:00 & 22:00 UTC
   workflow_dispatch:
 
 jobs:
-  run:
+  update_dashboard:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: 3.11
 
-      - run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install pandas matplotlib pybadges>=2.2.1
 
-      - run: python scripts/create_controls_db.py
-      - run: python scripts/generate_graphs.py
-      - run: python scripts/update_dashboard.py
+      - name: Generate database
+        run: python scripts/create_controls_db.py
 
-      - env:
+      - name: Generate graphs & badges
+        run: python scripts/generate_graphs.py
+
+      - name: Update metrics report
+        run: python scripts/update_dashboard.py
+
+      - name: Commit and push updates
+        env:
           GITHUB_TOKEN: ${{ secrets.Zero_Trust_PAT }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/badges assets/graphs reports
-          git commit -m "Automated update" || echo "No changes"
-          git push
+          git add outputs reports
+          git commit -m "Automated update: $(date +'%Y-%m-%d %H:%M')" || echo "No changes"
+          git push https://x-access-token:${{ secrets.Zero_Trust_PAT }}@github.com/DRA3V50/ZeroTrust-Dashboard.git
