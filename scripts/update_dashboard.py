@@ -1,14 +1,26 @@
 import sqlite3
 import pandas as pd
+import os
 
 DB_PATH = 'data/controls.db'
+REPORT_PATH = 'reports/latest_report.md'
+
+# Ensure reports folder exists
+os.makedirs(os.path.dirname(REPORT_PATH), exist_ok=True)
 
 def update_dashboard():
     print("Generating latest report...")
-    conn = sqlite3.connect(DB_PATH)  # plain sqlite connection
+    
+    # Connect to SQLite database
+    conn = sqlite3.connect(DB_PATH)
+    
+    # Fetch all controls data
     df = pd.read_sql_query("SELECT * FROM controls", conn)
     conn.close()
+    
+    # Save report as CSV (or markdown if you prefer)
+    df.to_csv(REPORT_PATH, index=False)
+    print(f"Dashboard updated and saved to {REPORT_PATH}.")
 
-    # Save as markdown or CSV
-    df.to_csv("latest_report.md", index=False)
-    print("Dashboard updated.")
+if __name__ == "__main__":
+    update_dashboard()
