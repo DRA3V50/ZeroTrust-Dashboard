@@ -4,16 +4,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pybadges import badge
 
-# Paths
 DB_PATH = 'data/controls.db'
 GRAPH_DIR = 'assets/graphs'
 BADGE_DIR = 'assets/badges'
 
-# Ensure folders exist
+# Ensure directories exist
 os.makedirs(GRAPH_DIR, exist_ok=True)
 os.makedirs(BADGE_DIR, exist_ok=True)
 
-# Fetch control data from DB
 def fetch_controls():
     print("Fetching control data from SQLite DB...")
     conn = sqlite3.connect(DB_PATH)
@@ -21,7 +19,6 @@ def fetch_controls():
     conn.close()
     return df
 
-# Generate Zero Trust Posture graph
 def generate_zero_trust_graph(df):
     print("Generating Zero Trust Posture graph...")
     plt.figure(figsize=(10,6))
@@ -34,7 +31,6 @@ def generate_zero_trust_graph(df):
     plt.close()
     print("Zero Trust graph saved.")
 
-# Generate ISO 27001 Coverage graph
 def generate_iso_27001_graph(df):
     print("Generating ISO 27001 Coverage graph...")
     plt.figure(figsize=(10,6))
@@ -47,25 +43,21 @@ def generate_iso_27001_graph(df):
     plt.close()
     print("ISO 27001 graph saved.")
 
-# Generate SVG badge for each control
-def generate_control_badge(control_id, domain, score):
-    svg = badge(
-        left_text=control_id,
-        right_text=f"{domain} ({score})",
-        color='green'
-    )
-    badge_file = os.path.join(BADGE_DIR, f"{control_id.replace('.', '_')}.svg")
-    with open(badge_file, 'w') as f:
-        f.write(svg)
-    print(f"Badge saved: {badge_file}")
+def generate_control_badges(df):
+    print("Generating badges...")
+    for _, row in df.iterrows():
+        svg = badge(
+            left_text=row['control_id'],
+            right_text=f"{row['score']}%",
+            right_color="green" if row['score'] >= 80 else "orange" if row['score'] >= 60 else "red"
+        )
+        file_path = os.path.join(BADGE_DIR, f"{row['control_id'].replace('.', '_')}.svg")
+        with open(file_path, 'w') as f:
+            f.write(svg)
+        print(f"Badge saved: {file_path}")
 
 if __name__ == "__main__":
-    controls_data = fetch_controls()
-
-    # Generate graphs
-    generate_zero_trust_graph(controls_data)
-    generate_iso_27001_graph(controls_data)
-
-    # Generate badges
-    for _, row in controls_data.iterrows():
-        generate_control_badge(row['control_id'], row['domain'], row['score'])
+    df = fetch_controls()
+    generate_zero_trust_graph(df)
+    generate_iso_27001_graph(df)
+    generate_control_badges(df)
