@@ -5,29 +5,63 @@ from datetime import datetime
 
 os.makedirs("reports", exist_ok=True)
 
-conn = sqlite3.connect("data/controls.db")
-df = pd.read_sql("SELECT * FROM controls", conn)
-conn.close()
+DB_PATH = "data/controls.db"
+README_PATH = "README.md"
+REPORT_PATH = "reports/latest_report.md"
 
-report_file = "reports/latest_report.md"
-now = datetime.now().strftime("%Y-%m-%d %H:%M")
+def fetch_controls():
+    conn = sqlite3.connect(DB_PATH)
+    df = pd.read_sql("SELECT * FROM controls", conn)
+    conn.close()
+    return df
 
-with open(report_file, "w") as f:
-    # Header
-    f.write("# 🔒 Zero Trust Dashboard\n\n")
-    f.write(f"*Report generated: {now}*\n\n")
-    
-    # Overview
-    f.write("## 🔎 Overview\n")
-    f.write("Automated real-time view of Zero Trust posture and ISO 27001 compliance.\n\n")
-    
-    # Metrics Table
-    f.write("## ⚠️ Critical Metrics Snapshot\n")
-    f.write("| Control ID | Domain | Score | Status |\n")
-    f.write("|------------|--------|-------|--------|\n")
-    
+def generate_md_table(df):
+    table = "| Control ID | Domain | Score (%) |\n"
+    table += "|------------|--------|-----------|\n"
     for _, row in df.iterrows():
-        status = "✅ Good" if row.score >= 70 else "⚠️ Needs Attention"
-        f.write(f"| {row.control_id} | {row.domain} | {row.score}% | {status} |\n")
-    
-    f.write("\n> Updated daily along with graphs and badges, providing a quick view of areas to focus remediation.\n")
+        table += f"| {row['control_id']} | {row['domain']} | {row['score']} |\n"
+    return table
+
+def update_latest_report(df):
+    with open(REPORT_PATH, "w") as f:
+        f.write("# Zero Trust Dashboard Report\n\n")
+        f.write(generate_md_table(df))
+    print("[OK] Latest report updated")
+
+def update_readme_table(df):
+    table_md = generate_md_table(df)
+    readme_lines = []
+    if os.path.exists(README_PATH):
+        with open(README_PATH, "r") as f:
+            readme_lines = f.readlines()
+
+    start_tag = "<!-- METRICS_TABLE_START -->\n"
+    end_tag = "<!-- METRICS_TABLE_END -->\n"
+
+    # Remove old table if exists
+    inside_table = False
+    new_lines = []
+    for line in readme_lines:
+        if line == start_tag:
+            inside_table = True
+            continue
+        if line == end_tag:
+            inside_table = False
+            continue
+        if not inside_table:
+            new_lines.append(line)
+
+    # Insert new table
+    new_lines.append(start_tag)
+    new_lines.append(table_md)
+    new_lines.append(end_tag)
+
+    with open(README_PATH, "w") as f:
+        f.writelines(new_lines)
+
+    print("[OK] README metrics table updated")
+
+if __name__ == "__main__":
+    df = fetch_controls()
+    update_latest_report(df)
+    update_readme_table(df)
