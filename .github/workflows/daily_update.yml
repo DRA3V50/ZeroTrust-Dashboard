@@ -1,33 +1,54 @@
 name: Daily Update
 
+# Run twice a day at 8 AM and 8 PM EST
 on:
   schedule:
-    - cron: '0 13,1 * * *'  # 8 AM & 8 PM EST in UTC
-  workflow_dispatch:
+    - cron: '0 13,1 * * *' # 8AM and 8PM EST = 13:00 and 01:00 UTC
+  workflow_dispatch:      # Manual trigger
 
 jobs:
   update_dashboard:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+    steps:
+      # Step 1: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
+      # Step 3: Install dependencies
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install tabulate  # ensure optional dependencies for pandas markdown
 
-      - name: Create SQLite database
+      # Step 4: Create / update database
+      - name: Create or update SQLite DB
         run: python scripts/create_controls_db.py
 
+      # Step 5: Generate graphs
       - name: Generate graphs
         run: python scripts/generate_graphs.py
 
+      # Step 6: Generate badges
       - name: Generate badges
         run: python scripts/generate_badges.py
 
-      - name: Update dashboard
+      # Step 7: Update dashboard/report
+      - name: Update dashboard/report
         run: python scripts/update_dashboard.py
+
+      # Step 8: Commit & push updated assets
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/graphs/* assets/badges/* reports/latest_report.md
+          git diff-index --quiet HEAD || git commit -m "Automated daily update: graphs, badges, report"
+          git push
