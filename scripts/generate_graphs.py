@@ -1,44 +1,55 @@
-import os
-import sqlite3
-import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib
 
-DB_PATH = 'data/controls.db'
-GRAPH_DIR = 'assets/graphs'
-
-os.makedirs(GRAPH_DIR, exist_ok=True)
-
-def fetch_controls():
-    conn = sqlite3.connect(DB_PATH)
-    df = pd.read_sql_query("SELECT * FROM controls", conn)
-    conn.close()
-    return df
+# Use a readable font family
+matplotlib.rcParams['font.family'] = 'DejaVu Sans'
 
 def generate_zero_trust_graph(df):
-    print("Generating Zero Trust Posture graph...")
-    plt.figure(figsize=(10,6))
-    plt.bar(df['domain'], df['score'], color='skyblue')
-    plt.xlabel('Security Domain')
-    plt.ylabel('Score')
-    plt.title('Zero Trust Posture')
-    plt.tight_layout()
-    plt.savefig(os.path.join(GRAPH_DIR, 'zero_trust_posture.png'))
+    plt.figure(figsize=(11, 6))
+    bars = plt.bar(df['domain'], df['score'], color="#0d3b66")  # darker blue
+    plt.xlabel('Security Domain', fontsize=14, fontweight='bold', color='white')
+    plt.ylabel('Score', fontsize=14, fontweight='bold', color='white')
+    plt.title('Zero Trust Posture', fontsize=16, fontweight='bold', color='white')
+    plt.ylim(0, 100)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+    ax = plt.gca()
+    ax.set_facecolor('#1b1b1b')
+    plt.gcf().patch.set_facecolor('#1b1b1b')
+
+    plt.xticks(rotation=35, fontsize=11, color='white', ha='right')
+    plt.yticks(fontsize=12, color='white')
+
+    # Add value labels on top of bars with padding
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, height + 2, f'{height}%', ha='center', color='white', fontsize=12)
+
+    plt.tight_layout(rect=[0, 0.1, 1, 0.95])  # Add more bottom space for rotated labels
+    plt.savefig('assets/graphs/zero_trust_posture.png', dpi=150, facecolor='#1b1b1b')
     plt.close()
-    print("Zero Trust graph saved.")
+
 
 def generate_iso_27001_graph(df):
-    print("Generating ISO 27001 Coverage graph...")
-    plt.figure(figsize=(10,6))
-    plt.bar(df['control_id'], df['score'], color='orange')
-    plt.xlabel('ISO 27001 Control')
-    plt.ylabel('Compliance Score')
-    plt.title('ISO 27001 Control Coverage')
-    plt.tight_layout()
-    plt.savefig(os.path.join(GRAPH_DIR, 'iso_27001_coverage.png'))
-    plt.close()
-    print("ISO 27001 graph saved.")
+    plt.figure(figsize=(11, 6))
+    bars = plt.bar(df['control_id'], df['score'], color="#f4a261")  # softer orange
+    plt.xlabel('ISO 27001 Control', fontsize=14, fontweight='bold', color='white')
+    plt.ylabel('Compliance Score', fontsize=14, fontweight='bold', color='white')
+    plt.title('ISO 27001 Control Coverage', fontsize=16, fontweight='bold', color='white')
+    plt.ylim(0, 100)
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
 
-if __name__ == "__main__":
-    controls = fetch_controls()
-    generate_zero_trust_graph(controls)
-    generate_iso_27001_graph(controls)
+    ax = plt.gca()
+    ax.set_facecolor('#1b1b1b')
+    plt.gcf().patch.set_facecolor('#1b1b1b')
+
+    plt.xticks(rotation=35, fontsize=11, color='white', ha='right')
+    plt.yticks(fontsize=12, color='white')
+
+    for bar in bars:
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2, height + 2, f'{height}%', ha='center', color='white', fontsize=12)
+
+    plt.tight_layout(rect=[0, 0.1, 1, 0.95])
+    plt.savefig('assets/graphs/iso_27001_coverage.png', dpi=150, facecolor='#1b1b1b')
+    plt.close()
