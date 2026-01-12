@@ -1,17 +1,18 @@
 import sqlite3
 import os
 
+# Path to the database
 DB_PATH = 'data/controls.db'
 
 # Ensure data folder exists
-os.makedirs('data', exist_ok=True)
+os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
 def create_controls_db():
     print("Creating/updating SQLite database...")
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Create controls table
+    # Create the controls table if it doesn't exist
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS controls (
         control_id TEXT PRIMARY KEY,
@@ -20,10 +21,10 @@ def create_controls_db():
     )
     ''')
 
-    # Populate with sample data if empty
+    # Populate with sample data if the table is empty
     cursor.execute('SELECT COUNT(*) FROM controls')
     if cursor.fetchone()[0] == 0:
-        print("Populating database with sample data...")
+        print("Populating the database with sample data...")
         sample_data = [
             ('A.5.1', 'Information Security Policies', 80),
             ('A.6.1', 'Organization of Information Security', 75),
@@ -34,7 +35,7 @@ def create_controls_db():
 
     conn.commit()
     conn.close()
-    print("Controls database created/updated successfully.")
+    print("Database created/updated successfully.")
 
 if __name__ == "__main__":
     create_controls_db()
