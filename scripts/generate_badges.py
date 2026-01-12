@@ -1,17 +1,19 @@
-import os
-import shutil
+from pybadges import badge
 
-BADGE_DIR = 'assets/badges'
-os.makedirs(BADGE_DIR, exist_ok=True)
+def generate_control_badge(control_id, domain, score, color='blue'):
+    """
+    Generates an SVG badge for a control.
+    Compatible with older and newer versions of pybadges.
+    """
+    try:
+        # Try the newer syntax first
+        svg = badge(label=control_id, message=domain, right_color=color)
+    except TypeError:
+        # Fallback for older pybadges versions
+        svg = badge(left_text=control_id, right_text=domain, right_color=color)
 
-def generate_badges():
-    badges = ['Identity.svg', 'Device.svg', 'Network.svg', 'Application.svg', 'Data.svg']
-    for badge in badges:
-        path = os.path.join(BADGE_DIR, badge)
-        if not os.path.exists(path):
-            with open(path, 'w') as f:
-                f.write(f'<svg><text>{badge.replace(".svg","")}</text></svg>')
-    print(f"Badges generated successfully in {BADGE_DIR}")
-
-if __name__ == "__main__":
-    generate_badges()
+    # Save the SVG badge
+    filename = f"assets/badges/{control_id.replace('.', '_')}.svg"
+    with open(filename, 'w') as f:
+        f.write(svg)
+    print(f"Badge saved: {filename}")
