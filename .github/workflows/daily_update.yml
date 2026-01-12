@@ -2,8 +2,8 @@ name: Daily Update Dashboard
 
 on:
   schedule:
-    # Runs at 06:00 and 22:00 EST daily (convert to UTC for GitHub Actions)
-    - cron: '0 11,3 * * *'  # 06:00 EST = 11:00 UTC, 22:00 EST = 03:00 UTC
+    # Runs at 06:00 and 22:00 EST daily
+    - cron: '0 11,3 * * *'  # GitHub Actions uses UTC
   workflow_dispatch:
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
       - name: Create Controls Database
         run: python scripts/create_controls_db.py
 
-      - name: Update Dashboard Report
+      - name: Update Dashboard
         run: python scripts/update_dashboard.py
 
       - name: Generate Badges
