@@ -1,28 +1,20 @@
 import sqlite3
+from pathlib import Path
+import pandas as pd
 
-conn = sqlite3.connect("data/controls.db")
-c = conn.cursor()
+DB_PATH = Path("data/controls.db")
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-c.execute("""
-CREATE TABLE IF NOT EXISTS controls (
-    control_id TEXT PRIMARY KEY,
-    domain TEXT NOT NULL,
-    score INTEGER NOT NULL
-)
-""")
+def create_db():
+    conn = sqlite3.connect(DB_PATH)
+    df = pd.DataFrame({
+        "control_id": ["A.5.1", "A.6.1", "A.7.2", "A.9.2"],
+        "domain": ["Identity", "Device", "Network", "Data"],
+        "score": [3, 2, 4, 5]
+    })
+    df.to_sql("controls", conn, if_exists="replace", index=False)
+    conn.close()
+    print(f"[DEBUG] Database created/populated at {DB_PATH}")
 
-# Sample data
-controls_data = [
-    ("A.5.1", "Identity", 85),
-    ("A.6.1", "Device", 90),
-    ("A.8.2", "Network", 75),
-    ("A.9.2", "Data", 80)
-]
-
-c.executemany("""
-INSERT OR REPLACE INTO controls (control_id, domain, score) VALUES (?, ?, ?)
-""", controls_data)
-
-conn.commit()
-conn.close()
-print("[DEBUG] Database created/populated at data/controls.db")
+if __name__ == "__main__":
+    create_db()
