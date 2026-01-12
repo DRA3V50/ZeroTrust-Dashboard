@@ -1,6 +1,6 @@
 import sqlite3
 import os
-import random  # <-- new
+import random  # optional for random scores
 
 os.makedirs("data", exist_ok=True)
 
@@ -15,16 +15,15 @@ CREATE TABLE IF NOT EXISTS controls (
 )
 """)
 
-# generate random scores between 50% and 100%
+# Sample data with random scores for dynamic updates
 controls = [
-    ("A.5.1", "Policy", random.randint(50, 100)),
-    ("A.6.1", "Access Control", random.randint(50, 100)),
-    ("A.8.2", "Assets", random.randint(50, 100)),
-    ("A.9.2", "Monitoring", random.randint(50, 100))
+    ("A.5.1", "Policy", random.randint(60, 100)),
+    ("A.6.1", "Access Control", random.randint(60, 100)),
+    ("A.8.2", "Assets", random.randint(60, 100)),
+    ("A.9.2", "Monitoring", random.randint(60, 100))
 ]
 
 c.executemany("INSERT OR REPLACE INTO controls VALUES (?, ?, ?)", controls)
-
 conn.commit()
 conn.close()
-print("[DEBUG] Database created/populated at data/controls.db with random scores")
+print("[DEBUG] Database created/populated at data/controls.db")
