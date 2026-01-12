@@ -1,5 +1,3 @@
 pandas
 matplotlib
-pybadges>=1.3
-SQLAlchemy
-tabulate
+pybadges>=2.2.1
