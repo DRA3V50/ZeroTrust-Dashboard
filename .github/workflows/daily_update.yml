@@ -1,11 +1,10 @@
 name: Daily Update
 
-# Run twice a day in EST (UTC-5). GitHub uses UTC, so 8 AM & 8 PM EST = 13:00 & 01:00 UTC
+# Runs at 8AM and 8PM EST every day
 on:
   schedule:
-    - cron: '13 0 * * *'  # 8 AM EST
-    - cron: '01 12 * * *' # 8 PM EST
-  workflow_dispatch:  # Allows manual trigger
+    - cron: '0 13,1 * * *'  # UTC times for 8AM and 8PM EST
+  workflow_dispatch:       # Allows manual trigger
 
 jobs:
   update_dashboard:
@@ -21,9 +20,11 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Create/Update SQLite DB
+      - name: Create / Update SQLite DB
         run: python scripts/create_controls_db.py
 
       - name: Generate Graphs
@@ -35,11 +36,12 @@ jobs:
       - name: Update Dashboard Report
         run: python scripts/update_dashboard.py
 
-      - name: Commit and Push Updates
+      - name: Commit and Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_Sim_Token }}  # Use your personal token
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions@github.com"
-          git add assets/graphs/* assets/badges/* reports/latest_report.md
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git add assets/graphs/*.png assets/badges/*.svg reports/latest_report.md
           git commit -m "Automated daily update: graphs, badges, report" || echo "No changes to commit"
-          git push https://DRA3V50:${{ secrets.PAT_TOKEN }}@github.com/DRA3V50/ZeroTrust-Dashboard.git
-
+          git push https://DRA3V50:${GITHUB_TOKEN}@github.com/DRA3V50/ZeroTrust-Dashboard.git HEAD:main
