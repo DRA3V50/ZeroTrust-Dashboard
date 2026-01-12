@@ -1,5 +1,5 @@
 pandas
 matplotlib
-pybadges
+pybadges>=1.2.0
 SQLAlchemy
 tabulate
