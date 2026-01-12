@@ -2,7 +2,7 @@ import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
-from generate_badges import generate_control_badge  # fixed import
+from generate_badges import generate_control_badge
 
 DB_PATH = 'data/controls.db'
 GRAPH_PATH = 'assets/graphs/'
@@ -22,7 +22,7 @@ def plot_zero_trust(df):
     plt.ylabel("Score", color='white')
     plt.xticks(rotation=45, ha='right', color='white')
     plt.yticks(color='white')
-    plt.gca().set_facecolor('#2b2b2b')  # darker background
+    plt.gca().set_facecolor('#2b2b2b')
     plt.tight_layout()
     plt.savefig(os.path.join(GRAPH_PATH, "zero_trust_posture.png"), facecolor='#2b2b2b')
     plt.close()
