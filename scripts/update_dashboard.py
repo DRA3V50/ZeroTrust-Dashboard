@@ -1,36 +1,52 @@
 import sqlite3
 import pandas as pd
+import os
+from datetime import datetime
 
+# Paths
 DB_PATH = "data/controls.db"
+REPORT_PATH = "reports/latest_report.md"
 README_PATH = "README.md"
+
+os.makedirs("reports", exist_ok=True)
 
 # Fetch data
 conn = sqlite3.connect(DB_PATH)
 df = pd.read_sql("SELECT * FROM controls", conn)
 conn.close()
 
-# Create Markdown table
-table_md = "| Control ID | Domain | Score (%) |\n"
-table_md += "|-----------|--------|-----------|\n"
-for _, r in df.iterrows():
-    table_md += f"| {r.control_id} | {r.domain} | {r.score} |\n"
-
-# Write to latest report
-with open("reports/latest_report.md", "w") as f:
+# --- Update latest_report.md ---
+with open(REPORT_PATH, "w") as f:
     f.write("# Zero Trust Dashboard Report\n\n")
-    f.write(table_md)
+    f.write(f"_Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M')}_\n\n")
+    f.write("| Control | Domain | Score (%) |\n")
+    f.write("|--------|--------|-----------|\n")
+    for _, r in df.iterrows():
+        f.write(f"| {r.control_id} | {r.domain} | {r.score}% |\n")
+print("[OK] Report updated")
 
-# Optional: Update README dynamically
-# Replace between markers <!-- START_METRICS --> ... <!-- END_METRICS -->
+# --- Update README.md with dynamic metrics table ---
 with open(README_PATH, "r") as f:
-    readme = f.read()
+    readme_content = f.read()
 
-start_marker = "<!-- START_METRICS -->"
-end_marker = "<!-- END_METRICS -->"
+# Build metrics table in Markdown
+metrics_table_md = "\n| Control | Domain | Score (%) |\n|--------|--------|-----------|\n"
+for _, r in df.iterrows():
+    metrics_table_md += f"| {r.control_id} | {r.domain} | {r.score}% |\n"
 
-if start_marker in readme and end_marker in readme:
-    before = readme.split(start_marker)[0]
-    after = readme.split(end_marker)[1]
-    readme = before + start_marker + "\n" + table_md + "\n" + end_marker + after
-    with open(README_PATH, "w") as f:
-        f.write(readme)
+# Replace table between markers
+start_marker = "<!-- METRICS_TABLE_START -->"
+end_marker = "<!-- METRICS_TABLE_END -->"
+
+if start_marker in readme_content and end_marker in readme_content:
+    pre = readme_content.split(start_marker)[0]
+    post = readme_content.split(end_marker)[1]
+    new_readme = f"{pre}{start_marker}\n{metrics_table_md}{end_marker}{post}"
+else:
+    # If markers not found, append at end
+    new_readme = f"{readme_content}\n{start_marker}\n{metrics_table_md}{end_marker}\n"
+
+with open(README_PATH, "w") as f:
+    f.write(new_readme)
+
+print("[OK] README metrics table updated")
