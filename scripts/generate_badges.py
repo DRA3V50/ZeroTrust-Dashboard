@@ -1,18 +1,17 @@
+import sqlite3
+import pandas as pd
 import os
 
-BADGE_DIR = "outputs/badges"
-os.makedirs(BADGE_DIR, exist_ok=True)
+os.makedirs("reports", exist_ok=True)
+conn = sqlite3.connect("data/controls.db")
+df = pd.read_sql("SELECT * FROM controls", conn)
+conn.close()
 
-def generate_badge(control_id, domain, score):
-    bg = "#1e1e1e"
-    text = "#ffffff"
-    svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="340" height="42">
-  <rect width="340" height="42" rx="6" fill="{bg}"/>
-  <text x="12" y="26" fill="{text}" font-size="14" font-family="Arial">
-    {control_id} • {domain} • {score}%
-  </text>
-</svg>
-"""
-    file_path = f"{BADGE_DIR}/{control_id}.svg"
-    with open(file_path, "w") as f:
-        f.write(svg)
+with open("reports/latest_report.md", "w") as f:
+    f.write("# Zero Trust Dashboard Metrics\n\n")
+    f.write("| Control | Domain | Score |\n")
+    f.write("|---------|--------|-------|\n")
+    for _, r in df.iterrows():
+        f.write(f"| {r.control_id} | {r.domain} | {r.score}% |\n")
+
+print("[OK] Report and metrics table updated")
