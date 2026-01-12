@@ -1,44 +1,48 @@
-name: Daily Update
+name: Daily Zero-Trust Dashboard Update
 
 on:
   schedule:
-    # Runs at 05:00 AM and 11:00 PM EST
-    - cron: '0 10,4 * * *'  # UTC time: EST +5h
+    # Run at 6:00 AM and 11:00 PM EST
+    - cron: '0 11,4 * * *'  # UTC 11:00 and 04:00 corresponds to 6 AM and 11 PM EST
   workflow_dispatch:  # Allows manual run
 
 jobs:
   update_dashboard:
     runs-on: ubuntu-latest
-
+    env:
+      PAT: ${{ secrets.PAT_SIM_TOKEN }}
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
 
-    - name: Upgrade pip and install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pandas svgwrite
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
 
-    - name: Create/Update controls database
-      run: python scripts/create_controls_db.py
+      - name: Install dependencies
+        run: |
+          python -m pip install pandas numpy svgwrite pytz tzdata python-dateutil
 
-    - name: Update dashboard report
-      run: python scripts/update_dashboard.py
+      - name: Create/Update Controls Database
+        run: python scripts/create_controls_db.py
 
-    - name: Generate badges
-      run: python scripts/generate_badges.py
+      - name: Generate Dashboard Report
+        run: python scripts/update_dashboard.py
 
-    - name: Commit and push changes
-      env:
-        PAT_Sim_Token: ${{ secrets.PAT_Sim_Token }}
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add .
-        git commit -m "Automated daily update: report + badges" || echo "No changes to commit"
-        git push https://PAT_Sim_Token@github.com/${{ github.repository }}.git HEAD:main
+      - name: Generate Badges
+        run: python scripts/generate_badges.py
+
+      - name: Configure Git for Push
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and Push Changes
+        run: |
+          git add reports/latest_report.md assets/badges/*.svg
+          git commit -m "Automated daily update: report + badges" || echo "No changes to commit"
+          git push https://x-access-token:$PAT@github.com/DRA3V50/ZeroTrust-Dashboard.git HEAD:main
