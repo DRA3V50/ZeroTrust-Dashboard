@@ -2,7 +2,7 @@ import os
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
-from pybadges import badge as pybadge
+from pybadges import badge as pybadge  # older version supports only left/right/color
 
 DB_PATH = 'data/controls.db'
 GRAPH_DIR = 'assets/graphs'
@@ -40,31 +40,32 @@ def fetch_controls():
     return df
 
 def generate_control_badge(control_id, domain, score):
-    control_text = f"{control_id}: {domain}"
-    score_text = str(score)
-    svg = pybadge(text=control_text + " | " + score_text)  # single string for pybadges
+    # Use left/right which is compatible with older pybadges
+    left_text = f"{control_id}: {domain}"
+    right_text = str(score)
+    svg = pybadge(left=left_text, right=right_text, color='blue')
     badge_path = os.path.join(BADGE_DIR, f"{control_id}.svg")
     with open(badge_path, "w") as f:
         f.write(svg)
 
 def generate_zero_trust_graph(df):
     plt.figure(figsize=(12, 6))
-    plt.bar(df['domain'], df['score'], color='#1f2937')
+    plt.bar(df['domain'], df['score'], color='#1f2937')  # dark dimmed background bars
     plt.xlabel('Security Domain', fontsize=12)
     plt.ylabel('Score', fontsize=12)
     plt.title('Zero Trust Posture', fontsize=14)
-    plt.xticks(rotation=30, ha='right')
+    plt.xticks(rotation=30, ha='right', fontsize=10)
     plt.tight_layout()
     plt.savefig(os.path.join(GRAPH_DIR, 'zero_trust_posture.png'))
     plt.close()
 
 def generate_iso_27001_graph(df):
     plt.figure(figsize=(12, 6))
-    plt.bar(df['control_id'], df['score'], color='#4b5563')
+    plt.bar(df['control_id'], df['score'], color='#4b5563')  # darker bars
     plt.xlabel('ISO 27001 Control', fontsize=12)
     plt.ylabel('Compliance Score', fontsize=12)
     plt.title('ISO 27001 Control Coverage', fontsize=14)
-    plt.xticks(rotation=30, ha='right')
+    plt.xticks(rotation=30, ha='right', fontsize=10)
     plt.tight_layout()
     plt.savefig(os.path.join(GRAPH_DIR, 'iso_27001_coverage.png'))
     plt.close()
