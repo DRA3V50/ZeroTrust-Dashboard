@@ -3,7 +3,7 @@
 ---
 
 ## 🔎 Overview
-The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. By leveraging **Python**, **SQLite**, and **GitHub Actions**, this system ensures metrics, reports, and visualizations are updated twice daily, supporting informed security decision-making.  
+The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. By leveraging **Python**, **SQLite**, and **GitHub Actions**, this system ensures metrics, reports, and visualizations are updated twice daily, supporting informed security decision-making.
 
 - Provides consistent, auditable insights for operational and federal security teams.  
 - Supports ongoing monitoring without manual intervention.  
@@ -41,17 +41,16 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 - **Data Storage**: Security metrics stored in a structured **SQLite database** (`data/controls.db`).  
 - **Report Generation**: Produces structured reports summarizing current security posture and compliance.  
 - **Visualizations**:  
-  - **Graphs**: Dynamic visual representation of Zero Trust and ISO-27001 coverage.  
+  - **Graphs**: Dynamic visual representation of Zero Trust and ISO-27001 coverage. Updated daily, showing the latest results without overwriting previous data.  
   - **Badges**: Real-time visual summaries of individual controls.  
+- Graphs feature a professional dark theme with smaller, readable sizes (~330px width) for dashboards or executive briefings.  
 
-> **⚠️ Note**: Graphs and metrics table are updated twice daily to reflect the latest data, without overwriting previous outputs.  
-
-Graphs feature a professional dark theme with smaller, readable sizes for dashboards or executive briefings.  
+> **⚠️ Note**: Graphs are updated twice daily to reflect the latest data, without overwriting previous outputs.  
 
 ---
 
 ## 📝 Security Monitoring and Audit Support
-The dashboard supports operational monitoring, compliance tracking, and audit readiness:  
+The dashboard supports operational monitoring, compliance tracking, and audit readiness:
 
 - **Track Compliance**: Monitor controls across domains and ISO 27001 standards.  
 - **Identify Gaps**: Highlight areas of insufficient security or non-compliance.  
@@ -66,35 +65,31 @@ The dashboard supports operational monitoring, compliance tracking, and audit re
 ### Latest Zero Trust Posture
 - Visual representation of domain scores updated daily.  
 - Provides actionable insight for analysts and leadership.  
-![Zero Trust Posture](outputs/graphs/zero_trust_posture.png)
+![Zero Trust Posture](outputs/graphs/zero_trust_posture_YYYYMMDD_HHMM.png)
 
 ### Latest ISO 27001 Control Coverage
 - Daily updated visual representation of control compliance.  
 - Highlights strengths and areas needing attention.  
-![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage.png)
+![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage_YYYYMMDD_HHMM.png)
 
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.  
-![A.5.1](outputs/badges/A.5.1_20260112_2209.svg)  
-![A.6.1](outputs/badges/A.6.1_20260112_2209.svg)  
-![A.7.2](outputs/badges/A.7.2_20260112_2209.svg)  
-![A.9.2](outputs/badges/A.9.2_20260112_2209.svg)
+![A.5.1](outputs/badges/A.5.1_YYYYMMDD_HHMM.svg)  
+![A.6.1](outputs/badges/A.6.1_YYYYMMDD_HHMM.svg)  
+![A.8.2](outputs/badges/A.8.2_YYYYMMDD_HHMM.svg)  
+![A.9.2](outputs/badges/A.9.2_YYYYMMDD_HHMM.svg)
 
----
+### 🗂 Metrics Table
+> Note: This table is automatically updated daily by the workflow, reflecting the latest Zero Trust and ISO 27001 control scores.
 
-## 🗂 Metrics Table
-Note: This table is automatically updated daily by the workflow, reflecting the latest Zero Trust and ISO 27001 control scores.
-
-| Control ID | Domain | Score (%) |
-|-----------|--------|-----------|
-| A.5.1     | Policy | 85        |
-| A.6.1     | Access | 75        |
-| A.8.2     | Assets | 90        |
-| A.9.2     | Monitoring | 60    |
+| Control ID | Domain   | Score (%) |
+|------------|---------|-----------|
+| A.5.1      | Policy   | 85        |
+| A.6.1      | Access   | 75        |
+| A.8.2      | Risk     | 90        |
+| A.9.2      | Monitoring | 60      |
 
 ---
 
 ## 📜 License
-This project is released under the **MIT License**.  
-
----
+This project is released under the **MIT License**.
