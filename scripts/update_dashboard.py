@@ -1,18 +1,17 @@
-import sqlite3
 import pandas as pd
+import os
 
-def generate_report():
-    conn = sqlite3.connect('data/controls.db')
-    df = pd.read_sql_query("SELECT * FROM controls", conn)
-    conn.close()
+DB_PATH = 'data/controls.db'
+REPORT_PATH = 'latest_report.md'
 
-    try:
-        df.to_markdown('reports/latest_report.md', index=False)
-        print("Dashboard report updated successfully (Markdown).")
-    except ImportError:
-        # fallback to CSV if tabulate missing
-        df.to_csv('reports/latest_report.csv', index=False)
-        print("Tabulate not found. Saved report as CSV instead.")
+def update_dashboard():
+    print("Generating latest report...")
+    df = pd.read_sql_query("SELECT * FROM controls", f"sqlite:///{DB_PATH}")
+    with open(REPORT_PATH, 'w') as f:
+        f.write("# Zero Trust Dashboard - Latest Report\n\n")
+        f.write("## ISO 27001 Control Scores\n\n")
+        f.write(df.to_markdown(index=False))
+    print(f"Report saved: {REPORT_PATH}")
 
-if __name__ == '__main__':
-    generate_report()
+if __name__ == "__main__":
+    update_dashboard()
