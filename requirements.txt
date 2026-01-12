@@ -2,3 +2,4 @@ pandas
 matplotlib
 pybadges
 SQLAlchemy
+tabulate
