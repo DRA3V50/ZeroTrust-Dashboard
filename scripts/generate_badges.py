@@ -20,8 +20,9 @@ def generate_control_badges():
         control_text = f"{row['control_id']}: {row['domain']}"
         score_text = str(row['score'])
 
-        # Positional arguments only (works on all versions)
-        svg = pybadges.badge(control_text, score_text, color='blue')
+        # POSITONAL ONLY, no keywords
+        # This will work on any pybadges version
+        svg = pybadges.badge(control_text, score_text)
 
         badge_path = os.path.join(BADGE_DIR, f"{row['control_id']}.svg")
         with open(badge_path, "w") as f:
@@ -30,3 +31,4 @@ def generate_control_badges():
 
 if __name__ == "__main__":
     generate_control_badges()
+
