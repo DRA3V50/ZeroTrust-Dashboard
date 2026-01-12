@@ -2,41 +2,33 @@ name: Daily Update
 
 on:
   schedule:
-    # Run twice daily at 8:00 AM and 8:00 PM UTC
-    - cron: '0 8,20 * * *'
-  workflow_dispatch:
+    - cron: '0 8,20 * * *'  # Runs twice a day at 8 AM and 8 PM UTC
+  workflow_dispatch:  # Allows for manual triggering
 
 jobs:
   update_dashboard:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.11
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pandas matplotlib pybadges
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-    - name: Create/Update SQLite Database
-      run: python scripts/create_controls_db.py
+      - name: Run create_controls_db.py
+        run: python scripts/create_controls_db.py
 
-    - name: Generate Graphs and Badges
-      run: python scripts/generate_graphs.py
+      - name: Run generate_graphs.py
+        run: python scripts/generate_graphs.py
 
-    - name: Update Dashboard Report
-      run: python scripts/update_dashboard.py
+      - name: Run generate_badges.py
+        run: python scripts/generate_badges.py
 
-    - name: Commit and Push Updates
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add assets/badges/* assets/graphs/* latest_report.md
-        git commit -m "Automated daily update: report + badges + graphs" || echo "No changes to commit"
-        git push
+      - name: Run update_dashboard.py
+        run: python scripts/update_dashboard.py
