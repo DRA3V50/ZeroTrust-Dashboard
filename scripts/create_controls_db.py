@@ -1,5 +1,4 @@
-import sqlite3
-import os
+import sqlite3, os
 
 os.makedirs("data", exist_ok=True)
 
@@ -23,7 +22,7 @@ controls = [
 ]
 
 c.executemany("INSERT OR REPLACE INTO controls VALUES (?, ?, ?)", controls)
-
 conn.commit()
 conn.close()
+
 print("[DEBUG] Database created/populated at data/controls.db")
