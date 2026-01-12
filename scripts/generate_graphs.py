@@ -34,6 +34,7 @@ def iso_graph(df):
     ax.set_ylim(0, 100)
     ax.set_ylabel("Compliance (%)")
     ax.set_title("ISO 27001 Coverage")
+    ax.set_xticks(range(len(df["domain"])))
     ax.set_xticklabels(df["domain"], rotation=30, ha='right')
     plt.tight_layout()
     filename = f"{GRAPH_DIR}/iso_27001_coverage_{timestamp}.png"
