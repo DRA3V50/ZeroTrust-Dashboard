@@ -1,43 +1,38 @@
-import sqlite3
 from pathlib import Path
+import sqlite3
 
+# Paths
 DB_PATH = Path("data/controls.db")
 REPORT_PATH = Path("reports/latest_report.md")
-REPORT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 def fetch_metrics():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
+    # Fetch zero-trust metrics
     cursor.execute("SELECT domain, coverage FROM zero_trust")
-    zero_trust = cursor.fetchall()
+    zero_trust = [(row[0], int(row[1])) for row in cursor.fetchall()]
 
+    # Fetch ISO metrics
     cursor.execute("SELECT control, coverage FROM iso_controls")
-    iso_controls = cursor.fetchall()
+    iso_controls = [(row[0], int(row[1])) for row in cursor.fetchall()]
 
     conn.close()
     return zero_trust, iso_controls
 
 def generate_report():
     zero_trust, iso_controls = fetch_metrics()
+    
     with open(REPORT_PATH, "w") as f:
-        f.write("# Zero Trust & ISO 27001 Dashboard Report\n\n")
-
-        f.write("## Zero Trust Coverage\n")
-        if zero_trust:
-            for domain, coverage in zero_trust:
-                f.write(f"- {domain}: {coverage}%\n")
-        else:
-            f.write("No data yet.\n")
-
-        f.write("\n## ISO 27001 Controls Coverage\n")
-        if iso_controls:
-            for control, coverage in iso_controls:
-                f.write(f"- {control}: {coverage}%\n")
-        else:
-            f.write("No data yet.\n")
-
-    print("Dashboard report updated successfully ✅")
+        f.write("# Zero Trust Dashboard Report\n\n")
+        f.write("## Zero Trust Domains\n")
+        for domain, coverage in zero_trust:
+            f.write(f"- **{domain}**: {coverage}%\n")
+        f.write("\n## ISO Controls\n")
+        for control, coverage in iso_controls:
+            f.write(f"- **{control}**: {coverage}%\n")
+    
+    print("Dashboard report updated successfully.")
 
 if __name__ == "__main__":
     generate_report()
