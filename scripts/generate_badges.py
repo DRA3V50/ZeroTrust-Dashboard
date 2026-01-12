@@ -1,21 +1,22 @@
 import pybadges
 import os
 
-ASSET_DIR = "assets/badges"
-os.makedirs(ASSET_DIR, exist_ok=True)
+BADGES_DIR = "assets/badges"
+os.makedirs(BADGES_DIR, exist_ok=True)
 
 def generate_badge(control_id, domain, score):
-    # pybadges 3.x uses label/value
-    svg = pybadges.badge(
-        label=f"{control_id} | {domain}",  # left side
-        value=str(score),                   # right side
-        color="darkblue"
-    )
-    path = os.path.join(ASSET_DIR, f"{control_id}.svg")
-    with open(path, "w") as f:
-        f.write(svg)
-    print(f"[DEBUG] Badge generated: {path}")
+    """Generate SVG badge using pybadges 3.x API"""
+    text = f"{control_id} | {domain} | {score}"
 
-if __name__ == "__main__":
-    # Sample badge
-    generate_badge("A.5.1", "Identity", 80)
+    # Use 'label' and 'value' removed; pybadges 3.x uses single 'text'
+    svg = pybadges.badge(
+        text=text,
+        color="darkblue",      # background color of badge
+        label_color="lightgrey", # left side bg if using split badge
+        style="flat"           # can be 'flat', 'plastic', etc.
+    )
+
+    file_path = os.path.join(BADGES_DIR, f"{control_id.replace('.', '_')}.svg")
+    with open(file_path, "w") as f:
+        f.write(svg)
+    print(f"[DEBUG] Badge generated: {file_path}")
