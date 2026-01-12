@@ -5,18 +5,20 @@ BADGES_DIR = "assets/badges"
 os.makedirs(BADGES_DIR, exist_ok=True)
 
 def generate_badge(control_id, domain, score):
-    """Generate SVG badge using pybadges 3.x API"""
-    text = f"{control_id} | {domain} | {score}"
-
-    # Use 'label' and 'value' removed; pybadges 3.x uses single 'text'
-    svg = pybadges.badge(
-        text=text,
-        color="darkblue",      # background color of badge
-        label_color="lightgrey", # left side bg if using split badge
-        style="flat"           # can be 'flat', 'plastic', etc.
+    # Combine text for smaller badges
+    left_text = f"{control_id} | {domain}"
+    right_text = str(score)
+    
+    # pybadges v3+ uses `label` and `value` (not left/right)
+    svg_content = pybadges.badge(
+        label=left_text,
+        value=right_text,
+        color="darkblue",
+        background="#222",  # dim/dark background
+        style="flat"
     )
-
-    file_path = os.path.join(BADGES_DIR, f"{control_id.replace('.', '_')}.svg")
-    with open(file_path, "w") as f:
-        f.write(svg)
-    print(f"[DEBUG] Badge generated: {file_path}")
+    
+    filename = f"{BADGES_DIR}/{control_id.replace('.', '_')}.svg"
+    with open(filename, "w") as f:
+        f.write(svg_content)
+    print(f"[DEBUG] Badge saved: {filename}")
