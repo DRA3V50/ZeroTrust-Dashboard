@@ -1,40 +1,40 @@
-name: Daily Zero Trust Update
+name: Zero Trust Dashboard Update
 
 on:
   schedule:
-    - cron: '0 10,22 * * *' # Runs twice daily at 10:00 & 22:00 UTC
+    # Run twice daily at 00:00 and 12:00 UTC
+    - cron: "0 0,12 * * *"
   workflow_dispatch:
 
 jobs:
-  update_dashboard:
+  update-dashboard:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          pip install pandas matplotlib pybadges>=2.2.1
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Generate database
-        run: python scripts/create_controls_db.py
+    - name: Generate Dashboard and Badges
+      run: |
+        python scripts/update_dashboard.py
+        python scripts/generate_graphs.py
 
-      - name: Generate graphs & badges
-        run: python scripts/generate_graphs.py
-
-      - name: Update metrics report
-        run: python scripts/update_dashboard.py
-
-      - name: Commit and push updates
-        env:
-          GITHUB_TOKEN: ${{ secrets.Zero_Trust_PAT }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add outputs reports
-          git commit -m "Automated update: $(date +'%Y-%m-%d %H:%M')" || echo "No changes"
-          git push https://x-access-token:${{ secrets.Zero_Trust_PAT }}@github.com/DRA3V50/ZeroTrust-Dashboard.git
+    - name: Commit and Push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.ZeroTrustPAT }}
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add outputs/graphs/* outputs/badges/* reports/*.md
+        git commit -m "Automated update: $(date '+%Y-%m-%d %H:%M')"
+        git push origin main
