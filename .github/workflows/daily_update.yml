@@ -2,7 +2,7 @@ name: Daily Update
 
 on:
   schedule:
-    - cron: '0 8,20 * * *' # 8:00 AM and 8:00 PM EST
+    - cron: '0 10,22 * * *' # Runs twice daily at 10:00 AM and 10:00 PM EST
   workflow_dispatch:
 
 jobs:
@@ -11,39 +11,40 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: 3.11
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas matplotlib svgwrite
+          pip install pandas svgwrite matplotlib
 
-      - name: Create/Update Controls DB
-        run: python scripts/create_controls_db.py
+      - name: Create/Update Controls Database
+        run: |
+          python scripts/create_controls_db.py
 
-      - name: Update Dashboard
-        run: python scripts/update_dashboard.py
+      - name: Generate Dashboard Report
+        run: |
+          python scripts/update_dashboard.py
 
       - name: Generate Badges
-        run: python scripts/generate_badges.py
+        run: |
+          python scripts/generate_badges.py
 
       - name: Generate Graphs
-        run: python scripts/generate_graphs.py
+        run: |
+          python scripts/generate_graphs.py
 
-      - name: Configure Git
+      - name: Commit and Push Changes
+        env:
+          PAT_SIM_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Commit & Push Updates
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_SIM_TOKEN }}
-        run: |
           git add .
-          git commit -m "Automated daily update: report, badges & graphs" || echo "No changes to commit"
-          git push origin main
+          git commit -m "Automated daily update: report + badges + graphs" || echo "No changes to commit"
+          git push https://x-access-token:${PAT_SIM_TOKEN}@github.com/DRA3V50/ZeroTrust-Dashboard.git
