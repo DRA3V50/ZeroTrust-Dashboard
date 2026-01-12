@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import pandas as pd
 from pybadges import badge
 
 DB_PATH = 'data/controls.db'
@@ -7,17 +8,34 @@ BADGE_DIR = 'assets/badges'
 
 os.makedirs(BADGE_DIR, exist_ok=True)
 
-conn = sqlite3.connect(DB_PATH)
-controls = conn.execute("SELECT control_id, domain, score FROM controls").fetchall()
-conn.close()
+def fetch_controls():
+    conn = sqlite3.connect(DB_PATH)
+    df = pd.read_sql_query("SELECT * FROM controls", conn)
+    conn.close()
+    return df
 
-for control_id, domain, score in controls:
-    print(f"Generating badge for {control_id}...")
-    svg = badge(
-        left_text=f"{control_id}: {domain}",
-        right_text=str(score),
-        right_color="blue"
-    )
-    with open(os.path.join(BADGE_DIR, f"{control_id}.svg"), "w") as f:
-        f.write(svg)
-print("All badges generated.")
+def generate_control_badges():
+    df = fetch_controls()
+    for _, row in df.iterrows():
+        try:
+            # Newer pybadges syntax
+            svg = badge(
+                label=f"{row['control_id']}: {row['domain']}",
+                value=row['score'],
+                color='blue'
+            )
+        except TypeError:
+            # Older pybadges fallback
+            svg = badge(
+                left=f"{row['control_id']}: {row['domain']}",
+                right=str(row['score']),
+                color='blue'
+            )
+
+        badge_path = os.path.join(BADGE_DIR, f"{row['control_id']}.svg")
+        with open(badge_path, "w") as f:
+            f.write(svg)
+        print(f"Badge saved: {badge_path}")
+
+if __name__ == "__main__":
+    generate_control_badges()
