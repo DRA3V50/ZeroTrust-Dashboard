@@ -9,26 +9,31 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
-    env:
-      TZ: America/New_York   # Ensure EST
+
     steps:
+      # 1️⃣ Checkout the repository
       - uses: actions/checkout@v3
 
+      # 2️⃣ Set up Python
       - uses: actions/setup-python@v4
         with:
           python-version: 3.11
 
+      # 3️⃣ Install dependencies
       - run: pip install -r requirements.txt
 
+      # 4️⃣ Run scripts
       - run: python scripts/create_controls_db.py
       - run: python scripts/generate_graphs.py
       - run: python scripts/update_dashboard.py
 
-      - run: |
+      # 5️⃣ Commit & push updates
+      - name: Commit & Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.Zero_Trust_PAT }}
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add outputs reports data
-          git commit -m "Automated update" || echo "No changes"
+          git add outputs badges reports data
+          git commit -m "Automated update: $(date +'%Y-%m-%d %H:%M')" || echo "No changes to commit"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.ZeroTrust_PAT }}
