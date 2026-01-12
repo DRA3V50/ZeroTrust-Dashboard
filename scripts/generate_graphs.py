@@ -54,6 +54,39 @@ def generate_iso_27001_graph(df):
 def generate_control_badge(control_id, domain, score):
     print(f"Generating badge for {control_id}...")
 
+    # Adjust the badge function to use the correct arguments: 'left' and 'right'
+    badge_file = os.path.join(BADGE_DIR, f'{control_id}.svg')
+
+    svg = badge(
+        left=domain,         # Domain is now the left part of the badge
+        right=f"{score}%",    # Score is the right part of the badge
+        color="blue"          # Set a badge color (you can customize this)
+    )
+
+    # Save badge as SVG
+    with open(badge_file, 'w') as f:
+        f.write(svg)
+    print(f"Badge saved: {badge_file}")
+
+# Main function to generate graphs and badges
+def generate_graphs_and_badges():
+    controls_data = fetch_controls()  # Fetch data from the database
+
+    # Generate graphs
+    generate_zero_trust_graph(controls_data)
+    generate_iso_27001_graph(controls_data)
+
+    # Generate badges for each control
+    for control in controls_data.itertuples():
+        generate_control_badge(control.control_id, control.domain, control.score)
+
+if __name__ == "__main__":
+    generate_graphs_and_badges()
+
+# Function to generate a badge for a control
+def generate_control_badge(control_id, domain, score):
+    print(f"Generating badge for {control_id}...")
+
     # Adjust the badge function to use the correct arguments: 'label' and 'value'
     badge_file = os.path.join(BADGE_DIR, f'{control_id}.svg')
 
