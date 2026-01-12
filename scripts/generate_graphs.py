@@ -4,16 +4,46 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from pybadges import badge
 
-# Path to the database and folders
+# Path to the database and the badges directory
 DB_PATH = 'data/controls.db'
 GRAPH_DIR = 'assets/graphs'
 BADGE_DIR = 'assets/badges'
 
-# Ensure the directories exist
+# Ensure the graphs and badges directories exist (create them if they don't)
 os.makedirs(GRAPH_DIR, exist_ok=True)
 os.makedirs(BADGE_DIR, exist_ok=True)
 
-# Function to fetch control data from SQLite DB
+# Function to create a SQLite database and table if not present
+def create_controls_db():
+    print("Creating/updating SQLite database...")
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    # Create table if it doesn't exist
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS controls (
+        control_id TEXT PRIMARY KEY,
+        domain TEXT NOT NULL,
+        score INTEGER
+    )
+    ''')
+
+    # Populate the table with sample data if it's empty
+    cursor.execute('SELECT COUNT(*) FROM controls')
+    if cursor.fetchone()[0] == 0:
+        print("Populating the database with sample data...")
+        sample_data = [
+            ('A.5.1', 'Information Security Policies', 80),
+            ('A.6.1', 'Organization of Information Security', 75),
+            ('A.8.2', 'Risk Management', 90),
+            ('A.9.2', 'Access Control', 85)
+        ]
+        cursor.executemany('INSERT INTO controls VALUES (?, ?, ?)', sample_data)
+
+    conn.commit()
+    conn.close()
+
+# Fetch the control data from the database
 def fetch_controls():
     print("Fetching data from SQLite DB...")
     conn = sqlite3.connect(DB_PATH)
@@ -21,6 +51,24 @@ def fetch_controls():
     df = pd.read_sql_query(query, conn)
     conn.close()
     return df
+
+# Function to generate badges for each control
+def generate_control_badge(control_id, domain, score):
+    print(f"Generating badge for {control_id}...")
+    
+    # Generate badge (removed the problematic 'left' argument)
+    svg = badge(
+        label=f'{control_id}: {domain}',
+        value=score,
+        color='blue'  # Customize color as needed
+    )
+
+    # Save the badge as an SVG
+    badge_path = os.path.join(BADGE_DIR, f"{control_id}.svg")
+    with open(badge_path, "w") as f:
+        f.write(svg)
+    
+    print(f"Badge saved for {control_id}.")
 
 # Generate the Zero Trust Posture graph
 def generate_zero_trust_graph(df):
@@ -50,27 +98,9 @@ def generate_iso_27001_graph(df):
     plt.savefig(os.path.join(GRAPH_DIR, 'iso_27001_coverage.png'))
     print("ISO 27001 graph saved.")
 
-# Function to generate a badge for a control
-def generate_control_badge(control_id, domain, score):
-    print(f"Generating badge for {control_id}...")
-
-    # Correct usage of pybadges: left and right parameters for pybadges
-    badge_file = os.path.join(BADGE_DIR, f'{control_id}.svg')
-
-    # Adjusted usage to match pybadges API
-    svg = badge(
-        left=domain,         # The domain (e.g., "Application")
-        right=f"{score}%",    # Score as the right side of the badge (e.g., "85%")
-        color="blue",         # Color of the badge (e.g., blue)
-    )
-
-    # Save badge as SVG
-    with open(badge_file, 'w') as f:
-        f.write(svg)
-    print(f"Badge saved: {badge_file}")
-
-# Main function to generate graphs and badges
-def generate_graphs_and_badges():
+# Main function to execute the script
+if __name__ == "__main__":
+    create_controls_db()  # Ensure the database is created/updated
     controls_data = fetch_controls()  # Fetch data from the database
 
     # Generate graphs
@@ -78,8 +108,5 @@ def generate_graphs_and_badges():
     generate_iso_27001_graph(controls_data)
 
     # Generate badges for each control
-    for control in controls_data.itertuples():
-        generate_control_badge(control.control_id, control.domain, control.score)
-
-if __name__ == "__main__":
-    generate_graphs_and_badges()
+    for index, row in controls_data.iterrows():
+        generate_control_badge(row['control_id'], row['domain'], row['score'])
