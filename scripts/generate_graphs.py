@@ -16,32 +16,37 @@ def fetch():
 
 def zero_trust_graph(df):
     plt.style.use("dark_background")
-    plt.figure(figsize=(4,2.5))  # smaller width x height ~ max 295px width
+    plt.figure(figsize=(4.8, 2.5))  # scaled down to max width ~295px
+
     plt.bar(df["control_id"], df["score"], color="#3498db")
     plt.ylim(0, 100)
     plt.ylabel("Score (%)")
     plt.title("Zero Trust Posture")
+
     plt.tight_layout()
     plt.savefig(f"{GRAPH_DIR}/zero_trust_posture.png", dpi=150)
     plt.close()
-    print("[OK] Zero Trust graph generated")
+    print("[OK] Zero Trust graph updated")
 
 def iso_graph(df):
     plt.style.use("dark_background")
-    plt.figure(figsize=(4,2.5))  # same smaller size
+    plt.figure(figsize=(4.8, 2.5))  # scaled down
+
     plt.bar(df["domain"], df["score"], color="#e67e22")
     plt.xticks(rotation=30, ha="right")
     plt.ylim(0, 100)
     plt.ylabel("Compliance (%)")
     plt.title("ISO 27001 Coverage")
+
     plt.tight_layout()
     plt.savefig(f"{GRAPH_DIR}/iso_27001_coverage.png", dpi=150)
     plt.close()
-    print("[OK] ISO graph generated")
+    print("[OK] ISO 27001 graph updated")
 
 if __name__ == "__main__":
     df = fetch()
     zero_trust_graph(df)
     iso_graph(df)
+
     for _, row in df.iterrows():
         generate_badge(row["control_id"], row["domain"], row["score"])
