@@ -1,6 +1,5 @@
 import sqlite3
 import os
-import pandas as pd
 
 DB_PATH = 'data/controls.db'
 
@@ -12,7 +11,7 @@ def create_controls_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Create table if it doesn't exist
+    # Create controls table
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS controls (
         control_id TEXT PRIMARY KEY,
@@ -21,7 +20,7 @@ def create_controls_db():
     )
     ''')
 
-    # Populate table if empty
+    # Populate with sample data if empty
     cursor.execute('SELECT COUNT(*) FROM controls')
     if cursor.fetchone()[0] == 0:
         print("Populating database with sample data...")
