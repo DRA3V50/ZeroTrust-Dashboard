@@ -1,63 +1,61 @@
-# ZeroTrust-Dashboard 🔐📊  
-**Automated Enterprise Security Posture & ISO 27001 Metrics**
+# ZeroTrust-Dashboard 🔒
+
+**Live Zero Trust Posture & ISO 27001 Control Coverage Dashboard**
 
 ---
 
-## 🔐 Summary
-ZeroTrust-Dashboard provides a **real-time, continuously updated view of enterprise security**. It tracks **Zero Trust domain maturity** and **ISO 27001 control coverage**, giving analysts and leadership **actionable insights at a glance**.  
+### 🔹 Overview
+ZeroTrust-Dashboard continuously tracks enterprise security posture and ISO 27001 compliance in real-time.  
+This repository showcases your ability to monitor, report, and visualize key security metrics across multiple domains, helping organizations maintain robust security practices.
 
-**Built for security analysts, auditors, and leadership dashboards.**  
-
----
-
-## 🗂️ Key Features
-- **Live Zero Trust Posture & ISO 27001 Controls**: Identity, Device, Network, Application, Data, plus policy & compliance coverage, all in one visual view.  
-- **Automated Daily Updates**: Python scripts + SQLite + GitHub Actions keep your badges and reports current without overwriting history.  
-- **Persistent Data**: Metrics stored in `data/controls.db` allow longitudinal analysis.  
-- **Quick Insight for Analysts**: Identify gaps, track trends, and support audits efficiently.
+- **Zero Trust Domains:** Identity, Device, Network, Application, Data  
+- **ISO 27001 Controls:** Policies, Organization, Access, Risk Management, and more  
 
 ---
 
-## 📊 Live Enterprise Dashboard
-### Combined Security & Compliance View
-| Domain / Control | Badge |
-|-----------------|-------|
-| Identity | ![Identity](assets/badges/Identity.svg) |
-| Device | ![Device](assets/badges/Device.svg) |
-| Network | ![Network](assets/badges/Network.svg) |
-| Application | ![Application](assets/badges/Application.svg) |
-| Data | ![Data](assets/badges/Data.svg) |
-| A.5.1 – Info Security Policies | ![A.5.1](assets/badges/A_5_1.svg) |
-| A.6.1 – Org of Info Security | ![A.6.1](assets/badges/A_6_1.svg) |
-| A.7.2 – Employee Awareness | ![A.7.2](assets/badges/A_7_2.svg) |
-| A.9.2 – Access Control | ![A.9.2](assets/badges/A_9_2.svg) |
+### 📊 Live Metrics
 
-> Badges **update daily automatically** while your README and history remain intact.
+**Zero Trust Posture**  
+![Identity](assets/badges/Identity.svg) ![Device](assets/badges/Device.svg) ![Network](assets/badges/Network.svg) ![Application](assets/badges/Application.svg) ![Data](assets/badges/Data.svg)
+
+**ISO 27001 Control Coverage**  
+![A.5.1](assets/badges/A_5_1.svg) ![A.6.1](assets/badges/A_6_1.svg) ![A.7.2](assets/badges/A_7_2.svg) ![A.9.2](assets/badges/A_9_2.svg)
 
 ---
 
-## 📌 How It Works
-1. **Metrics Collection** – `scripts/update_dashboard.py` aggregates domain coverage & ISO control status.  
-2. **Badge Generation** – `scripts/generate_badges.py` produces visual SVG badges for dashboards and reports.  
-3. **Database Persistence** – `scripts/create_controls_db.py` maintains `controls.db` for historical trends.  
-4. **Automation Pipeline** – `.github/workflows/daily_update.yml` runs daily to update metrics, badges, and reports.
+### 🛠 How It Works
+1. **Data Collection:** Metrics stored in `data/controls.db` (SQLite).  
+2. **Reporting:** `scripts/update_dashboard.py` generates `reports/latest_report.md`.  
+3. **Visuals:** `scripts/generate_badges.py` updates live SVG badges.  
+4. **Automation:** GitHub Actions runs twice daily (morning & night EST) to update reports and badges automatically.  
 
 ---
 
-## 📈 Analyst Use Cases
-- Quickly identify **high-risk domains or missing controls**  
-- Track **Zero Trust maturity over time**  
-- Provide leadership **visual dashboards for compliance and posture**  
-- Prepare for **audits and evidence-based reviews**  
-- Train analysts using **continuous, realistic security data**
+### 📈 Analyst Insights
+- Quickly identify coverage gaps across Zero Trust domains and ISO 27001 controls  
+- Visualize trends for informed security decisions  
+- Keep a historical record of enterprise posture metrics  
 
 ---
 
-## 📁 Reports & Assets
-- **Latest Report:** [`reports/latest_report.md`](reports/latest_report.md)  
-- **Badges Directory:** [`assets/badges`](assets/badges)  
-- **Database:** [`data/controls.db`](data/controls.db)
+### 🗂️ Features
+- Fully automated dashboard updates  
+- Persistent SQLite database ensures data history  
+- Professional, enterprise-grade visualization of controls & posture  
+- Easy to extend with additional metrics or controls  
 
 ---
 
-ZeroTrust-Dashboard **bridges security operations, compliance tracking, and automated visualization** — just like tools used by federal and corporate security teams for continuous monitoring and leadership reporting.
+### 📝 Latest Report
+Check out the latest assessment: [`reports/latest_report.md`](reports/latest_report.md)  
+
+---
+
+### 🔗 Repository Links
+- [Scripts folder](scripts) – Python scripts for automation  
+- [Badges folder](assets/badges) – Live SVG badges  
+- [Data folder](data) – SQLite database storing metrics  
+
+---
+
+**ZeroTrust-Dashboard** combines automation, real-time analytics, and professional reporting to help organizations monitor their security posture efficiently.
