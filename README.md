@@ -44,7 +44,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
   - **Graphs**: Dynamic visual representation of Zero Trust and ISO-27001 coverage.  
   - **Badges**: Real-time visual summaries of individual controls.  
 
-> **⚠️ Note:** Graphs are updated twice daily to reflect the latest data, without overwriting previous outputs.  
+> **⚠️ Note**: Graphs and metrics table are updated twice daily to reflect the latest data, without overwriting previous outputs.  
 
 Graphs feature a professional dark theme with smaller, readable sizes for dashboards or executive briefings.  
 
@@ -64,37 +64,37 @@ The dashboard supports operational monitoring, compliance tracking, and audit re
 ## 📊 Dashboards and Badges 📇
 
 ### Latest Zero Trust Posture
-- Visual representation of domain scores updated daily.
+- Visual representation of domain scores updated daily.  
 - Provides actionable insight for analysts and leadership.  
 ![Zero Trust Posture](outputs/graphs/zero_trust_posture.png)
 
 ### Latest ISO 27001 Control Coverage
-- Daily updated visual representation of control compliance.
+- Daily updated visual representation of control compliance.  
 - Highlights strengths and areas needing attention.  
 ![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage.png)
 
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.  
-![A.5.1](outputs/badges/A.5.1.svg)  
-![A.6.1](outputs/badges/A.6.1.svg)  
-![A.7.2](outputs/badges/A.7.2.svg)  
-![A.9.2](outputs/badges/A.9.2.svg)
+![A.5.1](outputs/badges/A.5.1_20260112_2209.svg)  
+![A.6.1](outputs/badges/A.6.1_20260112_2209.svg)  
+![A.7.2](outputs/badges/A.7.2_20260112_2209.svg)  
+![A.9.2](outputs/badges/A.9.2_20260112_2209.svg)
 
-### 🗂 Metrics Table
-| Control ID | Domain          | Score (%) |
-|------------|----------------|-----------|
-| A.5.1      | Policy          | 85        |
-| A.6.1      | Access Control  | 75        |
-| A.8.2      | Assets          | 90        |
-| A.9.2      | Monitoring      | 60        |
+---
 
-> **Note:** This table is automatically updated daily by the workflow, reflecting the latest Zero Trust and ISO 27001 control scores.
+## 🗂 Metrics Table
+Note: This table is automatically updated daily by the workflow, reflecting the latest Zero Trust and ISO 27001 control scores.
+
+| Control ID | Domain | Score (%) |
+|-----------|--------|-----------|
+| A.5.1     | Policy | 85        |
+| A.6.1     | Access | 75        |
+| A.8.2     | Assets | 90        |
+| A.9.2     | Monitoring | 60    |
 
 ---
 
 ## 📜 License
-This project is released under the **MIT License**.
-
----
+This project is released under the **MIT License**.  
 
 ---
