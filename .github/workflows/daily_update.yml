@@ -2,30 +2,42 @@ name: Daily Update
 
 on:
   schedule:
-    - cron: '0 9,21 * * *'  # 9AM & 9PM EST (14:00 & 02:00 UTC)
+    - cron: '0 8,20 * * *'  # Twice a day at 8 AM & 8 PM EST
   workflow_dispatch:
 
 jobs:
   update_dashboard:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Generate graphs & badges
-        run: python scripts/generate_graphs.py
+          pip install tabulate
+
+      - name: Generate graphs and badges
+        run: |
+          python scripts/generate_graphs.py
+          python scripts/generate_badges.py
+
       - name: Update dashboard report
         run: python scripts/update_dashboard.py
-      - name: Commit & push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Automated update: graphs, badges, report
-          branch: main
-          file_pattern: "assets/**,reports/**"
-          github_token: ${{ secrets.ZT_DASHBOARD_PAT }}
+
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.ZT_DASHBOARD_PAT }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/graphs/* assets/badges/* reports/latest_report.md
+          git commit -m "Automated update: graphs, badges, report" || echo "No changes to commit"
+          git push https://DRA3V50:${GITHUB_TOKEN}@github.com/DRA3V50/ZeroTrust-Dashboard.git HEAD:main
