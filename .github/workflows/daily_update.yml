@@ -1,13 +1,13 @@
-name: Zero Trust Dashboard Update
+name: Update Zero Trust Dashboard
 
 on:
   schedule:
-    # Run twice daily at 00:00 and 12:00 UTC
-    - cron: "0 0,12 * * *"
+    # Runs twice daily at 07:00 AM and 07:00 PM EST
+    - cron: '12 12,0 * * *'  # 07:00 AM & 07:00 PM EST converted to UTC
   workflow_dispatch:
 
 jobs:
-  update-dashboard:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,17 +24,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Generate Dashboard and Badges
+    - name: Generate dashboard
       run: |
         python scripts/update_dashboard.py
         python scripts/generate_graphs.py
+        python scripts/generate_badges.py
 
-    - name: Commit and Push changes
+    - name: Commit and push updates
       env:
-        GITHUB_TOKEN: ${{ secrets.ZeroTrustPAT }}
+        TOKEN: ${{ secrets.ZeroTrustPAT }}
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add outputs/graphs/* outputs/badges/* reports/*.md
-        git commit -m "Automated update: $(date '+%Y-%m-%d %H:%M')"
-        git push origin main
+        git add outputs graphs reports assets
+        git commit -m "Automated update: $(date '+%Y-%m-%d %H:%M EST')"
+        git push https://x-access-token:$TOKEN@github.com/${{ github.repository }}.git HEAD:main
