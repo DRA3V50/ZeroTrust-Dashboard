@@ -1,43 +1,29 @@
-import pandas as pd
-from create_controls_db import db_path
-import sqlite3
+from pathlib import Path
 
-df = pd.read_sql("SELECT * FROM controls", sqlite3.connect(db_path))
+README_FILE = Path("README.md")
 
-# Generate metrics table Markdown
-metrics_table = df.to_markdown(index=False)
+def update_readme():
+    # Construct updated README with badges and graphs
+    content = f"""
+# 🔒 Zero Trust Dashboard
 
-# Generate badges Markdown
-badges_md = "\n".join([f"![{row['control']}](outputs/badges/{row['control']}.svg)" for _, row in df.iterrows()])
-
-# Update README.md
-with open("README.md", "w") as f:
-    f.write(f"""# 🔒 Zero Trust Dashboard
-
----
-
-## 🔎 Overview
-The **Zero Trust Dashboard** provides automated daily insights of Zero Trust posture and ISO 27001 compliance using Python, SQLite, and GitHub Actions.
-
----
-
-## 📊 Latest Graphs
+## 📊 Latest Visuals
 
 ### Zero Trust Posture
 ![Zero Trust Posture](outputs/graphs/zero_trust_posture.png)
 
-### ISO 27001 Coverage
-![ISO 27001 Coverage](outputs/graphs/iso_27001_coverage.png)
+### ISO 27001 Control Coverage
+![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage.png)
 
----
+### Real-Time Badges
+![A.5.1](outputs/badges/A.5.1.svg)
+![A.6.1](outputs/badges/A.6.1.svg)
+![A.8.2](outputs/badges/A.8.2.svg)
+![A.9.2](outputs/badges/A.9.2.svg)
+"""
 
-## 🏷 Badges
-{badges_md}
+    README_FILE.write_text(content)
+    print("README updated with latest graphs and badges.")
 
----
-
-## 🗂 Metrics Table
-{metrics_table}
-
-> Updated automatically by GitHub Actions workflow.
-""")
+if __name__ == "__main__":
+    update_readme()
