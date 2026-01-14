@@ -8,15 +8,15 @@ db_path = Path("data/controls.db")
 graphs_dir = Path("outputs/graphs")
 graphs_dir.mkdir(parents=True, exist_ok=True)
 
-# Connect to SQLite database
+# Connect to database
 conn = sqlite3.connect(db_path)
 
-# Read controls from database
+# Read controls
 df = pd.read_sql("SELECT * FROM controls", conn)
 
-# Generate Zero Trust posture graph
+# Zero Trust posture graph
 zt_scores = df.groupby("domain")["score"].mean()
-plt.figure(figsize=(4,3))  # small figure for badge-style output
+plt.figure(figsize=(4,3))
 zt_scores.plot(kind="bar", color="teal", edgecolor="black")
 plt.ylim(0,100)
 plt.title("Zero Trust Posture")
@@ -25,7 +25,7 @@ plt.tight_layout()
 plt.savefig(graphs_dir / "zero_trust_posture.png", dpi=100)
 plt.close()
 
-# Generate ISO 27001 coverage graph
+# ISO 27001 coverage graph
 iso_scores = df.groupby("control")["score"].mean()
 plt.figure(figsize=(4,3))
 iso_scores.plot(kind="bar", color="darkorange", edgecolor="black")
