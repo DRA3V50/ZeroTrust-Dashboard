@@ -30,21 +30,30 @@ badge_lines = ["### Real-Time Badges\n", "- Summarizes individual control status
 conn = sqlite3.connect(db_path)
 c = conn.cursor()
 c.execute("SELECT control, score FROM controls")
-data = c.fetchall()
+badge_data = c.fetchall()
 conn.close()
 
 # Sort descending by score
-data.sort(key=lambda x: x[1], reverse=True)
+badge_data.sort(key=lambda x: x[1], reverse=True)
 
-for control, score in data:
+for control, score in badge_data:
     badge_lines.append(f"![{control}](outputs/badges/{control}.svg)\n")
 
 # Metrics table (tab-separated)
+conn = sqlite3.connect(db_path)
+c = conn.cursor()
+c.execute("SELECT control, domain, score FROM controls")
+table_data = c.fetchall()
+conn.close()
+
+# Sort table descending by score
+table_data.sort(key=lambda x: x[2], reverse=True)
+
 table_lines = ["### 🗂 Metrics Table\n", "control\tdomain\tscore\n"]
-for control, domain, score in data:
+for control, domain, score in table_data:
     table_lines.append(f"{control}\t{domain}\t{score}\n")
 
-# Replace sections
+# Replace sections in README
 lines[start_graph_idx:start_badge_idx] = graph_lines
 lines[start_badge_idx:start_table_idx] = badge_lines
 lines[start_table_idx:] = table_lines
