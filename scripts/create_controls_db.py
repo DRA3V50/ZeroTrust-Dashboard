@@ -1,16 +1,14 @@
+# scripts/create_controls_db.py
 import sqlite3
 import os
 from datetime import datetime
 
-# Ensure data folder exists
 os.makedirs("data", exist_ok=True)
-
 db_path = "data/controls.db"
 
 conn = sqlite3.connect(db_path)
 c = conn.cursor()
 
-# Create table if not exists
 c.execute('''
 CREATE TABLE IF NOT EXISTS controls (
     control TEXT PRIMARY KEY,
@@ -20,7 +18,6 @@ CREATE TABLE IF NOT EXISTS controls (
 )
 ''')
 
-# Sample initial controls
 controls = [
     ("A.5.1", "InfoSec Policies", 87),
     ("A.6.1", "Org InfoSec", 92),
