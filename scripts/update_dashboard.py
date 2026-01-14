@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sqlite3
 import os
 from datetime import datetime
@@ -30,44 +31,49 @@ control_scores = {row[0]: row[2] for row in rows}
 domain_scores = {row[1]: row[2] for row in rows if row[1] in ZERO_TRUST_DOMAINS}
 
 # --- Step 2: Generate Zero Trust Posture Graph ---
-plt.style.use('dark_background')
-fig, ax = plt.subplots(figsize=(8,4))
+plt.style.use('seaborn-darkgrid')  # lighter grid and more readable
+fig, ax = plt.subplots(figsize=(10,5))  # bigger graph
+
 colors = []
 for domain in ZERO_TRUST_DOMAINS:
     score = domain_scores.get(domain, 0)
     if score < 60:
-        colors.append("red")
+        colors.append("#FF4136")  # 🔴 Red
     elif score < 80:
-        colors.append("orange")
+        colors.append("#FF851B")  # 🟠 Orange
     else:
-        colors.append("green")
+        colors.append("#2ECC40")  # 🟢 Green
 
 ax.bar(ZERO_TRUST_DOMAINS, [domain_scores.get(d,0) for d in ZERO_TRUST_DOMAINS], color=colors)
 ax.set_ylim(0, 100)
 ax.set_ylabel("Score (%)")
 ax.set_title("Zero Trust Posture")
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+for i, v in enumerate([domain_scores.get(d,0) for d in ZERO_TRUST_DOMAINS]):
+    ax.text(i, v + 2, str(v), ha='center', fontweight='bold')  # show score above bar
 plt.tight_layout()
 plt.savefig(f"{GRAPH_DIR}/zero_trust_posture.png")
 plt.close()
 
 # --- Step 3: Generate ISO 27001 Coverage Graph ---
+fig, ax = plt.subplots(figsize=(10,5))  # bigger graph
 iso_colors = []
 for control in ISO_CONTROLS:
     score = control_scores.get(control, 0)
     if score < 60:
-        iso_colors.append("red")
+        iso_colors.append("#FF4136")  # 🔴 Red
     elif score < 80:
-        iso_colors.append("orange")
+        iso_colors.append("#FF851B")  # 🟠 Orange
     else:
-        iso_colors.append("blue")
+        iso_colors.append("#0074D9")  # 🔵 Blue
 
-fig, ax = plt.subplots(figsize=(8,4))
 ax.bar(ISO_CONTROLS, [control_scores.get(c,0) for c in ISO_CONTROLS], color=iso_colors)
 ax.set_ylim(0, 100)
 ax.set_ylabel("Score (%)")
 ax.set_title("ISO 27001 Compliance Coverage")
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+for i, v in enumerate([control_scores.get(c,0) for c in ISO_CONTROLS]):
+    ax.text(i, v + 2, str(v), ha='center', fontweight='bold')
 plt.tight_layout()
 plt.savefig(f"{GRAPH_DIR}/iso_27001_coverage.png")
 plt.close()
@@ -77,17 +83,14 @@ badge_lines = []
 for control in ISO_CONTROLS:
     score = control_scores.get(control, 0)
     if score >= 80:
-        color = "green"
+        color = "green"  # 🟢 Healthy / Compliant
     elif score >= 60:
-        color = "orange"
+        color = "orange"  # 🟠 Warning / Partial
     else:
-        color = "red"
+        color = "red"    # 🔴 Critical / Non-compliant
 
-    badge_svg = badge(
-        left_text=control,
-        right_text=str(score),
-        right_color=color
-    )
+    # Updated badge call for pybadges 2.x
+    badge_svg = badge(left_text=control, right_text=str(score), right_color=color)
 
     badge_file = f"{BADGE_DIR}/{control}.svg"
     with open(badge_file, "w") as f:
@@ -108,11 +111,27 @@ for control in ISO_CONTROLS:
 with open(README_PATH, "r", encoding="utf-8") as f:
     readme_text = f.read()
 
-# Replace placeholders with new badges and table
+# Replace placeholders in README
 readme_text = readme_text.replace("{{BADGES}}", "\n".join(badge_lines))
 readme_text = readme_text.replace("{{METRICS_TABLE}}", "\n".join(table_lines))
+
+# Ensure color codes box is in README (won't be erased by workflow)
+color_codes_box = """
+## 🚦 Color Codes
+
+| Color    | Meaning                 |
+|----------|-------------------------|
+| 🔴 Red   | Critical (0-59%)        |
+| 🟠 Orange| Warning (60-79%)        |
+| 🟢 Green | Healthy (80-100%)       |
+| 🔵 Blue  | Compliant / Covered ISO |
+"""
+if "{{COLOR_CODES}}" in readme_text:
+    readme_text = readme_text.replace("{{COLOR_CODES}}", color_codes_box)
+else:
+    readme_text += "\n" + color_codes_box
 
 with open(README_PATH, "w", encoding="utf-8") as f:
     f.write(readme_text)
 
-print("README, badges, table, and graphs updated successfully!")
+print("README, badges, table, graphs, and color codes updated successfully!")
