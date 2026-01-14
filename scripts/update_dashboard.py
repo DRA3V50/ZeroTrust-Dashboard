@@ -25,6 +25,7 @@ cursor.execute("SELECT control, domain, score FROM controls")
 rows = cursor.fetchall()
 conn.close()
 
+# Prepare dicts
 control_scores = {row[0]: row[2] for row in rows}
 domain_scores = {row[1]: row[2] for row in rows if row[1] in ZERO_TRUST_DOMAINS}
 
@@ -40,6 +41,7 @@ for domain in ZERO_TRUST_DOMAINS:
         colors.append("orange")
     else:
         colors.append("green")
+
 ax.bar(ZERO_TRUST_DOMAINS, [domain_scores.get(d,0) for d in ZERO_TRUST_DOMAINS], color=colors)
 ax.set_ylim(0, 100)
 ax.set_ylabel("Score (%)")
@@ -76,18 +78,20 @@ for control in ISO_CONTROLS:
     score = control_scores.get(control, 0)
     color = "green" if score >= 80 else "orange" if score >= 60 else "red"
     badge_svg = badge(
-        label=control,
-        message=str(score),
+        left_text=control,      # FIX for pybadges
+        right_text=str(score),  # FIX for pybadges
         color=color
     )
     badge_file = f"{BADGE_DIR}/{control}.svg"
     with open(badge_file, "w") as f:
         f.write(badge_svg)
+    # Markdown line to embed badge
     badge_lines.append(f'<img src="{badge_file}" alt="{control}" style="height:20px; margin:2px;"/>')
 
 # --- Step 5: Generate Metrics Table ---
 table_lines = ["| Control | Domain | Score (%) |",
                "|---------|--------|-----------|"]
+
 for control in ISO_CONTROLS:
     domain = next((row[1] for row in rows if row[0] == control), "")
     score = control_scores.get(control, 0)
@@ -97,6 +101,7 @@ for control in ISO_CONTROLS:
 with open(README_PATH, "r", encoding="utf-8") as f:
     readme_text = f.read()
 
+# Replace placeholders in README
 readme_text = readme_text.replace("{{BADGES}}", "\n".join(badge_lines))
 readme_text = readme_text.replace("{{METRICS_TABLE}}", "\n".join(table_lines))
 
