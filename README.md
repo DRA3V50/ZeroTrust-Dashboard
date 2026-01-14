@@ -7,7 +7,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 - Provides consistent, auditable insights for operational and federal security teams.  
 - Supports ongoing monitoring without manual intervention.  
-- Ideal for ISO-27001 compliance tracking, OSINT analysis, and risk management audits.  
+- Ideal for ISO 27001 compliance tracking, OSINT analysis, and risk management audits.  
 
 ---
 
@@ -89,4 +89,3 @@ The dashboard supports operational monitoring, compliance tracking, and audit re
 ---
 
 ## 📜 License
-This project is released under the **MIT License**.
