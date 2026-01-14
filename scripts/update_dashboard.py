@@ -9,6 +9,7 @@ README_PATH = "README.md"
 
 os.makedirs("reports", exist_ok=True)
 
+# Fetch data
 conn = sqlite3.connect(DB_PATH)
 df = pd.read_sql("SELECT * FROM controls", conn)
 conn.close()
@@ -43,5 +44,4 @@ else:
 
 with open(README_PATH, "w") as f:
     f.write(new_readme)
-
 print("[OK] README metrics table updated")
