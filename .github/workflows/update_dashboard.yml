@@ -2,8 +2,7 @@ name: Zero Trust Dashboard Update
 
 on:
   schedule:
-    # Runs at 08:00 and 20:00 EST daily
-    - cron: '0 13,1 * * *' # UTC 13:00 = 08:00 EST, 01:00 UTC = 20:00 EST
+    - cron: '0 13,1 * * *' # 08:00 & 20:00 EST
   workflow_dispatch:
 
 jobs:
@@ -11,21 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  # Needed to push changes
-
-    - name: Start SSH agent
-      uses: webfactory/ssh-agent@v0.9.1
-      with:
-        ssh-private-key: ${{ secrets.SSH_KEY }}
-
-    - name: Configure Git for SSH push
-      run: |
-        git config user.name "ZeroTrust Dashboard Bot"
-        git config user.email "actions@github.com"
-        git remote set-url origin git@github.com:DRA3V50/ZeroTrust-Dashboard.git
+    - uses: actions/checkout@v3
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -36,17 +21,22 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install tabulate  # Required by pandas .to_markdown
 
     - name: Run dashboard scripts
       run: |
         python scripts/create_controls_db.py
         python scripts/update_dashboard.py
-        python scripts/generate_badges.py
         python scripts/generate_graphs.py
+        python scripts/generate_badges.py
+        python scripts/update_readme.py
+
+    - name: Configure SSH for pushing
+      uses: webfactory/ssh-agent@v0.8.1
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
 
     - name: Commit & push updates
       run: |
-        git add -f outputs/badges/ outputs/graphs/ reports/
-        git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
+        git add -f outputs/ badges/ graphs/ reports/ README.md
+        git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes"
         git push origin HEAD:main
