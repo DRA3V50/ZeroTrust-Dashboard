@@ -14,10 +14,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Start SSH agent
-      uses: webfactory/ssh-agent@v0.8.0
+    - name: Setup SSH Agent
+      uses: webfactory/ssh-agent@v0.8.2
       with:
-        ssh-private-key: ${{ secrets.SSH_KEY }}
+        ssh-private-key: ${{ secrets.ZE_TRUST_SSH }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -29,18 +29,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Run dashboard scripts
-      run: |
-        python scripts/create_controls_db.py
-        python scripts/update_dashboard.py
-        python scripts/generate_graphs.py
-        python scripts/generate_badges.py
-        python scripts/update_readme.py
+    - name: Create / update database
+      run: python scripts/create_controls_db.py
 
-    - name: Clear old git credentials
-      run: |
-        git credential-cache exit || true
-        git config --global --unset credential.helper || true
+    - name: Update dashboard data
+      run: python scripts/update_dashboard.py
+
+    - name: Generate badges
+      run: python scripts/generate_badges.py
+
+    - name: Generate graphs
+      run: python scripts/generate_graphs.py
+
+    - name: Update README
+      run: python scripts/update_readme.py
 
     - name: Configure Git
       run: |
