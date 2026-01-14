@@ -2,7 +2,7 @@
 
 ---
 
-## 🔎 Overview
+## 📝 Overview
 The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. It leverages **Python**, **SQLite**, and **GitHub Actions** to automatically update metrics, reports, badges, and visualizations twice daily.
 
 - Provides consistent, auditable insights for operational and federal security teams.  
@@ -20,7 +20,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 ---
 
-## 🔑 Key Metrics
+## 📊 Key Metrics
 
 ### Zero Trust Domains
 - **Identity**: Ensures secure access and user verification.  
@@ -37,9 +37,9 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 ---
 
-## 🧮 How It Works
-- **Data Storage**: Security metrics are stored in **SQLite** (`data/controls.db`).  
-- **Report Generation**: Produces structured reports summarizing current security posture and compliance.  
+## ⚙️ How It Works
+- **📄Data Storage**: Security metrics are stored in **SQLite** (`data/controls.db`).  
+- **🗂️Report Generation**: Produces structured reports summarizing current security posture and compliance.  
 - **Visualizations**:  
   - **Graphs**: Dark-background graphs representing Zero Trust and ISO 27001 coverage, updated automatically twice daily.  
   - **Badges**: Real-time visual summaries of individual controls.  
