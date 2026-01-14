@@ -1,8 +1,8 @@
-# scripts/generate_badges.py
 import sqlite3
 import pybadges
 import os
 from create_controls_db import db_path
+from datetime import datetime
 
 os.makedirs("outputs/badges", exist_ok=True)
 
@@ -15,13 +15,18 @@ conn.close()
 for control, score in data:
     if score >= 90:
         color = "green"
-    elif score >= 75:
+    elif score >= 80:
         color = "orange"
     else:
         color = "red"
 
-    badge_svg = pybadges.badge(left_text=control, right_text=f"{score}%", right_color=color)
-    badge_file = f"outputs/badges/{control}.svg"
+    badge_svg = pybadges.badge(
+        left_text=control,
+        right_text=f"{score}%",
+        right_color=color
+    )
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M")
+    badge_file = f"outputs/badges/{control}_{timestamp}.svg"
     with open(badge_file, "w") as f:
         f.write(badge_svg)
     print(f"Badge saved to {badge_file}")
