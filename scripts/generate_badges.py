@@ -15,7 +15,6 @@ df = pd.read_sql("SELECT * FROM controls", conn)
 
 # Function to generate SVG badge for a control
 def create_badge(control_name, score):
-    # Determine color based on score
     if score >= 90:
         color = "brightgreen"
     elif score >= 75:
@@ -31,12 +30,9 @@ def create_badge(control_name, score):
     </svg>"""
     return svg_template
 
-# Generate badges for each control
+# Generate badges
 for _, row in df.iterrows():
-    control = row["control"]
-    score = row["score"]
-    badge_svg = create_badge(control, score)
-    badge_file = badges_dir / f"{control}.svg"
-    badge_file.write_text(badge_svg)
+    badge_file = badges_dir / f"{row['control']}.svg"
+    badge_file.write_text(create_badge(row["control"], row["score"]))
 
 print("Badges generated successfully.")
