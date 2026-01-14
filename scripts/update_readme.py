@@ -22,9 +22,9 @@ def generate_graphs_section():
         "### Latest Zero Trust Posture\n"
         "- Updated daily, showing actionable insight for analysts and leadership.\n"
         '<div style="text-align:center;">\n'
-        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="60%" '
+        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="50%" '
         'style="display:inline-block; margin-right:10px;"/>\n'
-        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="35%" '
+        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="50%" '
         'style="display:inline-block;"/>\n'
         "</div>\n\n"
     )
@@ -46,6 +46,18 @@ def generate_table_section(metrics):
     md += "\n"
     return md
 
+def generate_color_codes_box():
+    return """
+## 🚦 Color Codes
+
+| Color    | Meaning                 |
+|----------|-------------------------|
+| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing       |
+| 🟠 Orange| Warning (60-79%) / Partial / In Progress       |
+| 🟢 Green | Healthy (80-100%)       |
+| 🔵 Blue  | Compliant / Covered ISO |
+"""
+
 def update_readme():
     with open(README_PATH, "r", encoding="utf-8") as f:
         lines = f.readlines()
@@ -55,8 +67,9 @@ def update_readme():
     graphs_sec = generate_graphs_section()
     badges_sec = generate_badges_section(metrics)
     table_sec = generate_table_section(metrics)
+    color_codes_box = generate_color_codes_box()
 
-    # Find section boundaries
+    # Find section boundaries for dashboards
     start = None
     end = None
     for i, line in enumerate(lines):
@@ -78,6 +91,7 @@ def update_readme():
         + graphs_sec
         + badges_sec
         + table_sec
+        + color_codes_box
     )
 
     updated_lines = lines[:start] + [new_section] + lines[end:]
@@ -85,7 +99,7 @@ def update_readme():
     with open(README_PATH, "w", encoding="utf-8") as f:
         f.writelines(updated_lines)
 
-    print("README.md updated with latest graphs, badges, and table.")
+    print("README.md updated with latest graphs, badges, table, and color codes.")
 
 if __name__ == "__main__":
     update_readme()
