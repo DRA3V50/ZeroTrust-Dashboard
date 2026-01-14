@@ -64,20 +64,23 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
   <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="45%" style="display:inline-block;"/>
 </div>
 
+### 🔹 Graphs & Color Codes
+- **Zero Trust Posture Graph**: Scores for the five domains — Identity, Device, Network, Application, and Data.  
+  - 🔴 Critical (0–59%)  
+  - 🟠 Warning (60–79%)  
+  - 🟢 Healthy (80–100%)  
+- **ISO 27001 Coverage Graph**: Compliance for key controls.  
+  - 🔴 Non-compliant / Missing  
+  - 🟠 Partial / In Progress  
+  - 🔵 Compliant / Covered  
+
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.
 <div style="text-align:center;">
-  <img src="outputs/badges/A.5.1.svg" alt="A.5.1" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/A.8.2.svg" alt="A.8.2" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/A.9.2.svg" alt="A.9.2" style="height:20px; margin:2px;"/>
+{{BADGES}}
 </div>
 
 ### 🗂 Metrics Table
-| Control | Domain | Score (%) |
-|---------|--------|------------|
-| A.5.1 | InfoSec Policies | 87 |
-| A.6.1 | Org InfoSec | 92 |
-| A.8.2 | Risk Management | 79 |
-| A.9.2 | Access Control | 85 |
-
+<div style="text-align:center;">
+{{METRICS_TABLE}}
+</div>
