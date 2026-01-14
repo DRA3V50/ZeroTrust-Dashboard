@@ -1,31 +1,38 @@
-import pandas as pd
+import sqlite3
+from pathlib import Path
 import matplotlib.pyplot as plt
-import os
-from create_controls_db import db_path
+import pandas as pd
+from scripts.create_controls_db import db_path
 
-os.makedirs("outputs/graphs", exist_ok=True)
+# Ensure database exists
+conn = sqlite3.connect(db_path)
+df = pd.read_sql("SELECT * FROM controls", conn)
+conn.close()
 
-df = pd.read_sql("SELECT * FROM controls", sqlite3.connect(db_path))
+graphs_dir = Path("outputs/graphs")
+graphs_dir.mkdir(parents=True, exist_ok=True)
 
-# Dark theme settings
+# Dark theme
 plt.style.use('dark_background')
 
-# Zero Trust posture graph
-fig, ax = plt.subplots(figsize=(4, 3))
-ax.bar(df['control'], df['score'], color='limegreen')
-ax.set_ylim(0, 100)
-ax.set_title("Zero Trust Posture")
-ax.set_ylabel("Score (%)")
-fig.tight_layout()
-plt.savefig("outputs/graphs/zero_trust_posture.png", dpi=100)
-plt.close(fig)
+# Zero Trust Posture Graph
+plt.figure(figsize=(6, 4))
+plt.bar(df['control'], df['score'], color='deepskyblue')
+plt.title("Zero Trust Posture", color="white")
+plt.ylabel("Score (%)", color="white")
+plt.ylim(0, 100)
+plt.tight_layout()
+plt.savefig(graphs_dir / "zero_trust_posture.png")
+plt.close()
 
-# ISO 27001 coverage graph
-fig, ax = plt.subplots(figsize=(4, 3))
-ax.bar(df['control'], df['score'], color='deepskyblue')
-ax.set_ylim(0, 100)
-ax.set_title("ISO 27001 Coverage")
-ax.set_ylabel("Score (%)")
-fig.tight_layout()
-plt.savefig("outputs/graphs/iso_27001_coverage.png", dpi=100)
-plt.close(fig)
+# ISO 27001 Control Coverage Graph
+plt.figure(figsize=(6, 4))
+plt.bar(df['control'], df['score'], color='orange')
+plt.title("ISO 27001 Control Coverage", color="white")
+plt.ylabel("Score (%)", color="white")
+plt.ylim(0, 100)
+plt.tight_layout()
+plt.savefig(graphs_dir / "iso_27001_coverage.png")
+plt.close()
+
+print("Graphs generated successfully.")
