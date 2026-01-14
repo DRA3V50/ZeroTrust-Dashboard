@@ -13,6 +13,7 @@ data = c.fetchall()
 conn.close()
 
 for control, score in data:
+    # Determine color based on score
     if score >= 90:
         color = "green"
     elif score >= 80:
@@ -20,13 +21,16 @@ for control, score in data:
     else:
         color = "red"
 
+    # Generate badge
     badge_svg = pybadges.badge(
         left_text=control,
         right_text=f"{score}%",
         right_color=color
     )
-    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M")
-    badge_file = f"outputs/badges/{control}_{timestamp}.svg"
+
+    # Save badge with control name only (no timestamps)
+    badge_file = f"outputs/badges/{control}.svg"
     with open(badge_file, "w") as f:
         f.write(badge_svg)
+
     print(f"Badge saved to {badge_file}")
