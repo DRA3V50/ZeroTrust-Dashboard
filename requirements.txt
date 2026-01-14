@@ -2,3 +2,4 @@ pandas
 matplotlib
 pybadges>=2.2.0
 tabulate
+seaborn
