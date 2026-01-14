@@ -1,26 +1,27 @@
 import sqlite3
-import random
 from pathlib import Path
+from create_controls_db import create_db, db_path
 
-# Ensure data directory exists
-data_dir = Path("data")
-data_dir.mkdir(parents=True, exist_ok=True)
-db_path = data_dir / "controls.db"
+# Ensure database exists
+create_db()
 
-# Initialize database if missing
-from scripts.create_controls_db import db_path as db_check_path
-import scripts.create_controls_db
-
-# Connect to database
+# Connect to DB
 conn = sqlite3.connect(db_path)
-c = conn.cursor()
 
-# Update scores randomly (replace with real logic)
-controls = c.execute("SELECT control FROM controls").fetchall()
-for (control,) in controls:
-    new_score = random.randint(70, 100)  # Randomized for demo/testing
-    c.execute("UPDATE controls SET score = ? WHERE control = ?", (new_score, control))
+# Read controls data
+try:
+    import pandas as pd
+except ImportError:
+    import sys
+    import subprocess
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pandas"])
+    import pandas as pd
 
-conn.commit()
+df = pd.read_sql("SELECT * FROM controls", conn)
 conn.close()
+
+# Save a latest report
+Path("reports").mkdir(exist_ok=True)
+report_file = Path("reports/latest_report.md")
+df.to_markdown(report_file, index=False)
 print("Dashboard data updated successfully.")
