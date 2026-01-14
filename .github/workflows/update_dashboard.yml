@@ -11,46 +11,54 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Checkout the repo
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # Setup Python
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
 
+    # Install dependencies
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # --- Cleanup old outputs ---
+    # Cleanup old outputs
     - name: Cleanup old badges and graphs
       run: |
         find outputs/badges/ -type f -not -name '*.svg' -delete
         find outputs/graphs/ -type f -not -name '*.png' -delete
         echo "[INFO] Old non-standard output files removed"
 
+    # Run dashboard scripts
     - name: Run dashboard scripts
       run: |
         python scripts/update_dashboard.py
         python scripts/generate_badges.py
         python scripts/generate_graphs.py
 
+    # Touch outputs so git detects changes
     - name: Touch outputs to ensure Git sees changes
       run: |
         find outputs/badges/ outputs/graphs/ -exec touch {} \;
 
-    - name: Clear old Git credentials (optional)
+    # Clear old Git credentials (optional, safe)
+    - name: Clear old Git credentials
       run: |
-        git remote set-url origin https://github.com/${{ github.repository }}
         git credential-cache exit || true
+        git remote set-url origin https://github.com/${{ github.repository }}
 
+    # Configure Git for commit
     - name: Configure Git
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "actions@github.com"
 
+    # Commit and push updates using your new token
     - name: Commit and push updates
       run: |
         git add -f outputs/badges/ outputs/graphs/ reports/
