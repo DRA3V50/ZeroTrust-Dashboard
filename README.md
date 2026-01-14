@@ -54,6 +54,21 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 > **⚠️ Note**: All graphs, badges, and metrics are refreshed daily to reflect the latest data.
 
 ---
+---
+
+### ***🚦Color Codes***
+
+# Zero Trust Posture Graph
+- 🔴 Critical (0–59%)  
+- 🟠 Warning (60–79%)  
+- 🟢 Healthy (80–100%)  
+
+# ISO 27001 Compliance Graph
+- 🔴 Non-compliant / Missing  
+- 🟠 Partial / In Progress  
+- 🔵 Compliant / Covered  
+
+---
 
 ## 📊 Dashboards and Badges
 
