@@ -1,40 +1,25 @@
 import sqlite3
-import pandas as pd
+import random
 from pathlib import Path
 
-# Database path
-db_path = Path("data/controls.db")
+# Ensure data directory exists
+data_dir = Path("data")
+data_dir.mkdir(parents=True, exist_ok=True)
+db_path = data_dir / "controls.db"
 
-# Create the data directory if it doesn't exist
-db_path.parent.mkdir(parents=True, exist_ok=True)
+# Initialize database if missing
+from scripts.create_controls_db import db_path as db_check_path
+import scripts.create_controls_db
 
-# Connect to SQLite DB (creates if missing)
+# Connect to database
 conn = sqlite3.connect(db_path)
+c = conn.cursor()
 
-# Initialize controls table if not exists
-conn.execute('''
-CREATE TABLE IF NOT EXISTS controls (
-    control TEXT PRIMARY KEY,
-    domain TEXT,
-    score INTEGER
-)
-''')
-
-# Sample data (can be replaced with real metrics)
-controls_data = [
-    ("A.5.1", "InfoSec Policies", 87),
-    ("A.6.1", "Org InfoSec", 92),
-    ("A.8.2", "Risk Management", 79),
-    ("A.9.2", "Access Control", 85)
-]
-
-# Upsert controls
-for control, domain, score in controls_data:
-    conn.execute('''
-    INSERT INTO controls (control, domain, score)
-    VALUES (?, ?, ?)
-    ON CONFLICT(control) DO UPDATE SET score=excluded.score
-    ''', (control, domain, score))
+# Update scores randomly (replace with real logic)
+controls = c.execute("SELECT control FROM controls").fetchall()
+for (control,) in controls:
+    new_score = random.randint(70, 100)  # Randomized for demo/testing
+    c.execute("UPDATE controls SET score = ? WHERE control = ?", (new_score, control))
 
 conn.commit()
 conn.close()
