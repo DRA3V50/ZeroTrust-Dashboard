@@ -68,6 +68,15 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 - 🟠 Partial / In Progress  
 - 🔵 Compliant / Covered  
 
+| Color    | Meaning                 |
+|----------|-------------------------|
+| 🔴 Red   | Critical (0-59%)        |
+| 🟠 Orange| Warning (60-79%)        |
+| 🟢 Green | Healthy (80-100%)       |
+| 🔵 Blue  | Compliant / Covered ISO |
+
+---
+
 ---
 
 ## 📊 Dashboards and Badges
