@@ -6,20 +6,6 @@
 
 The **Zero Trust Dashboard** provides a visual and automated view of your organization's **Zero Trust security posture** and **ISO 27001 compliance**. It refreshes twice daily to help analysts, leadership, and auditors quickly understand your security state.
 
-### 🔹 Graphs & Color Codes
-- **Zero Trust Posture Graph**: Shows current scores for the five domains — Identity, Device, Network, Application, and Data.  
-  - **Color coding**:  
-    - 🔴 Critical (0–59%)  
-    - 🟠 Warning (60–79%)  
-    - 🟢 Healthy (80–100%)  
-- **ISO 27001 Coverage Graph**: Displays compliance coverage for key controls.  
-  - **Color coding**:  
-    - 🔵 Compliant / Covered  
-    - 🟡 Partial / In Progress  
-    - 🔴 Non-compliant / Missing  
-
-> ⚠️ Note: If the ISO 27001 graph appears all blue, all tracked controls are currently fully compliant.
-
 ### 🔹 Badges
 - Each control has a **dynamic badge** showing its current score.  
 - Updated in real-time by the workflow to reflect any changes in the database.
@@ -31,6 +17,7 @@ The **Zero Trust Dashboard** provides a visual and automated view of your organi
 ---
 
 ## 📝 Overview
+
 The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. It leverages **Python**, **SQLite**, and **GitHub Actions** to automatically update metrics, reports, badges, and visualizations twice daily.
 
 - Provides consistent, auditable insights for operational and federal security teams.  
@@ -84,6 +71,18 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
   <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="45%" style="display:inline-block; margin-right:5px;"/>
   <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="45%" style="display:inline-block;"/>
 </div>
+
+### 🔹 Graphs & Color Codes
+- **Zero Trust Posture Graph**: Shows current scores for the five domains — Identity, Device, Network, Application, and Data.  
+  - **Color coding**:  
+    - 🔴 Critical (0–59%)  
+    - 🟠 Warning (60–79%)  
+    - 🟢 Healthy (80–100%)  
+- **ISO 27001 Coverage Graph**: Displays compliance coverage for key controls.  
+  - **Color coding**:  
+    - 🔴 Non-compliant / Missing  
+    - 🟠 Partial / In Progress  
+    - 🔵 Compliant / Covered  
 
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.
