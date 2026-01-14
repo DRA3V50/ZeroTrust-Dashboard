@@ -24,6 +24,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    # --- Cleanup old outputs ---
+    - name: Cleanup old badges and graphs
+      run: |
+        find outputs/badges/ -type f -not -name '*.svg' -delete
+        find outputs/graphs/ -type f -not -name '*.png' -delete
+        echo "[INFO] Old non-standard output files removed"
+
     - name: Run dashboard scripts
       run: |
         python scripts/update_dashboard.py
@@ -34,7 +41,7 @@ jobs:
       run: |
         find outputs/badges/ outputs/graphs/ -exec touch {} \;
 
-    - name: Clear old Git credentials (optional, safe)
+    - name: Clear old Git credentials (optional)
       run: |
         git remote set-url origin https://github.com/${{ github.repository }}
         git credential-cache exit || true
