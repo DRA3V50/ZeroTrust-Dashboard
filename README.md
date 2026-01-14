@@ -60,7 +60,6 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.
-
 <div style="text-align:center;">
   <img src="outputs/badges/A.5.1.svg" alt="A.5.1" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
@@ -69,9 +68,10 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 </div>
 
 ### 🗂 Metrics Table
-| Control | Domain            | Score (%) |
-|---------|-----------------|-----------|
-| A.5.1   | InfoSec Policies | 87        |
-| A.6.1   | Org InfoSec      | 92        |
-| A.8.2   | Risk Management  | 79        |
-| A.9.2   | Access Control   | 85        |
+| Control | Domain | Score |
+|---------|------------------|-------|
+| A.5.1 | InfoSec Policies | 87 |
+| A.6.1 | Org InfoSec | 92 |
+| A.8.2 | Risk Management | 79 |
+| A.9.2 | Access Control | 85 |
+
