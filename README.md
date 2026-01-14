@@ -2,6 +2,34 @@
 
 ---
 
+## 📝 Summary
+
+The **Zero Trust Dashboard** provides a visual and automated view of your organization's **Zero Trust security posture** and **ISO 27001 compliance**. It refreshes twice daily to help analysts, leadership, and auditors quickly understand your security state.
+
+### 🔹 Graphs & Color Codes
+- **Zero Trust Posture Graph**: Shows current scores for the five domains — Identity, Device, Network, Application, and Data.  
+  - **Color coding**:  
+    - 🔴 Critical (0–59%)  
+    - 🟠 Warning (60–79%)  
+    - 🟢 Healthy (80–100%)  
+- **ISO 27001 Coverage Graph**: Displays compliance coverage for key controls.  
+  - **Color coding**:  
+    - 🔵 Compliant / Covered  
+    - 🟡 Partial / In Progress  
+    - 🔴 Non-compliant / Missing  
+
+> ⚠️ Note: If the ISO 27001 graph appears all blue, all tracked controls are currently fully compliant.
+
+### 🔹 Badges
+- Each control has a **dynamic badge** showing its current score.  
+- Updated in real-time by the workflow to reflect any changes in the database.
+
+### 🔹 Metrics Table
+- Displays control names, domains, and current scores (%).  
+- Neatly formatted and auto-updated by the workflow.
+
+---
+
 ## 📝 Overview
 The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. It leverages **Python**, **SQLite**, and **GitHub Actions** to automatically update metrics, reports, badges, and visualizations twice daily.
 
@@ -38,8 +66,8 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ---
 
 ## ⚙️ How It Works
-- **📄Data Storage**: Security metrics are stored in **SQLite** (`data/controls.db`).  
-- **🗂️Report Generation**: Produces structured reports summarizing current security posture and compliance.  
+- **📄 Data Storage**: Security metrics are stored in **SQLite** (`data/controls.db`).  
+- **🗂️ Report Generation**: Produces structured reports summarizing current security posture and compliance.  
 - **Visualizations**:  
   - **Graphs**: Dark-background graphs representing Zero Trust and ISO 27001 coverage, updated automatically twice daily.  
   - **Badges**: Real-time visual summaries of individual controls.  
@@ -67,10 +95,18 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 </div>
 
 ### 🗂 Metrics Table
+<div style="text-align:center;">
 | Control | Domain | Score (%) |
 |---------|--------|------------|
 | A.5.1 | InfoSec Policies | 87 |
 | A.6.1 | Org InfoSec | 92 |
 | A.8.2 | Risk Management | 79 |
 | A.9.2 | Access Control | 85 |
+</div>
 
+<!-- AUTO-UPDATE-START -->
+<!--
+The workflow script will replace this section with up-to-date badges and table.
+Do NOT edit below this line manually unless you want to override the auto-updates.
+-->
+<!-- AUTO-UPDATE-END -->
