@@ -1,7 +1,10 @@
 import pybadges
 import os
+import shutil
 
 BADGE_DIR = "outputs/badges"
+if os.path.exists(BADGE_DIR):
+    shutil.rmtree(BADGE_DIR)
 os.makedirs(BADGE_DIR, exist_ok=True)
 
 def generate_badge(control_id, domain, score):
