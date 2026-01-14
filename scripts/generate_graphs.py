@@ -1,52 +1,34 @@
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
-import shutil
-from generate_badges import generate_badge
+from pathlib import Path
 
-DB_PATH = "data/controls.db"
-GRAPH_DIR = "outputs/graphs"
+# Paths
+db_path = Path("data/controls.db")
+graphs_dir = Path("outputs/graphs")
+graphs_dir.mkdir(parents=True, exist_ok=True)
 
-# Clean previous graphs
-if os.path.exists(GRAPH_DIR):
-    shutil.rmtree(GRAPH_DIR)
-os.makedirs(GRAPH_DIR, exist_ok=True)
+# Connect to DB
+conn = sqlite3.connect(db_path)
+df = pd.read_sql("SELECT * FROM controls", conn)
+conn.close()
 
-def fetch():
-    conn = sqlite3.connect(DB_PATH)
-    df = pd.read_sql("SELECT * FROM controls", conn)
-    conn.close()
-    return df
+# Zero Trust Posture Graph
+domains = df['domain'].tolist()
+scores = df['score'].tolist()
+plt.figure(figsize=(6,3))
+plt.bar(domains, scores, color='teal')
+plt.title("Zero Trust Posture")
+plt.ylim(0,100)
+plt.savefig(graphs_dir / "zero_trust_posture.png", dpi=150)
+plt.close()
 
-def zero_trust_graph(df):
-    plt.style.use("dark_background")
-    plt.figure(figsize=(4.8, 2.5))
-    plt.bar(df["control_id"], df["score"], color="#3498db")
-    plt.ylim(0, 100)
-    plt.ylabel("Score (%)")
-    plt.title("Zero Trust Posture")
-    plt.tight_layout()
-    plt.savefig(f"{GRAPH_DIR}/zero_trust_posture.png", dpi=150)
-    plt.close()
-    print("[OK] Zero Trust graph updated")
+# ISO 27001 Coverage Graph
+plt.figure(figsize=(6,3))
+plt.bar(df['control'], df['score'], color='orange')
+plt.title("ISO 27001 Control Coverage")
+plt.ylim(0,100)
+plt.savefig(graphs_dir / "iso_27001_coverage.png", dpi=150)
+plt.close()
 
-def iso_graph(df):
-    plt.style.use("dark_background")
-    plt.figure(figsize=(4.8, 2.5))
-    plt.bar(df["domain"], df["score"], color="#e67e22")
-    plt.xticks(rotation=30, ha="right")
-    plt.ylim(0, 100)
-    plt.ylabel("Compliance (%)")
-    plt.title("ISO 27001 Coverage")
-    plt.tight_layout()
-    plt.savefig(f"{GRAPH_DIR}/iso_27001_coverage.png", dpi=150)
-    plt.close()
-    print("[OK] ISO 27001 graph updated")
-
-if __name__ == "__main__":
-    df = fetch()
-    zero_trust_graph(df)
-    iso_graph(df)
-    for _, row in df.iterrows():
-        generate_badge(row["control_id"], row["domain"], row["score"])
+print("Graphs generated successfully.")
