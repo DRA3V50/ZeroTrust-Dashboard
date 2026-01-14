@@ -6,6 +6,9 @@ on:
     - cron: '0 13,1 * * *' # UTC 13:00 = 08:00 EST, 01:00 UTC = 20:00 EST
   workflow_dispatch:
 
+permissions:
+  contents: write  # Allows automatic push
+
 jobs:
   update_dashboard:
     runs-on: ubuntu-latest
@@ -32,11 +35,6 @@ jobs:
         python scripts/generate_badges.py
         python scripts/update_readme.py
 
-    - name: Clear old git credentials
-      run: |
-        git credential-cache exit || true
-        git config --global --unset credential.helper || true
-
     - name: Configure Git
       run: |
         git config user.name "github-actions[bot]"
@@ -46,4 +44,4 @@ jobs:
       run: |
         git add -f outputs/badges/ outputs/graphs/ reports/ README.md
         git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
+        git push origin HEAD:main
