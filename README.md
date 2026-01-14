@@ -3,10 +3,10 @@
 ---
 
 ## 🔎 Overview
-The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. By leveraging **Python**, **SQLite**, and **GitHub Actions**, this system ensures metrics, reports, badges, and visualizations are updated twice daily, supporting informed security decision-making.
+The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. It leverages **Python**, **SQLite**, and **GitHub Actions** to automatically update metrics, reports, badges, and visualizations twice daily.
 
-- Consistent, auditable insights for operational and federal security teams.  
-- Ongoing monitoring without manual intervention.  
+- Provides consistent, auditable insights for operational and federal security teams.  
+- Supports ongoing monitoring without manual intervention.  
 - Ideal for ISO-27001 compliance tracking, OSINT analysis, and risk management audits.  
 
 ---
@@ -16,7 +16,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 - **ISO 27001 Compliance Monitoring**: Tracks coverage of key controls, highlighting gaps and compliance levels.  
 - **Automated Daily Updates**: Graphs, badges, and reports are refreshed twice daily to reflect the latest data.  
 - **Data-Driven Insights**: Supports actionable decision-making through real-time metrics.  
-- **Demonstration and Testing**: Graphs and badges can be generated with dynamic or randomized data for testing without affecting production outputs.  
+- **Demonstration and Testing**: Graphs and badges can be generated dynamically without affecting production outputs.  
 
 ---
 
@@ -38,18 +38,17 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ---
 
 ## 🧮 How It Works
-- **Data Storage**: Security metrics are stored in a structured **SQLite database** (`data/controls.db`).  
+- **Data Storage**: Security metrics are stored in **SQLite** (`data/controls.db`).  
 - **Report Generation**: Produces structured reports summarizing current security posture and compliance.  
 - **Visualizations**:  
-  - **Graphs**: Dark-themed, high-contrast visualizations for Zero Trust and ISO 27001 coverage, updated twice daily.  
-  - **Badges**: Visual summaries of individual controls with real-time status.  
-- **Metrics Table**: Auto-updated table showing the latest control scores.  
+  - **Graphs**: Dark-background graphs representing Zero Trust and ISO 27001 coverage, updated automatically twice daily.  
+  - **Badges**: Real-time visual summaries of individual controls.  
 
-> **⚠️ Note**: Graphs, badges, and metrics are updated twice daily, reflecting the latest data without overwriting historical outputs.  
+> **⚠️ Note**: All graphs, badges, and metrics are refreshed daily to reflect the latest data.
 
 ---
 
-## 📊 Dashboards, Badges & Metrics 📇
+## 📊 Dashboards and Badges
 
 ### Latest Zero Trust Posture
 - Updated daily, showing actionable insight for analysts and leadership.  
@@ -74,18 +73,9 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 | A.8.2   | Risk Management  | 79 |
 | A.9.2   | Access Control   | 85 |
 
-> **Note**: Table is automatically updated daily, reflecting the latest Zero Trust and ISO 27001 control scores.  
-
----
-
-## 📝 Security Monitoring and Audit Support
-- **Track Compliance**: Monitor controls across domains and ISO 27001 standards.  
-- **Identify Gaps**: Highlight areas of insufficient security or non-compliance.  
-- **Audit Preparation**: Generate reports suitable for internal and external audits.  
-
-> Dashboards can be customized to focus on specific controls, thresholds, or domains aligned with organizational priorities or OSINT investigations.  
+> **Note**: This table is auto-updated daily to reflect the latest control scores.
 
 ---
 
 ## 📜 License
-MIT License – see LICENSE file for details
+MIT License
