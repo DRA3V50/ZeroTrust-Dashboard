@@ -56,7 +56,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ---
 ---
 
-#🚦Color Codes
+####🚦Color Codes
 
 # ***Zero Trust Posture Code***
 - 🔴 Critical (0–59%)  
