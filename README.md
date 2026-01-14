@@ -56,38 +56,19 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="45%" style="display:inline-block"/>
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.
-
 <img src="outputs/badges/A.5.1.svg" alt="A.5.1" style="height: 20px; margin-right: 5px;"/>
 <img src="outputs/badges/A.5.1_20260112_2213.svg" alt="A.5.1_20260112_2213" style="height: 20px; margin-right: 5px;"/>
 <img src="outputs/badges/A.5.1_20260112_2217.svg" alt="A.5.1_20260112_2217" style="height: 20px; margin-right: 5px;"/>
 <img src="outputs/badges/A.5.1_20260112_2222.svg" alt="A.5.1_20260112_2222" style="height: 20px; margin-right: 5px;"/>
 <img src="outputs/badges/A.5.1_20260112_2246.svg" alt="A.5.1_20260112_2246" style="height: 20px; margin-right: 5px;"/>
 <img src="outputs/badges/A.5.1_20260112_2258.svg" alt="A.5.1_20260112_2258" style="height: 20px; margin-right: 5px;"/>
+<img src="outputs/badges/A.5.1_20260114_2122.svg" alt="A.5.1_20260114_2122" style="height: 20px; margin-right: 5px;"/>
 <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height: 20px; margin-right: 5px;"/>
 <img src="outputs/badges/A.6.1_20260112_2213.svg" alt="A.6.1_20260112_2213" style="height: 20px; margin-right: 5px;"/>
 <img src="outputs/badges/A.6.1_20260112_2217.svg" alt="A.6.1_20260112_2217" style="height: 20px; margin-right: 5px;"/>
 ### 🗂 Metrics Table
-| Control | Domain | Score (%) |
-|---------|--------|-----------|
-| A.5.1 | InfoSec Policies | 87 |
-| A.6.1 | Org InfoSec | 92 |
-| A.8.2 | Risk Management | 79 |
-| A.9.2 | Access Control | 85 |
-
-<img src="outputs/badges/A.8.2_20260112_2222.svg" alt="A.8.2_20260112_2222" style="height: 20px; margin-right: 5px;"/>
-<img src="outputs/badges/A.8.2_20260112_2246.svg" alt="A.8.2_20260112_2246" style="height: 20px; margin-right: 5px;"/>
-<img src="outputs/badges/A.8.2_20260112_2258.svg" alt="A.8.2_20260112_2258" style="height: 20px; margin-right: 5px;"/>
-<img src="outputs/badges/A.9.2.svg" alt="A.9.2" style="height: 20px; margin-right: 5px;"/>
-<img src="outputs/badges/A.9.2_20260112_2213.svg" alt="A.9.2_20260112_2213" style="height: 20px; margin-right: 5px;"/>
-<img src="outputs/badges/A.9.2_20260112_2217.svg" alt="A.9.2_20260112_2217" style="height: 20px; margin-right: 5px;"/>
-<img src="outputs/badges/A.9.2_20260112_2222.svg" alt="A.9.2_20260112_2222" style="height: 20px; margin-right: 5px;"/>
-<img src="outputs/badges/A.9.2_20260112_2246.svg" alt="A.9.2_20260112_2246" style="height: 20px; margin-right: 5px;"/>
-<img src="outputs/badges/A.9.2_20260112_2258.svg" alt="A.9.2_20260112_2258" style="height: 20px; margin-right: 5px;"/>
-
-
-### 🗂 Metrics Table
 control	domain	score
-A.6.1	Org InfoSec	92
 A.5.1	InfoSec Policies	87
-A.9.2	Access Control	85
+A.6.1	Org InfoSec	92
 A.8.2	Risk Management	79
+A.9.2	Access Control	85
