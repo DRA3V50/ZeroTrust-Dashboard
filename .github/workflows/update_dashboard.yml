@@ -3,7 +3,7 @@ name: Zero Trust Dashboard Update
 on:
   schedule:
     # Runs at 08:00 and 20:00 EST daily
-    - cron: '0 13,1 * * *' # UTC 13:00 = 08:00 EST, 01:00 UTC = 20:00 EST
+    - cron: '0 13,1 * * *'
   workflow_dispatch:
 
 jobs:
@@ -27,39 +27,25 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    # 4️⃣ Cleanup old outputs
-    - name: Cleanup old badges and graphs
-      run: |
-        find outputs/badges/ -type f -not -name '*.svg' -delete
-        find outputs/graphs/ -type f -not -name '*.png' -delete
-        echo "[INFO] Old non-standard output files removed"
-
-    # 5️⃣ Run dashboard scripts
+    # 4️⃣ Run dashboard scripts
     - name: Run dashboard scripts
       run: |
         python scripts/update_dashboard.py
         python scripts/generate_badges.py
         python scripts/generate_graphs.py
 
-    # 6️⃣ Touch outputs so Git detects changes
-    - name: Touch outputs to ensure Git sees changes
-      run: |
-        find outputs/badges/ outputs/graphs/ -exec touch {} \;
-
-    # 7️⃣ Clear old Git credentials
-    - name: Clear old Git credentials
-      run: git credential-cache exit || true
-
-    # 8️⃣ Configure Git to use your personal token
-    - name: Configure Git remote with personal token
+    # 5️⃣ Configure Git
+    - name: Configure Git
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "actions@github.com"
-        git remote set-url origin https://x-access-token:${{ secrets.ZeTr_PAT }}@github.com/${{ github.repository }}
 
-    # 9️⃣ Commit and push updates using personal token
+    # 6️⃣ Commit & push updates
     - name: Commit and push updates
       run: |
         git add -f outputs/badges/ outputs/graphs/ reports/
         git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
         git push origin HEAD:main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
