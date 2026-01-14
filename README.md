@@ -54,28 +54,13 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 > **⚠️ Note**: All graphs, badges, and metrics are refreshed daily to reflect the latest data.
 
 ---
----
 
-## Color Codes🚦
-
-# ***Zero Trust Posture Code***
-- 🔴 Critical (0–59%)  
-- 🟠 Warning (60–79%)  
-- 🟢 Healthy (80–100%)  
-
-# ***ISO 27001 Compliance Code***
-- 🔴 Non-compliant / Missing  
-- 🟠 Partial / In Progress  
-- 🔵 Compliant / Covered  
-
-| Color    | Meaning                 |
-|----------|-------------------------|
-| 🔴 Red   | Critical (0-59%)        |
-| 🟠 Orange| Warning (60-79%)        |
-| 🟢 Green | Healthy (80-100%)       |
-| 🔵 Blue  | Compliant / Covered ISO |
-
----
+| Color    | Meaning                      |
+|----------|------------------------------|
+| 🔴 Red   | Critical (0–59%) / Non-compliant / Missing |
+| 🟠 Orange| Warning (60–79%) / Partial / In Progress    |
+| 🟢 Green | Healthy (80–100%)             |
+| 🔵 Blue  | Compliant / Covered (ISO)     |
 
 ---
 
