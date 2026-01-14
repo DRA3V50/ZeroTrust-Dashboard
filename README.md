@@ -54,6 +54,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 > **⚠️ Note**: All graphs, badges, and metrics are refreshed daily to reflect the latest data.
 
 ---
+### Color Codes🚦
 
 | Color    | Meaning                      |
 |----------|------------------------------|
