@@ -30,10 +30,16 @@ conn.close()
 control_scores = {row[0]: row[2] for row in rows}
 domain_scores = {row[1]: row[2] for row in rows if row[1] in ZERO_TRUST_DOMAINS}
 
-# --- Step 2: Generate Zero Trust Posture Graph ---
-plt.style.use('seaborn-darkgrid')  # lighter grid and more readable
-fig, ax = plt.subplots(figsize=(10,5))  # bigger graph
+# --- Step 2: Set plot style safely ---
+try:
+    import seaborn
+    plt.style.use('seaborn-darkgrid')  # lighter grid and more readable
+except ImportError:
+    print("Seaborn not found. Using default matplotlib style instead.")
+    plt.style.use('default')
 
+# --- Step 3: Generate Zero Trust Posture Graph ---
+fig, ax = plt.subplots(figsize=(10,5))  # bigger graph
 colors = []
 for domain in ZERO_TRUST_DOMAINS:
     score = domain_scores.get(domain, 0)
@@ -50,12 +56,12 @@ ax.set_ylabel("Score (%)")
 ax.set_title("Zero Trust Posture")
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 for i, v in enumerate([domain_scores.get(d,0) for d in ZERO_TRUST_DOMAINS]):
-    ax.text(i, v + 2, str(v), ha='center', fontweight='bold')  # show score above bar
+    ax.text(i, v + 2, str(v), ha='center', fontweight='bold')
 plt.tight_layout()
 plt.savefig(f"{GRAPH_DIR}/zero_trust_posture.png")
 plt.close()
 
-# --- Step 3: Generate ISO 27001 Coverage Graph ---
+# --- Step 4: Generate ISO 27001 Coverage Graph ---
 fig, ax = plt.subplots(figsize=(10,5))  # bigger graph
 iso_colors = []
 for control in ISO_CONTROLS:
@@ -78,7 +84,7 @@ plt.tight_layout()
 plt.savefig(f"{GRAPH_DIR}/iso_27001_coverage.png")
 plt.close()
 
-# --- Step 4: Generate badges ---
+# --- Step 5: Generate badges ---
 badge_lines = []
 for control in ISO_CONTROLS:
     score = control_scores.get(control, 0)
@@ -89,7 +95,6 @@ for control in ISO_CONTROLS:
     else:
         color = "red"    # 🔴 Critical / Non-compliant
 
-    # Updated badge call for pybadges 2.x
     badge_svg = badge(left_text=control, right_text=str(score), right_color=color)
 
     badge_file = f"{BADGE_DIR}/{control}.svg"
@@ -98,20 +103,19 @@ for control in ISO_CONTROLS:
 
     badge_lines.append(f'<img src="{badge_file}" alt="{control}" style="height:20px; margin:2px;"/>')
 
-# --- Step 5: Generate Metrics Table ---
+# --- Step 6: Generate Metrics Table ---
 table_lines = ["| Control | Domain | Score (%) |",
                "|---------|--------|-----------|"]
-
 for control in ISO_CONTROLS:
     domain = next((row[1] for row in rows if row[0] == control), "")
     score = control_scores.get(control, 0)
     table_lines.append(f"| {control} | {domain} | {score} |")
 
-# --- Step 6: Update README ---
+# --- Step 7: Update README ---
 with open(README_PATH, "r", encoding="utf-8") as f:
     readme_text = f.read()
 
-# Replace placeholders in README
+# Replace placeholders
 readme_text = readme_text.replace("{{BADGES}}", "\n".join(badge_lines))
 readme_text = readme_text.replace("{{METRICS_TABLE}}", "\n".join(table_lines))
 
