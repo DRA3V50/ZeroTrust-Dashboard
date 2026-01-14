@@ -11,15 +11,17 @@ c.execute("SELECT control, score FROM controls")
 data = c.fetchall()
 conn.close()
 
+# Sort badges by descending score
+data.sort(key=lambda x: x[1], reverse=True)
+
 for control, score in data:
-    # Define color
     if score >= 90:
         color = "green"
     elif score >= 75:
         color = "orange"
     else:
         color = "red"
-    # Generate badge
+
     badge_svg = pybadges.badge(left_text=control, right_text=f"{score}%", right_color=color)
     badge_file = f"outputs/badges/{control}.svg"
     with open(badge_file, "w") as f:
