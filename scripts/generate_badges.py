@@ -1,17 +1,25 @@
+import sqlite3
+from pathlib import Path
 import pybadges
-import os
-import shutil
 
-BADGE_DIR = "outputs/badges"
-if os.path.exists(BADGE_DIR):
-    shutil.rmtree(BADGE_DIR)
-os.makedirs(BADGE_DIR, exist_ok=True)
+# Paths
+db_path = Path("data/controls.db")
+badges_dir = Path("outputs/badges")
+badges_dir.mkdir(parents=True, exist_ok=True)
 
-def generate_badge(control_id, domain, score):
-    badge = pybadges.badge(
-        left_text=f"{control_id} ({domain})",
-        right_text=f"{score}%",
-        right_color="#4c1"
+# Connect to DB
+conn = sqlite3.connect(db_path)
+df = pd.read_sql("SELECT * FROM controls", conn)
+conn.close()
+
+# Generate SVG badges
+for _, row in df.iterrows():
+    badge_svg = pybadges.badge(
+        left_text=row['control'],
+        right_text=f"{row['score']}%",
+        right_color="#4c1" if row['score'] >= 80 else "#dfb317"
     )
-    with open(f"{BADGE_DIR}/{control_id}.svg", "w") as f:
-        f.write(badge)
+    with open(badges_dir / f"{row['control']}.svg", "w") as f:
+        f.write(badge_svg)
+
+print("Badges generated successfully.")
