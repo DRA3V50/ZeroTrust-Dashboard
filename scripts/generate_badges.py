@@ -19,7 +19,7 @@ for control, score in data:
         color = "orange"
     else:
         color = "red"
-    # Generate badge using pybadges >= 2.2.0
+    # Generate badge
     badge_svg = pybadges.badge(left_text=control, right_text=f"{score}%", right_color=color)
     badge_file = f"outputs/badges/{control}.svg"
     with open(badge_file, "w") as f:
