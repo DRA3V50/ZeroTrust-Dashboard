@@ -3,29 +3,70 @@
 ---
 
 ## 🔎 Overview
-The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. Graphs, badges, and metrics are updated twice daily by GitHub Actions.
+The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. By leveraging **Python**, **SQLite**, and **GitHub Actions**, this system ensures metrics, reports, badges, and visualizations are updated twice daily, supporting informed security decision-making.
+
+- Consistent, auditable insights for operational and federal security teams.  
+- Ongoing monitoring without manual intervention.  
+- Ideal for ISO-27001 compliance tracking, OSINT analysis, and risk management audits.  
 
 ---
 
-## 📊 Latest Visualizations
+## 🛡️ Targeted Features
+- **Zero Trust Posture Evaluation**: Continuous assessment across five critical domains — Identity, Device, Network, Application, and Data.  
+- **ISO 27001 Compliance Monitoring**: Tracks coverage of key controls, highlighting gaps and compliance levels.  
+- **Automated Daily Updates**: Graphs, badges, and reports are refreshed twice daily to reflect the latest data.  
+- **Data-Driven Insights**: Supports actionable decision-making through real-time metrics.  
+- **Demonstration and Testing**: Graphs and badges can be generated with dynamic or randomized data for testing without affecting production outputs.  
 
-### Zero Trust Posture
-Updated daily — dark-themed for better readability.  
+---
+
+## 🔑 Key Metrics
+
+### Zero Trust Domains
+- **Identity**: Ensures secure access and user verification.  
+- **Device**: Monitors security and health of endpoints.  
+- **Network**: Protects against unauthorized access and ensures segmentation.  
+- **Application**: Evaluates security vulnerabilities and patch compliance.  
+- **Data**: Safeguards data integrity, encryption, and controlled access.  
+
+### ISO 27001 Controls
+- **A.5.1** – Information Security Policies  
+- **A.6.1** – Organization of Information Security  
+- **A.8.2** – Risk Management  
+- **A.9.2** – Access Control  
+
+---
+
+## 🧮 How It Works
+- **Data Storage**: Security metrics are stored in a structured **SQLite database** (`data/controls.db`).  
+- **Report Generation**: Produces structured reports summarizing current security posture and compliance.  
+- **Visualizations**:  
+  - **Graphs**: Dark-themed, high-contrast visualizations for Zero Trust and ISO 27001 coverage, updated twice daily.  
+  - **Badges**: Visual summaries of individual controls with real-time status.  
+- **Metrics Table**: Auto-updated table showing the latest control scores.  
+
+> **⚠️ Note**: Graphs, badges, and metrics are updated twice daily, reflecting the latest data without overwriting historical outputs.  
+
+---
+
+## 📊 Dashboards, Badges & Metrics 📇
+
+### Latest Zero Trust Posture
+- Updated daily, showing actionable insight for analysts and leadership.  
 ![Zero Trust Posture](outputs/graphs/zero_trust_posture.png)
 
-### ISO 27001 Control Coverage
-Updated daily — dark-themed graph.  
+### Latest ISO 27001 Control Coverage
+- Highlights strengths and areas needing attention, updated daily.  
 ![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage.png)
 
 ### Real-Time Badges
-Individual control status badges — updated daily.  
+- Summarizes individual control statuses with dynamic updates.  
 ![A.5.1](outputs/badges/A.5.1.svg)  
 ![A.6.1](outputs/badges/A.6.1.svg)  
 ![A.8.2](outputs/badges/A.8.2.svg)  
 ![A.9.2](outputs/badges/A.9.2.svg)
 
-### Metrics Table
-Automatically updated daily.  
+### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
 | A.5.1   | InfoSec Policies | 87 |
@@ -33,18 +74,18 @@ Automatically updated daily.
 | A.8.2   | Risk Management  | 79 |
 | A.9.2   | Access Control   | 85 |
 
-> ⚠️ **Note:** All graphs, badges, and metrics are refreshed by the workflow and reflect the latest Zero Trust and ISO 27001 data.
+> **Note**: Table is automatically updated daily, reflecting the latest Zero Trust and ISO 27001 control scores.  
 
 ---
 
-## 🧮 How It Works
-1. Security metrics stored in **SQLite** (`data/controls.db`).  
-2. **Python scripts** generate updated graphs, badges, and reports.  
-3. GitHub Actions workflow runs twice daily to commit and update all outputs.  
+## 📝 Security Monitoring and Audit Support
+- **Track Compliance**: Monitor controls across domains and ISO 27001 standards.  
+- **Identify Gaps**: Highlight areas of insufficient security or non-compliance.  
+- **Audit Preparation**: Generate reports suitable for internal and external audits.  
+
+> Dashboards can be customized to focus on specific controls, thresholds, or domains aligned with organizational priorities or OSINT investigations.  
 
 ---
 
 ## 📜 License
-MIT
-
-## 📜 License
+MIT License – see LICENSE file for details
