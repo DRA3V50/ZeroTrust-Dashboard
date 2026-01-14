@@ -1,63 +1,61 @@
 import os
-import sqlite3
 from create_controls_db import db_path
+import sqlite3
 
 readme_file = "README.md"
 
 with open(readme_file, "r") as f:
     lines = f.readlines()
 
-def find_section_index(lines, header):
-    for i, line in enumerate(lines):
-        if line.strip() == header:
-            return i
-    return -1
+# Find the section start indices for the parts to update
+start_graph_idx = None
+start_badge_idx = None
+start_table_idx = None
+end_table_idx = None
 
-# Find indices of the sections to replace
-graph_start = find_section_index(lines, "### Latest Zero Trust Posture")
-badge_start = find_section_index(lines, "### Real-Time Badges")
-metrics_start = find_section_index(lines, "### 🗂 Metrics Table")
+for i, line in enumerate(lines):
+    if line.strip() == "### Latest Zero Trust Posture":
+        start_graph_idx = i
+    elif line.strip() == "### Real-Time Badges":
+        start_badge_idx = i
+    elif line.strip() == "### 🗂 Metrics Table":
+        start_table_idx = i
 
-if graph_start == -1 or badge_start == -1 or metrics_start == -1:
-    print("Error: Could not find all required section headers in README.md")
-    exit(1)
+# To find where metrics table ends, look for the next section or end of file
+for i in range(start_table_idx + 1, len(lines)):
+    if lines[i].startswith("### ") and i > start_table_idx:
+        end_table_idx = i
+        break
+if end_table_idx is None:
+    end_table_idx = len(lines)
 
-# Find the end of each section (start of next or EOF)
-def find_section_end(start_idx):
-    for i in range(start_idx + 1, len(lines)):
-        if lines[i].startswith("### ") and i != start_idx:
-            return i
-    return len(lines)
-
-graph_end = badge_start
-badge_end = metrics_start
-metrics_end = find_section_end(metrics_start)
-
-# Prepare new content for graphs section
+# Prepare new graph lines (two graphs side by side)
 graph_lines = [
     "### Latest Zero Trust Posture\n",
     "- Updated daily, showing actionable insight for analysts and leadership.\n",
-    "![Zero Trust Scores](outputs/graphs/zero_trust_posture.png)\n",
-    "![ISO 27001 Coverage](outputs/graphs/iso_27001_coverage.png)\n",
+    '<img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="45%" style="display:inline-block"/>\n',
+    '<img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="45%" style="display:inline-block"/>\n',
+    "\n"
 ]
 
-# Prepare new content for badges section
-badge_files = sorted(f for f in os.listdir("outputs/badges") if f.endswith(".svg"))
+# Prepare new badge lines with inline images (small icons)
 badge_lines = [
     "### Real-Time Badges\n",
     "- Summarizes individual control statuses with dynamic updates.\n",
     "\n"
 ]
-# Add badges inline
+
+badge_files = sorted(f for f in os.listdir("outputs/badges") if f.endswith(".svg"))
 for file in badge_files:
-    badge_lines.append(f"![{file[:-4]}](outputs/badges/{file}) ")
+    control_name = file[:-4]
+    badge_lines.append(f'<img src="outputs/badges/{file}" alt="{control_name}" style="height: 20px; margin-right: 5px;"/>\n')
 
-badge_lines.append("\n\n")
+badge_lines.append("\n")
 
-# Prepare new content for metrics table section
+# Prepare metrics table lines (simple markdown table)
 conn = sqlite3.connect(db_path)
 c = conn.cursor()
-c.execute("SELECT control, domain, score FROM controls ORDER BY control ASC")
+c.execute("SELECT control, domain, score FROM controls ORDER BY control")
 data = c.fetchall()
 conn.close()
 
@@ -70,13 +68,15 @@ table_lines = [
 for control, domain, score in data:
     table_lines.append(f"| {control} | {domain} | {score} |\n")
 
-# Replace old sections with new content
-lines[graph_start:graph_end] = graph_lines
-lines[badge_start:badge_end] = badge_lines
-lines[metrics_start:metrics_end] = table_lines
+table_lines.append("\n")
 
-# Write back to README.md
+# Replace old sections with new lines
+lines[start_graph_idx:start_badge_idx] = graph_lines
+lines[start_badge_idx:start_table_idx] = badge_lines
+lines[start_table_idx:end_table_idx] = table_lines
+
+# Write back updated README
 with open(readme_file, "w") as f:
     f.writelines(lines)
 
-print("README.md updated with latest graphs, badges, and metrics.")
+print("README.md updated with latest graphs, badges, and metrics (preserving original structure).")
