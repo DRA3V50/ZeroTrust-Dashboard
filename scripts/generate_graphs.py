@@ -14,9 +14,19 @@ conn.close()
 controls = [row[0] for row in data]
 scores = [row[1] for row in data]
 
-# --- Zero Trust Posture Graph (single color) ---
+# Determine colors by score
+colors = []
+for score in scores:
+    if score >= 90:
+        colors.append("green")
+    elif score >= 75:
+        colors.append("orange")
+    else:
+        colors.append("red")
+
+# Zero Trust Graph (color-coded)
 plt.figure(figsize=(5, 3))
-plt.bar(controls, scores, color="#1f77b4")
+plt.bar(controls, scores, color=colors)
 plt.title("Zero Trust Scores", color="white")
 plt.ylabel("Score %", color="white")
 plt.xticks(color="white")
@@ -27,16 +37,7 @@ plt.savefig("outputs/graphs/zero_trust_posture.png", dpi=100, bbox_inches='tight
 plt.close()
 print("Zero Trust posture graph saved.")
 
-# --- ISO 27001 Coverage Graph (color-coded) ---
-colors = []
-for score in scores:
-    if score >= 90:
-        colors.append("green")
-    elif score >= 75:
-        colors.append("orange")
-    else:
-        colors.append("red")
-
+# ISO 27001 Graph (same color-coding)
 plt.figure(figsize=(5, 3))
 plt.bar(controls, scores, color=colors)
 plt.title("ISO 27001 Coverage", color="white")
