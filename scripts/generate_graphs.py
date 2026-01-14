@@ -2,10 +2,15 @@ import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import shutil
 from generate_badges import generate_badge
 
 DB_PATH = "data/controls.db"
 GRAPH_DIR = "outputs/graphs"
+
+# Clean previous graphs
+if os.path.exists(GRAPH_DIR):
+    shutil.rmtree(GRAPH_DIR)
 os.makedirs(GRAPH_DIR, exist_ok=True)
 
 def fetch():
@@ -16,7 +21,7 @@ def fetch():
 
 def zero_trust_graph(df):
     plt.style.use("dark_background")
-    plt.figure(figsize=(4.8, 2.5))  # scaled down to max width ~295px
+    plt.figure(figsize=(4.8, 2.5))
     plt.bar(df["control_id"], df["score"], color="#3498db")
     plt.ylim(0, 100)
     plt.ylabel("Score (%)")
