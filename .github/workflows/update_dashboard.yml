@@ -1,4 +1,3 @@
-# .github/workflows/update_dashboard.yml
 name: Zero Trust Dashboard Update
 
 on:
@@ -28,7 +27,7 @@ jobs:
     - name: Start SSH agent
       uses: webfactory/ssh-agent@v0.8.0
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-private-key: ${{ secrets.SSH_KEY }}
 
     - name: Configure Git
       run: |
@@ -47,4 +46,4 @@ jobs:
       run: |
         git add -f outputs/badges/ outputs/graphs/ reports/ README.md
         git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
-        git push origin main
+        git push git@github.com:${{ github.repository }} HEAD:main
