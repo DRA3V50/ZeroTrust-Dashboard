@@ -1,4 +1,4 @@
 pandas
 matplotlib
-pybadges
+pybadges>=2.2.0
 tabulate
