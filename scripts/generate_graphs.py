@@ -1,79 +1,68 @@
 import sqlite3
-import matplotlib.pyplot as plt
 import os
-from create_controls_db import db_path
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
-# Ensure output directory exists
-os.makedirs("outputs/graphs", exist_ok=True)
+DB_PATH = "data/controls.db"
+GRAPH_DIR = "outputs/graphs"
+ZERO_TRUST_DOMAINS = ["Identity", "Device", "Network", "Application", "Data"]
+ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
 
-# Read data from database
-conn = sqlite3.connect(db_path)
-c = conn.cursor()
-c.execute("SELECT control, score FROM controls")
-data = c.fetchall()
+os.makedirs(GRAPH_DIR, exist_ok=True)
+
+# Read data from SQLite
+conn = sqlite3.connect(DB_PATH)
+cursor = conn.cursor()
+cursor.execute("SELECT control, domain, score FROM controls")
+rows = cursor.fetchall()
 conn.close()
 
-controls = [row[0] for row in data]
-scores = [row[1] for row in data]
+# Prepare dicts
+control_scores = {row[0]: row[2] for row in rows}
+domain_scores = {row[1]: row[2] for row in rows if row[1] in ZERO_TRUST_DOMAINS}
 
-# -------------------------------
-# Zero Trust Posture Graph
-# -------------------------------
-# Color logic:
-# 🔴 Red     = score < 60  (Critical)
-# 🟠 Orange  = 60 <= score < 80 (Warning)
-# 🟢 Green   = score >= 80 (Healthy)
-colors_zt = []
-for score in scores:
-    if score >= 80:
-        colors_zt.append("green")
-    elif score >= 60:
-        colors_zt.append("orange")
+# --- Zero Trust Posture Graph ---
+plt.style.use('dark_background')
+fig, ax = plt.subplots(figsize=(8,4))
+colors = []
+
+for domain in ZERO_TRUST_DOMAINS:
+    score = domain_scores.get(domain, 0)
+    if score < 60:
+        colors.append("#FF0000")  # Red
+    elif score < 80:
+        colors.append("#FFA500")  # Orange
     else:
-        colors_zt.append("red")
+        colors.append("#00FF00")  # Green
 
-plt.figure(figsize=(6, 4))
-plt.bar(controls, scores, color=colors_zt)
-plt.title("Zero Trust Posture Scores", color="white")
-plt.ylabel("Score (%)", color="white")
-plt.xticks(color="white")
-plt.yticks(color="white")
-plt.gca().set_facecolor("#2E2E2E")
-plt.gcf().patch.set_facecolor("#2E2E2E")
-plt.ylim(0, 100)
-
-zero_trust_file = "outputs/graphs/zero_trust_posture.png"
-plt.savefig(zero_trust_file, dpi=100, bbox_inches="tight")
+ax.bar(ZERO_TRUST_DOMAINS, [domain_scores.get(d,0) for d in ZERO_TRUST_DOMAINS], color=colors)
+ax.set_ylim(0, 100)
+ax.set_ylabel("Score (%)")
+ax.set_title("Zero Trust Posture")
+ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+plt.tight_layout()
+plt.savefig(f"{GRAPH_DIR}/zero_trust_posture.png")
 plt.close()
-print(f"Zero Trust posture graph saved: {zero_trust_file}")
 
-# -------------------------------
-# ISO 27001 Coverage Graph
-# -------------------------------
-# Color logic:
-# 🔴 Red     = score < 60  (Non‑compliant)
-# 🟠 Orange  = 60 <= score < 80 (Partial / Warning)
-# 🔵 Blue    = score >= 80 (Compliant / Covered)
-colors_iso = []
-for score in scores:
-    if score >= 80:
-        colors_iso.append("#1f77b4")  # Blue for compliant/covered
-    elif score >= 60:
-        colors_iso.append("orange")
+# --- ISO 27001 Coverage Graph ---
+iso_colors = []
+for control in ISO_CONTROLS:
+    score = control_scores.get(control, 0)
+    if score < 60:
+        iso_colors.append("#FF0000")  # Red
+    elif score < 80:
+        iso_colors.append("#FFA500")  # Orange
     else:
-        colors_iso.append("red")
+        iso_colors.append("#0000FF")  # Blue
 
-plt.figure(figsize=(6, 4))
-plt.bar(controls, scores, color=colors_iso)
-plt.title("ISO 27001 Control Coverage", color="white")
-plt.ylabel("Score (%)", color="white")
-plt.xticks(color="white")
-plt.yticks(color="white")
-plt.gca().set_facecolor("#2E2E2E")
-plt.gcf().patch.set_facecolor("#2E2E2E")
-plt.ylim(0, 100)
-
-iso_coverage_file = "outputs/graphs/iso_27001_coverage.png"
-plt.savefig(iso_coverage_file, dpi=100, bbox_inches="tight")
+fig, ax = plt.subplots(figsize=(8,4))
+ax.bar(ISO_CONTROLS, [control_scores.get(c,0) for c in ISO_CONTROLS], color=iso_colors)
+ax.set_ylim(0, 100)
+ax.set_ylabel("Score (%)")
+ax.set_title("ISO 27001 Compliance Coverage")
+ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+plt.tight_layout()
+plt.savefig(f"{GRAPH_DIR}/iso_27001_coverage.png")
 plt.close()
-print(f"ISO 27001 coverage graph saved: {iso_coverage_file}")
+
+print("Graphs updated successfully!")
