@@ -1,6 +1,6 @@
 # Zero Trust Dashboard Report
 
-_Last updated: 2026-01-12 22:58_
+_Last updated: 2026-01-14 00:43_
 
 | Control | Domain | Score (%) |
 |--------|--------|-----------|
