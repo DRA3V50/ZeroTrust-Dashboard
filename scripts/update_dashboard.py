@@ -3,6 +3,7 @@ import os
 from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
+
 from pybadges import badge
 
 # --- Configuration ---
@@ -14,7 +15,7 @@ BADGE_DIR = "outputs/badges"
 ZERO_TRUST_DOMAINS = ["Identity", "Device", "Network", "Application", "Data"]
 ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
 
-# Ensure directories exist
+# Ensure output directories exist
 os.makedirs(GRAPH_DIR, exist_ok=True)
 os.makedirs(BADGE_DIR, exist_ok=True)
 
@@ -25,7 +26,6 @@ cursor.execute("SELECT control, domain, score FROM controls")
 rows = cursor.fetchall()
 conn.close()
 
-# Prepare dicts
 control_scores = {row[0]: row[2] for row in rows}
 domain_scores = {row[1]: row[2] for row in rows if row[1] in ZERO_TRUST_DOMAINS}
 
@@ -60,7 +60,7 @@ for control in ISO_CONTROLS:
     elif score < 80:
         iso_colors.append("orange")
     else:
-        iso_colors.append("blue")  # compliant
+        iso_colors.append("blue")
 
 fig, ax = plt.subplots(figsize=(8,4))
 ax.bar(ISO_CONTROLS, [control_scores.get(c,0) for c in ISO_CONTROLS], color=iso_colors)
@@ -76,16 +76,23 @@ plt.close()
 badge_lines = []
 for control in ISO_CONTROLS:
     score = control_scores.get(control, 0)
-    color = "green" if score >= 80 else "orange" if score >= 60 else "red"
+    if score >= 80:
+        color = "green"
+    elif score >= 60:
+        color = "orange"
+    else:
+        color = "red"
+
     badge_svg = badge(
-        left_text=control,      # FIX for pybadges
-        right_text=str(score),  # FIX for pybadges
-        color=color
+        left_text=control,
+        right_text=str(score),
+        right_color=color
     )
+
     badge_file = f"{BADGE_DIR}/{control}.svg"
     with open(badge_file, "w") as f:
         f.write(badge_svg)
-    # Markdown line to embed badge
+
     badge_lines.append(f'<img src="{badge_file}" alt="{control}" style="height:20px; margin:2px;"/>')
 
 # --- Step 5: Generate Metrics Table ---
@@ -101,7 +108,7 @@ for control in ISO_CONTROLS:
 with open(README_PATH, "r", encoding="utf-8") as f:
     readme_text = f.read()
 
-# Replace placeholders in README
+# Replace placeholders with new badges and table
 readme_text = readme_text.replace("{{BADGES}}", "\n".join(badge_lines))
 readme_text = readme_text.replace("{{METRICS_TABLE}}", "\n".join(table_lines))
 
