@@ -1,9 +1,8 @@
 import sqlite3
 import os
-import random  # optional for random scores
+import random
 
 os.makedirs("data", exist_ok=True)
-
 conn = sqlite3.connect("data/controls.db")
 c = conn.cursor()
 
@@ -15,7 +14,7 @@ CREATE TABLE IF NOT EXISTS controls (
 )
 """)
 
-# Sample data with random scores for dynamic updates
+# Randomized sample data for dynamic updates
 controls = [
     ("A.5.1", "Policy", random.randint(60, 100)),
     ("A.6.1", "Access Control", random.randint(60, 100)),
