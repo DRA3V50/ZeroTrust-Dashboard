@@ -1,28 +1,36 @@
 import sqlite3
-import os
-import random
+from pathlib import Path
 
-os.makedirs("data", exist_ok=True)
-conn = sqlite3.connect("data/controls.db")
+# Paths
+data_dir = Path("data")
+data_dir.mkdir(parents=True, exist_ok=True)
+db_path = data_dir / "controls.db"
+
+# Connect to database
+conn = sqlite3.connect(db_path)
 c = conn.cursor()
 
-c.execute("""
+# Create table if not exists
+c.execute('''
 CREATE TABLE IF NOT EXISTS controls (
-    control_id TEXT PRIMARY KEY,
-    domain TEXT,
-    score INTEGER
+    control TEXT PRIMARY KEY,
+    domain TEXT NOT NULL,
+    score INTEGER NOT NULL
 )
-""")
+''')
 
-# Randomized sample data for dynamic updates
-controls = [
-    ("A.5.1", "Policy", random.randint(60, 100)),
-    ("A.6.1", "Access Control", random.randint(60, 100)),
-    ("A.8.2", "Assets", random.randint(60, 100)),
-    ("A.9.2", "Monitoring", random.randint(60, 100))
+# Optional: populate with default controls if table is empty
+default_controls = [
+    ("A.5.1", "InfoSec Policies", 0),
+    ("A.6.1", "Org InfoSec", 0),
+    ("A.8.2", "Risk Management", 0),
+    ("A.9.2", "Access Control", 0)
 ]
 
-c.executemany("INSERT OR REPLACE INTO controls VALUES (?, ?, ?)", controls)
+for control, domain, score in default_controls:
+    c.execute('INSERT OR IGNORE INTO controls (control, domain, score) VALUES (?, ?, ?)',
+              (control, domain, score))
+
 conn.commit()
 conn.close()
-print("[DEBUG] Database created/populated at data/controls.db")
+print("Database initialized successfully.")
