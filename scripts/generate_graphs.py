@@ -37,7 +37,7 @@ plt.savefig("outputs/graphs/zero_trust_posture.png", dpi=100, bbox_inches='tight
 plt.close()
 print("Zero Trust posture graph saved.")
 
-# ISO 27001 Graph (same color-coding)
+# ISO 27001 Graph (color-coded)
 plt.figure(figsize=(5, 3))
 plt.bar(controls, scores, color=colors)
 plt.title("ISO 27001 Coverage", color="white")
