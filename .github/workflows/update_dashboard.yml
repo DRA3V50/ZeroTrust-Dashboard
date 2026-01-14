@@ -2,7 +2,8 @@ name: Zero Trust Dashboard Update
 
 on:
   schedule:
-    - cron: '0 13,1 * * *' # 08:00 & 20:00 EST
+    # Runs at 08:00 and 20:00 EST daily
+    - cron: '0 13,1 * * *' # UTC 13:00 = 08:00 EST, 01:00 UTC = 20:00 EST
   workflow_dispatch:
 
 jobs:
@@ -10,7 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Start SSH agent
+      uses: webfactory/ssh-agent@v0.8.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -30,13 +37,18 @@ jobs:
         python scripts/generate_badges.py
         python scripts/update_readme.py
 
-    - name: Configure SSH for pushing
-      uses: webfactory/ssh-agent@v0.8.1
-      with:
-        ssh-private-key: ${{ secrets.SSH_KEY }}
+    - name: Clear old git credentials
+      run: |
+        git credential-cache exit || true
+        git config --global --unset credential.helper || true
+
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "actions@github.com"
 
     - name: Commit & push updates
       run: |
-        git add -f outputs/ badges/ graphs/ reports/ README.md
-        git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes"
+        git add -f outputs/badges/ outputs/graphs/ reports/ README.md
+        git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
         git push origin HEAD:main
