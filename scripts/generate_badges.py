@@ -1,26 +1,19 @@
 import sqlite3
 import pybadges
 import os
-import pandas as pd
-
-# Path to DB
-db_path = "data/controls.db"
-
-# Path to output badges
-output_dir = "outputs/badges"
-os.makedirs(output_dir, exist_ok=True)
 
 # Connect to database
-conn = sqlite3.connect(db_path)
+conn = sqlite3.connect("data/controls.db")
+cursor = conn.cursor()
 
-# Read all controls
-df = pd.read_sql("SELECT * FROM controls", conn)
+# Make sure output folder exists
+os.makedirs("outputs/badges", exist_ok=True)
 
-for _, row in df.iterrows():
-    control = row["control"]
-    score = row["score"]
+cursor.execute("SELECT control, score FROM controls")
+rows = cursor.fetchall()
 
-    # Determine badge color
+for control, score in rows:
+    # Determine badge color based on score
     if score >= 90:
         color = "green"
     elif score >= 75:
@@ -28,12 +21,16 @@ for _, row in df.iterrows():
     else:
         color = "red"
 
-    # Create badge using older pybadges syntax
-    badge_svg = pybadges.badge(label=control, value=f"{score}%", color=color)
+    # Use correct pybadges API
+    badge_svg = pybadges.badge(
+        left_text=control,       # left side of badge
+        right_text=f"{score}%",  # right side of badge
+        right_color=color
+    )
 
-    # Save badge
-    badge_file = os.path.join(output_dir, f"{control}.svg")
+    badge_file = f"outputs/badges/{control}.svg"
     with open(badge_file, "w") as f:
         f.write(badge_svg)
 
+conn.close()
 print("Badges generated successfully.")
