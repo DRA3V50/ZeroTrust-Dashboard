@@ -1,25 +1,39 @@
 import sqlite3
-from pathlib import Path
+import os
+from datetime import datetime
 
-# Path for database
-db_path = Path("data/controls.db")
+# Ensure data folder exists
+os.makedirs("data", exist_ok=True)
 
-# Ensure parent directory exists
-db_path.parent.mkdir(parents=True, exist_ok=True)
+db_path = "data/controls.db"
 
-# Connect to SQLite DB (creates file if not exists)
 conn = sqlite3.connect(db_path)
+c = conn.cursor()
 
-# Create the controls table
-conn.execute('''
+# Create table if not exists
+c.execute('''
 CREATE TABLE IF NOT EXISTS controls (
     control TEXT PRIMARY KEY,
-    domain TEXT NOT NULL,
-    score INTEGER NOT NULL
+    domain TEXT,
+    score INTEGER,
+    last_updated TEXT
 )
 ''')
 
+# Sample initial controls
+controls = [
+    ("A.5.1", "InfoSec Policies", 87),
+    ("A.6.1", "Org InfoSec", 92),
+    ("A.8.2", "Risk Management", 79),
+    ("A.9.2", "Access Control", 85)
+]
+
+for control, domain, score in controls:
+    c.execute('''
+    INSERT OR REPLACE INTO controls (control, domain, score, last_updated)
+    VALUES (?, ?, ?, ?)
+    ''', (control, domain, score, datetime.utcnow().isoformat()))
+
 conn.commit()
 conn.close()
-
 print(f"Database initialized at {db_path}")
