@@ -3,7 +3,7 @@ name: Zero Trust Dashboard Update
 on:
   schedule:
     # Runs at 08:00 and 20:00 EST daily
-    - cron: '0 13,1 * * *'
+    - cron: '0 13,1 * * *'  # UTC 13:00 = 08:00 EST, 01:00 UTC = 20:00 EST
   workflow_dispatch:
 
 jobs:
@@ -40,12 +40,18 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "actions@github.com"
 
-    # 6️⃣ Commit & push updates
+    # 6️⃣ Debug remote URL (optional but recommended)
+    - name: Debug remote URL
+      run: |
+        echo "Remote URL: https://x-access-token:${{ secrets.ZeTrust_PAT }}@github.com/${{ github.repository }}"
+
+    # 7️⃣ Commit & push updates using new token
     - name: Commit and push updates
       run: |
+        git remote set-url origin https://x-access-token:${{ secrets.ZeTrust_PAT }}@github.com/${{ github.repository }}
         git add -f outputs/badges/ outputs/graphs/ reports/
         git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
         git push origin HEAD:main
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.ZeTrust_PAT }}
 
