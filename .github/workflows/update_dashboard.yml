@@ -3,11 +3,8 @@ name: Zero Trust Dashboard Update
 on:
   schedule:
     # Runs at 08:00 and 20:00 EST daily
-    - cron: '0 13,1 * * *' # UTC 13:00 = 08:00 EST, 01:00 UTC = 20:00 EST
+    - cron: '0 13,1 * * *'  # UTC 13:00 = 08:00 EST, 01:00 UTC = 20:00 EST
   workflow_dispatch:
-
-permissions:
-  contents: write  # Allows automatic push
 
 jobs:
   update_dashboard:
@@ -35,6 +32,11 @@ jobs:
         python scripts/generate_badges.py
         python scripts/update_readme.py
 
+    - name: Set up SSH for Git push
+      uses: webfactory/ssh-agent@v0.8.1
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
     - name: Configure Git
       run: |
         git config user.name "github-actions[bot]"
@@ -44,4 +46,4 @@ jobs:
       run: |
         git add -f outputs/badges/ outputs/graphs/ reports/ README.md
         git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
-        git push origin HEAD:main
+        git push git@github.com:${{ github.repository }} HEAD:main
