@@ -57,37 +57,27 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 ## 📊 Dashboards and Badges
 
+### Latest Zero Trust Posture
+- Updated daily, showing actionable insight for analysts and leadership.
 <div style="text-align:center;">
-  <!-- Graphs -->
   <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="45%" style="display:inline-block; margin-right:5px;"/>
   <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="45%" style="display:inline-block;"/>
 </div>
 
-### 🔹 Graphs & Color Codes
-- **Zero Trust Posture Graph**: Shows current scores for the five domains — Identity, Device, Network, Application, and Data.  
-  - **Color coding**:  
-    - 🔴 Critical (0–59%)  
-    - 🟠 Warning (60–79%)  
-    - 🟢 Healthy (80–100%)  
-- **ISO 27001 Coverage Graph**: Displays compliance coverage for key controls.  
-  - **Color coding**:  
-    - 🔴 Non-compliant / Missing  
-    - 🟠 Partial / In Progress  
-    - 🔵 Compliant / Covered  
-
-### 🔹 Real-Time Badges
+### Real-Time Badges
+- Summarizes individual control statuses with dynamic updates.
 <div style="text-align:center;">
-  {{BADGES}}
+  <img src="outputs/badges/A.5.1.svg" alt="A.5.1" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/A.8.2.svg" alt="A.8.2" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/A.9.2.svg" alt="A.9.2" style="height:20px; margin:2px;"/>
 </div>
 
 ### 🗂 Metrics Table
-<div style="text-align:center;">
-  {{METRICS_TABLE}}
-</div>
+| Control | Domain | Score (%) |
+|---------|--------|------------|
+| A.5.1 | InfoSec Policies | 87 |
+| A.6.1 | Org InfoSec | 92 |
+| A.8.2 | Risk Management | 79 |
+| A.9.2 | Access Control | 85 |
 
-<!-- AUTO-UPDATE-START -->
-<!--
-The workflow script will replace the placeholders above with up-to-date badges, table, and graphs.
-Do NOT manually edit below this line.
--->
-<!-- AUTO-UPDATE-END -->
