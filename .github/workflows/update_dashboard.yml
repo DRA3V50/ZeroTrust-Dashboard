@@ -27,8 +27,8 @@ jobs:
     - name: Run dashboard scripts
       run: |
         python scripts/update_dashboard.py
-        python scripts/generate_badges.py
         python scripts/generate_graphs.py
+        python scripts/generate_badges.py
 
     - name: Clear old git credentials
       run: |
@@ -40,12 +40,14 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "actions@github.com"
 
-    - name: Set remote URL with personal token
-      run: |
-        git remote set-url origin https://x-access-token:${{ secrets.ZeTrust_PAT }}@github.com/${{ github.repository }}
+    - name: Configure SSH
+      uses: webfactory/ssh-agent@v0.8.1
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
 
     - name: Commit & push updates
       run: |
         git add -f outputs/badges/ outputs/graphs/ reports/
         git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
         git push origin HEAD:main
+
