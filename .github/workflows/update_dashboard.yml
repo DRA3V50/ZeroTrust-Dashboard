@@ -11,37 +11,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
-      - name: Run dashboard scripts
-        run: |
-          python scripts/create_controls_db.py
-          python scripts/update_dashboard.py
-          python scripts/generate_graphs.py
-          python scripts/generate_badges.py
-          python scripts/update_readme.py
+    - name: Run dashboard scripts
+      run: |
+        python scripts/create_controls_db.py
+        python scripts/update_dashboard.py
+        python scripts/generate_graphs.py
+        python scripts/generate_badges.py
+        python scripts/update_readme.py
 
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "actions@github.com"
+    - name: Clear old git credentials
+      run: |
+        git credential-cache exit || true
+        git config --global --unset credential.helper || true
 
-      - name: Commit & push updates
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git add -f outputs/badges/ outputs/graphs/ reports/ README.md
-          git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
-          git push
+    - name: Configure Git
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "actions@github.com"
 
+    - name: Commit & push updates
+      run: |
+        git add -f outputs/badges/ outputs/graphs/ reports/ README.md
+        git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} HEAD:main
