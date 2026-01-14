@@ -1,3 +1,4 @@
+# scripts/generate_graphs.py
 import sqlite3
 import matplotlib.pyplot as plt
 import os
@@ -14,15 +15,15 @@ conn.close()
 controls = [row[0] for row in data]
 scores = [row[1] for row in data]
 
-# Zero Trust Posture graph with color thresholds
+# Zero Trust posture graph with color coding
 colors = []
 for s in scores:
     if s >= 90:
-        colors.append("green")
+        colors.append('green')
     elif s >= 75:
-        colors.append("orange")
+        colors.append('orange')
     else:
-        colors.append("red")
+        colors.append('red')
 
 plt.figure(figsize=(6, 4))
 plt.bar(controls, scores, color=colors)
@@ -32,12 +33,14 @@ plt.xticks(color="white")
 plt.yticks(color="white")
 plt.gca().set_facecolor("#2E2E2E")
 plt.gcf().patch.set_facecolor("#2E2E2E")
-graph_file = "outputs/graphs/zero_trust_posture.png"
-plt.savefig(graph_file, dpi=100, bbox_inches="tight")
-plt.close()
-print("Zero Trust posture graph saved.")
+plt.ylim(0, 100)
 
-# ISO 27001 coverage graph (blue by default)
+graph_file = "outputs/graphs/zero_trust_posture.png"
+plt.savefig(graph_file, dpi=100, bbox_inches='tight')
+plt.close()
+print(f"Zero Trust posture graph saved: {graph_file}")
+
+# ISO 27001 coverage graph (simple blue bar)
 plt.figure(figsize=(6, 4))
 plt.bar(controls, scores, color="#1f77b4")
 plt.title("ISO 27001 Control Coverage", color="white")
@@ -46,7 +49,9 @@ plt.xticks(color="white")
 plt.yticks(color="white")
 plt.gca().set_facecolor("#2E2E2E")
 plt.gcf().patch.set_facecolor("#2E2E2E")
-graph_file_iso = "outputs/graphs/iso_27001_coverage.png"
-plt.savefig(graph_file_iso, dpi=100, bbox_inches="tight")
+plt.ylim(0, 100)
+
+iso_graph_file = "outputs/graphs/iso_27001_coverage.png"
+plt.savefig(iso_graph_file, dpi=100, bbox_inches='tight')
 plt.close()
-print("ISO 27001 coverage graph saved.")
+print(f"ISO 27001 coverage graph saved: {iso_graph_file}")
