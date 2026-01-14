@@ -51,31 +51,24 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ## 📊 Dashboards and Badges
 
 ### Latest Zero Trust Posture
-- Updated daily, showing actionable insight for analysts and leadership.  
+- Updated daily, showing actionable insight for analysts and leadership.
 ![Zero Trust Posture](outputs/graphs/zero_trust_posture.png)
-
 ### Latest ISO 27001 Control Coverage
-- Highlights strengths and areas needing attention, updated daily.  
+- Updated daily to highlight strengths and gaps.
 ![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage.png)
-
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.  
-![A.5.1](outputs/badges/A.5.1.svg)  
-![A.6.1](outputs/badges/A.6.1.svg)  
-![A.8.2](outputs/badges/A.8.2.svg)  
-![A.9.2](outputs/badges/A.9.2.svg)
-
+### Real-Time Badges
+- Summarizes individual control statuses with dynamic updates.
+![A.5.1](outputs/badges/A.5.1.svg)
+![A.5.1_20260112_2213](outputs/badges/A.5.1_20260112_2213.svg)
+![A.5.1_20260112_2217](outputs/badges/A.5.1_20260112_2217.svg)
+![A.5.1_20260112_2222](outputs/badges/A.5.1_20260112_2222.svg)
+![A.5.1_20260112_2246](outputs/badges/A.5.1_20260112_2246.svg)
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.5.1   | InfoSec Policies | 87 |
-| A.6.1   | Org InfoSec      | 92 |
-| A.8.2   | Risk Management  | 79 |
-| A.9.2   | Access Control   | 85 |
-
-> **Note**: This table is auto-updated daily to reflect the latest control scores.
-
----
-
-## 📜 License
-MIT License
+| A.5.1 | InfoSec Policies | 87 |
+| A.6.1 | Org InfoSec | 92 |
+| A.8.2 | Risk Management | 79 |
+| A.9.2 | Access Control | 85 |
