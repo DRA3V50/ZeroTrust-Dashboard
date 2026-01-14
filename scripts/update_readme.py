@@ -1,29 +1,61 @@
-from pathlib import Path
+import os
+from create_controls_db import db_path
+import sqlite3
 
-README_FILE = Path("README.md")
+readme_file = "README.md"
 
-def update_readme():
-    # Construct updated README with badges and graphs
-    content = f"""
-# 🔒 Zero Trust Dashboard
+with open(readme_file, "r") as f:
+    lines = f.readlines()
 
-## 📊 Latest Visuals
+# Find section markers to replace graphs and badges
+start_graph_idx = None
+start_badge_idx = None
+start_table_idx = None
 
-### Zero Trust Posture
-![Zero Trust Posture](outputs/graphs/zero_trust_posture.png)
+for i, line in enumerate(lines):
+    if line.startswith("### Latest Zero Trust Posture"):
+        start_graph_idx = i
+    if line.startswith("### Real-Time Badges"):
+        start_badge_idx = i
+    if line.startswith("### 🗂 Metrics Table"):
+        start_table_idx = i
 
-### ISO 27001 Control Coverage
-![ISO 27001 Control Coverage](outputs/graphs/iso_27001_coverage.png)
+# Update graphs
+graph_lines = [
+    "### Latest Zero Trust Posture\n",
+    "- Updated daily, showing actionable insight for analysts and leadership.\n",
+    "![Zero Trust Posture](outputs/graphs/zero_trust_posture.png)\n",
+]
 
-### Real-Time Badges
-![A.5.1](outputs/badges/A.5.1.svg)
-![A.6.1](outputs/badges/A.6.1.svg)
-![A.8.2](outputs/badges/A.8.2.svg)
-![A.9.2](outputs/badges/A.9.2.svg)
-"""
+# Update badges
+badge_lines = ["### Real-Time Badges\n", "- Summarizes individual control statuses with dynamic updates.\n"]
+badge_files = sorted(os.listdir("outputs/badges"))
+for file in badge_files:
+    if file.endswith(".svg"):
+        badge_lines.append(f"![{file[:-4]}](outputs/badges/{file})\n")
 
-    README_FILE.write_text(content)
-    print("README updated with latest graphs and badges.")
+# Update metrics table
+conn = sqlite3.connect(db_path)
+c = conn.cursor()
+c.execute("SELECT control, domain, score FROM controls")
+data = c.fetchall()
+conn.close()
 
-if __name__ == "__main__":
-    update_readme()
+table_lines = [
+    "### 🗂 Metrics Table\n",
+    "| Control | Domain | Score (%) |\n",
+    "|---------|--------|-----------|\n",
+]
+
+for control, domain, score in data:
+    table_lines.append(f"| {control} | {domain} | {score} |\n")
+
+# Replace old sections
+lines[start_graph_idx:start_badge_idx] = graph_lines
+lines[start_badge_idx:start_table_idx] = badge_lines
+lines[start_table_idx:] = table_lines
+
+with open(readme_file, "w") as f:
+    f.writelines(lines)
+
+print("README.md updated with latest graphs, badges, and metrics.")
