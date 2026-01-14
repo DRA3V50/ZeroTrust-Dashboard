@@ -27,27 +27,21 @@ jobs:
     - name: Run dashboard scripts
       run: |
         python scripts/update_dashboard.py
-        python scripts/generate_graphs.py
         python scripts/generate_badges.py
+        python scripts/generate_graphs.py
 
-    - name: Clear old git credentials
-      run: |
-        git credential-cache exit || true
-        git config --global --unset credential.helper || true
+    - name: Start SSH agent
+      uses: webfactory/ssh-agent@v0.8
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
 
     - name: Configure Git
       run: |
-        git config user.name "github-actions[bot]"
+        git config user.name "ZeroTrust Dashboard Bot"
         git config user.email "actions@github.com"
-
-    - name: Configure SSH
-      uses: webfactory/ssh-agent@v0.8.1
-      with:
-        ssh-private-key: ${{ secrets.SSH_KEY }}
 
     - name: Commit & push updates
       run: |
         git add -f outputs/badges/ outputs/graphs/ reports/
         git commit -m "Automated update: $(date -u +"%Y-%m-%d %H:%M")" || echo "No changes to commit"
         git push origin HEAD:main
-
