@@ -4,7 +4,6 @@ from datetime import datetime
 
 # Ensure data folder exists
 os.makedirs("data", exist_ok=True)
-
 db_path = "data/controls.db"
 
 conn = sqlite3.connect(db_path)
