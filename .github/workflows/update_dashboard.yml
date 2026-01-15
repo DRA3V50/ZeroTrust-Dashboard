@@ -29,10 +29,10 @@ jobs:
       - name: Generate database
         run: python scripts/create_controls_db.py
 
-      - name: Update dashboard
+      - name: Update dashboard visuals
         run: python scripts/update_dashboard.py
 
-      - name: Update README
+      - name: Update README dynamic sections
         run: python scripts/update_readme.py
 
       - name: Commit and push changes
