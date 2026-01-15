@@ -75,7 +75,7 @@ def update_readme():
 
     # Replace entire section with new content (without Color Codes)
     new_section = (
-        "## 📊 Dashboards and Badges\n\n"
+        "## 📊 Security Dashboard 🗂️\n\n"
         + graphs_sec
         + badges_sec
         + table_sec
