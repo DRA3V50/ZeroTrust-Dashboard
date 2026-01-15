@@ -3,6 +3,9 @@ import os
 import sqlite3
 from pybadges import badge
 
+import matplotlib
+matplotlib.use("Agg")  # Ensure headless backend
+
 DB_PATH = "data/controls.db"
 BADGE_DIR = "outputs/badges"
 ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
