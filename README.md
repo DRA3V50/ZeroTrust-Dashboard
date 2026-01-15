@@ -91,23 +91,8 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 | Identity | Identity | 68 |
 | Network | Network | 47 |
 
+---
 
-## 🚦 Color Codes
-
-| Color    | Meaning                                  |
-|----------|-----------------------------------------|
-| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
-| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
-| 🟢 Green | Healthy (80-100%)                        |
-| 🔵 Blue  | Compliant / Covered ISO                  |
-## 🚦 Color Codes
-
-| Color    | Meaning                                  |
-|----------|-----------------------------------------|
-| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
-| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
-| 🟢 Green | Healthy (80-100%)                        |
-| 🔵 Blue  | Compliant / Covered ISO                  |
 ## 🚦 Color Codes
 
 | Color    | Meaning                                  |
