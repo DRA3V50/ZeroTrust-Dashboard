@@ -26,9 +26,19 @@ conn.close()
 # Convert to dictionary for quick lookup
 control_scores = {row[0]: row[1] for row in rows}
 
+print("Fetched scores from database:")
+for control in ALL_CONTROLS:
+    score = control_scores.get(control)
+    if score is None:
+        print(f"⚠️ Warning: No score found for {control}, defaulting to 0")
+        score = 0
+        control_scores[control] = 0
+    else:
+        print(f"{control}: {score}%")
+
 # Generate badge for every control
 for control in ALL_CONTROLS:
-    score = control_scores.get(control, 0)
+    score = control_scores[control]
     if score >= 80:
         color = "green"
     elif score >= 60:
