@@ -46,18 +46,6 @@ def generate_table_section(metrics):
     md += "\n"
     return md
 
-def generate_color_codes_box():
-    return """
-## 🚦 Color Codes
-
-| Color    | Meaning                                  |
-|----------|-----------------------------------------|
-| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
-| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
-| 🟢 Green | Healthy (80-100%)                        |
-| 🔵 Blue  | Compliant / Covered ISO                  |
-"""
-
 def update_readme():
     with open(README_PATH, "r", encoding="utf-8") as f:
         lines = f.readlines()
@@ -67,7 +55,6 @@ def update_readme():
     graphs_sec = generate_graphs_section()
     badges_sec = generate_badges_section(metrics)
     table_sec = generate_table_section(metrics)
-    color_codes_box = generate_color_codes_box()
 
     start = None
     end = None
@@ -86,13 +73,12 @@ def update_readme():
     if end is None:
         end = len(lines)
 
-    # Replace entire section with new content
+    # Replace entire section with new content (without Color Codes)
     new_section = (
         "## 📊 Dashboards and Badges\n\n"
         + graphs_sec
         + badges_sec
         + table_sec
-        + color_codes_box
     )
 
     updated_lines = lines[:start] + [new_section] + lines[end:]
@@ -100,7 +86,7 @@ def update_readme():
     with open(README_PATH, "w", encoding="utf-8") as f:
         f.writelines(updated_lines)
 
-    print("README.md updated with latest graphs, badges, table, and color codes.")
+    print("README.md updated with latest graphs, badges, and table (Color Codes removed from dynamic update).")
 
 if __name__ == "__main__":
     update_readme()
