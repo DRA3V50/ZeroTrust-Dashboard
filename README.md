@@ -81,22 +81,3 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.5.1 | InfoSec Policies | 63 |
-| A.6.1 | Org InfoSec | 87 |
-| A.8.2 | Risk Management | 41 |
-| A.9.2 | Access Control | 30 |
-| Application | Application | 7 |
-| Data | Data | 31 |
-| Device | Device | 48 |
-| Identity | Identity | 48 |
-| Network | Network | 0 |
-
-
-## 🚦 Color Codes
-
-| Color    | Meaning                                  |
-|----------|-----------------------------------------|
-| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
-| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
-| 🟢 Green | Healthy (80-100%)                        |
-| 🔵 Blue  | Compliant / Covered ISO                  |
