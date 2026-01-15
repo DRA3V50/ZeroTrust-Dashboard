@@ -8,7 +8,7 @@ The **Zero Trust Dashboard** provides a visual and automated view of your organi
 
 ---
 
-## 📝 Overview
+## 🗃️ Overview
 
 The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. It leverages **Python**, **SQLite**, and **GitHub Actions** to automatically update metrics, reports, badges, and visualizations twice daily.
 
