@@ -67,29 +67,30 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ### Real-Time Badges
 - Summarizes individual control statuses with dynamic updates.
 <div style="text-align:center;">
-  <img src="outputs/badges/A.5.1.svg" alt="A.5.1" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/A.8.2.svg" alt="A.8.2" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/A.9.2.svg" alt="A.9.2" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/Application.svg" alt="Application" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/Data.svg" alt="Data" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/Device.svg" alt="Device" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/Identity.svg" alt="Identity" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/Network.svg" alt="Network" style="height:20px; margin:2px;"/>
+  <br/>
+  <img src="outputs/badges/A.5.1.svg" alt="A.5.1" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/A.8.2.svg" alt="A.8.2" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/A.9.2.svg" alt="A.9.2" style="height:20px; margin:2px;"/>
 </div>
 
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
 | A.5.1 | InfoSec Policies | 73 |
-| A.6.1 | Org InfoSec | 0 |
-| A.8.2 | Risk Management | 16 |
-| A.9.2 | Access Control | 88 |
-| Application | Application | 47 |
-| Data | Data | 23 |
-| Device | Device | 6 |
-| Identity | Identity | 24 |
-| Network | Network | 57 |
+| A.6.1 | Org InfoSec | 66 |
+| A.8.2 | Risk Management | 8 |
+| A.9.2 | Access Control | 9 |
+| Application | Application | 32 |
+| Data | Data | 9 |
+| Device | Device | 96 |
+| Identity | Identity | 51 |
+| Network | Network | 20 |
 
 ## 🚦 Color Codes
 
