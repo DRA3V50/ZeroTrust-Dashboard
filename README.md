@@ -30,11 +30,11 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ## 📊 Key Metrics
 
 ### Zero Trust Domains
-- **Identity**: Ensures secure access and user verification.  
-- **Device**: Monitors security and health of endpoints.  
-- **Network**: Protects against unauthorized access and ensures segmentation.  
-- **Application**: Evaluates security vulnerabilities and patch compliance.  
-- **Data**: Safeguards data integrity, encryption, and controlled access.  
+- **Identity** - Ensures secure access and user verification.  
+- **Device** - Monitors security and health of endpoints.  
+- **Network** - Protects against unauthorized access and ensures segmentation.  
+- **Application** - Evaluates security vulnerabilities and patch compliance.  
+- **Data** - Safeguards data integrity, encryption, and controlled access.  
 
 ### ISO 27001 Controls
 - **A.5.1** – Information Security Policies  
