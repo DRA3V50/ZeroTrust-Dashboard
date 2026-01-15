@@ -1,13 +1,14 @@
 name: Update Zero Trust Dashboard
 
 on:
+  workflow_dispatch:   # Manual trigger
   schedule:
-    - cron: "0 0,12 * * *"  # runs twice daily
-  workflow_dispatch:
+    - cron: '0 0,12 * * *'  # Twice daily at 00:00 and 12:00 UTC
 
 jobs:
   update-dashboard:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -15,37 +16,34 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install pybadges matplotlib
+          python -m pip install --upgrade pip
+          pip install matplotlib pybadges sqlite3
 
-      # Step 1: Update database (if you have a script for this)
-      - name: Update database metrics
+      - name: Update database
         run: |
-          python scripts/update_metrics.py  # replace if your DB update script has a different name
+          python scripts/update_dashboard.py
 
-      # Step 2: Generate graphs
       - name: Generate graphs
         run: |
           python scripts/generate_graphs.py
 
-      # Step 3: Generate badges (runs after DB and graphs are updated)
       - name: Generate badges
         run: |
           python scripts/generate_badges.py
 
-      # Step 4: Update README (reads latest DB, graphs, badges)
       - name: Update README
         run: |
           python scripts/update_readme.py
 
       - name: Commit and push changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md outputs/graphs outputs/badges
-          git commit -m "Auto-update dashboard, graphs, badges"
-          git push
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add outputs/graphs outputs/badges README.md
+          git commit -m "Automated update: graphs, badges, and README"
+          git push || echo "No changes to commit"
+
