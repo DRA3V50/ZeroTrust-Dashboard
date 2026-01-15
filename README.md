@@ -81,15 +81,15 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.5.1 | InfoSec Policies | 46 |
-| A.6.1 | Org InfoSec | 59 |
-| A.8.2 | Risk Management | 59 |
-| A.9.2 | Access Control | 65 |
-| Application | Application | 63 |
-| Data | Data | 20 |
-| Device | Device | 57 |
-| Identity | Identity | 3 |
-| Network | Network | 70 |
+| A.5.1 | InfoSec Policies | 58 |
+| A.6.1 | Org InfoSec | 17 |
+| A.8.2 | Risk Management | 53 |
+| A.9.2 | Access Control | 88 |
+| Application | Application | 24 |
+| Data | Data | 14 |
+| Device | Device | 22 |
+| Identity | Identity | 82 |
+| Network | Network | 25 |
 
 ## 🚦 Color Codes
 
