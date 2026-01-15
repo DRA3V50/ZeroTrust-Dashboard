@@ -54,16 +54,6 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 > **⚠️ Note**: All graphs, badges, and metrics are refreshed daily to reflect the latest data.
 
 ---
-### Color Codes🚦
-
-| Color    | Meaning                      |
-|----------|------------------------------|
-| 🔴 Red   | Critical (0–59%) / Non-compliant / Missing |
-| 🟠 Orange| Warning (60–79%) / Partial / In Progress    |
-| 🟢 Green | Healthy (80–100%)             |
-| 🔵 Blue  | Compliant / Covered (ISO)     |
-
----
 
 ## 📊 Dashboards and Badges
 
@@ -90,29 +80,3 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 | A.6.1 | Org InfoSec | 92 |
 | A.8.2 | Risk Management | 79 |
 | A.9.2 | Access Control | 85 |
-
-
-## 🚦 Color Codes
-
-| Color    | Meaning                                  |
-|----------|-----------------------------------------|
-| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
-| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
-| 🟢 Green | Healthy (80-100%)                        |
-| 🔵 Blue  | Compliant / Covered ISO                  |
-## 🚦 Color Codes
-
-| Color    | Meaning                                  |
-|----------|-----------------------------------------|
-| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
-| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
-| 🟢 Green | Healthy (80-100%)                        |
-| 🔵 Blue  | Compliant / Covered ISO                  |
-## 🚦 Color Codes
-
-| Color    | Meaning                 |
-|----------|-------------------------|
-| 🔴 Red   | Critical (0-59%)        |
-| 🟠 Orange| Warning (60-79%)        |
-| 🟢 Green | Healthy (80-100%)       |
-| 🔵 Blue  | Compliant / Covered ISO |
