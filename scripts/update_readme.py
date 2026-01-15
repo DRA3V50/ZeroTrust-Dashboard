@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 import sqlite3
 import os
-import matplotlib
-matplotlib.use("Agg")  # Headless
 
 README_PATH = "README.md"
 GRAPH_DIR = "outputs/graphs"
 BADGE_DIR = "outputs/badges"
 DB_PATH = "data/controls.db"
 
-ISO_CONTROLS = ["A.5.1","A.6.1","A.8.2","A.9.2"]
+ZERO_TRUST_DOMAINS = ["Identity", "Device", "Network", "Application", "Data"]
+ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
 
 def fetch_metrics():
     conn = sqlite3.connect(DB_PATH)
@@ -34,8 +33,16 @@ def generate_graphs_section():
 def generate_badges_section(metrics):
     md = "### Real-Time Badges\n- Summarizes individual control statuses with dynamic updates.\n"
     md += '<div style="text-align:center;">\n'
-    for control, _, _ in metrics:
+
+    # First ISO controls badges
+    for control in ISO_CONTROLS:
         md += f'  <img src="{BADGE_DIR}/{control}.svg" alt="{control}" style="height:20px; margin:2px;"/>\n'
+
+    # Then Zero Trust domain badges (replace spaces with underscores for filenames)
+    for domain in ZERO_TRUST_DOMAINS:
+        filename = domain.replace(" ", "_") + ".svg"
+        md += f'  <img src="{BADGE_DIR}/{filename}" alt="{domain}" style="height:20px; margin:2px;"/>\n'
+
     md += "</div>\n\n"
     return md
 
@@ -61,10 +68,11 @@ def generate_color_codes_box():
 """
 
 def update_readme():
-    with open(README_PATH,"r",encoding="utf-8") as f:
+    with open(README_PATH, "r", encoding="utf-8") as f:
         lines = f.readlines()
 
     metrics = fetch_metrics()
+
     graphs_sec = generate_graphs_section()
     badges_sec = generate_badges_section(metrics)
     table_sec = generate_table_section(metrics)
@@ -72,15 +80,15 @@ def update_readme():
 
     start = None
     end = None
-    for i,line in enumerate(lines):
+    for i, line in enumerate(lines):
         if line.strip() == "## 📊 Dashboards and Badges":
             start = i
             break
     if start is None:
         raise RuntimeError("Could not find '## 📊 Dashboards and Badges' in README.md")
 
-    for j in range(start+1,len(lines)):
-        if lines[j].startswith("## ") and j>start:
+    for j in range(start + 1, len(lines)):
+        if lines[j].startswith("## ") and j > start:
             end = j
             break
     if end is None:
@@ -94,12 +102,12 @@ def update_readme():
         + color_codes_box
     )
 
-    updated_lines = lines[:start]+[new_section]+lines[end:]
+    updated_lines = lines[:start] + [new_section] + lines[end:]
 
-    with open(README_PATH,"w",encoding="utf-8") as f:
+    with open(README_PATH, "w", encoding="utf-8") as f:
         f.writelines(updated_lines)
 
     print("README.md updated with latest graphs, badges, table, and color codes.")
 
-if __name__=="__main__":
+if __name__ == "__main__":
     update_readme()
