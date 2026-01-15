@@ -7,7 +7,6 @@ GRAPH_DIR = "outputs/graphs"
 BADGE_DIR = "outputs/badges"
 DB_PATH = "data/controls.db"
 
-ZERO_TRUST_DOMAINS = ["Identity", "Device", "Network", "Application", "Data"]
 ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
 
 def fetch_metrics():
@@ -23,26 +22,16 @@ def generate_graphs_section():
         "### Latest Zero Trust Posture\n"
         "- Updated daily, showing actionable insight for analysts and leadership.\n"
         f'<div style="text-align:center;">\n'
-        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="60%" '
-        'style="display:inline-block; margin-right:10px;"/>\n'
-        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="35%" '
-        'style="display:inline-block;"/>\n'
+        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" style="display:block; margin: 0 auto 15px auto;"/>\n'
+        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="80%" style="display:block; margin: 0 auto;"/>\n'
         "</div>\n\n"
     )
 
 def generate_badges_section(metrics):
     md = "### Real-Time Badges\n- Summarizes individual control statuses with dynamic updates.\n"
     md += '<div style="text-align:center;">\n'
-
-    # First ISO controls badges
-    for control in ISO_CONTROLS:
+    for control, _, _ in metrics:
         md += f'  <img src="{BADGE_DIR}/{control}.svg" alt="{control}" style="height:20px; margin:2px;"/>\n'
-
-    # Then Zero Trust domain badges (replace spaces with underscores for filenames)
-    for domain in ZERO_TRUST_DOMAINS:
-        filename = domain.replace(" ", "_") + ".svg"
-        md += f'  <img src="{BADGE_DIR}/{filename}" alt="{domain}" style="height:20px; margin:2px;"/>\n'
-
     md += "</div>\n\n"
     return md
 
