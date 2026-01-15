@@ -22,9 +22,9 @@ def generate_graphs_section():
         "### Latest Zero Trust Posture\n"
         "- Updated daily, showing actionable insight for analysts and leadership.\n"
         '<div style="text-align:center;">\n'
-        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="50%" '
+        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="60%" '
         'style="display:inline-block; margin-right:10px;"/>\n'
-        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="50%" '
+        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="35%" '
         'style="display:inline-block;"/>\n'
         "</div>\n\n"
     )
@@ -50,12 +50,12 @@ def generate_color_codes_box():
     return """
 ## 🚦 Color Codes
 
-| Color    | Meaning                 |
-|----------|-------------------------|
-| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing       |
-| 🟠 Orange| Warning (60-79%) / Partial / In Progress       |
-| 🟢 Green | Healthy (80-100%)       |
-| 🔵 Blue  | Compliant / Covered ISO |
+| Color    | Meaning                                  |
+|----------|-----------------------------------------|
+| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
+| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
+| 🟢 Green | Healthy (80-100%)                        |
+| 🔵 Blue  | Compliant / Covered ISO                  |
 """
 
 def update_readme():
