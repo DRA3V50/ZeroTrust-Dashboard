@@ -27,7 +27,6 @@ controls = [
 ]
 
 for control, domain in controls:
-    # Generate random score 0-100
     score = random.randint(0, 100)
     c.execute('''
     INSERT OR REPLACE INTO controls (control, domain, score, last_updated)
