@@ -10,11 +10,10 @@ os.makedirs(BADGE_DIR, exist_ok=True)
 # Database path
 DB_PATH = "data/controls.db"
 
-# Define all controls: ISO + Zero Trust domains
-ALL_CONTROLS = [
-    "A.5.1", "A.6.1", "A.8.2", "A.9.2",
-    "Application", "Data", "Device", "Identity", "Network"
-]
+# Define controls
+ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
+ZERO_TRUST_DOMAINS = ["Application", "Data", "Device", "Identity", "Network"]
+ALL_CONTROLS = ISO_CONTROLS + ZERO_TRUST_DOMAINS
 
 # Connect to DB and fetch scores
 conn = sqlite3.connect(DB_PATH)
@@ -39,16 +38,27 @@ for control in ALL_CONTROLS:
 # Generate badge for every control
 for control in ALL_CONTROLS:
     score = control_scores[control]
-    if score >= 80:
-        color = "green"
-    elif score >= 60:
-        color = "orange"
-    else:
-        color = "red"
+    
+    # Assign color based on type
+    if control in ISO_CONTROLS:
+        if score >= 80:
+            color = "blue"
+        elif score >= 60:
+            color = "orange"
+        else:
+            color = "red"
+    else:  # Zero Trust domains
+        if score >= 80:
+            color = "green"
+        elif score >= 60:
+            color = "orange"
+        else:
+            color = "red"
 
     badge_svg = badge(left_text=control, right_text=str(score), right_color=color)
     badge_path = os.path.join(BADGE_DIR, f"{control}.svg")
     with open(badge_path, "w", encoding="utf-8") as f:
         f.write(badge_svg)
 
-print("All badges generated and updated successfully.")
+print("All badges generated and updated successfully with ISO blue and Zero Trust green.")
+
