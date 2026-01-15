@@ -59,11 +59,11 @@ def update_readme():
     start = None
     end = None
     for i, line in enumerate(lines):
-        if line.strip() == "## 📊 Dashboards and Badges":
+        if line.strip() == "## 📊 Security Dashboard 🗂️":
             start = i
             break
     if start is None:
-        raise RuntimeError("Could not find '## 📊 Dashboards and Badges' in README.md")
+        raise RuntimeError("Could not find '## 📊 Security Dashboard 🗂️' in README.md")
 
     # Find next section header after start (to mark end of current section)
     for j in range(start + 1, len(lines)):
@@ -90,3 +90,4 @@ def update_readme():
 
 if __name__ == "__main__":
     update_readme()
+
