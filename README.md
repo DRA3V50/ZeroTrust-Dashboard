@@ -57,7 +57,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 ## 📊 Security Dashboard 🗂️
 
-### Latest Zero Trust Posture
+### Latest Zero Trust & ISO 27001 Data
 - Updated daily, showing actionable insight for analysts and leadership.
 <div style="text-align:center;">
   <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" style="display:block; margin: 10px auto;"/>
