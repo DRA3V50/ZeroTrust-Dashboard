@@ -19,14 +19,26 @@ CREATE TABLE IF NOT EXISTS controls (
 )
 ''')
 
-controls = [
+# ISO controls
+iso_controls = [
     ("A.5.1", "InfoSec Policies"),
     ("A.6.1", "Org InfoSec"),
     ("A.8.2", "Risk Management"),
     ("A.9.2", "Access Control")
 ]
 
-for control, domain in controls:
+# Zero Trust domains as "pseudo-controls" for dashboard purposes
+zero_trust_domains = [
+    ("Identity", "Identity"),
+    ("Device", "Device"),
+    ("Network", "Network"),
+    ("Application", "Application"),
+    ("Data", "Data")
+]
+
+all_controls = iso_controls + zero_trust_domains
+
+for control, domain in all_controls:
     score = random.randint(0, 100)
     c.execute('''
     INSERT OR REPLACE INTO controls (control, domain, score, last_updated)
