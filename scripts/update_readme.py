@@ -1,12 +1,11 @@
+#!/usr/bin/env python3
 import sqlite3
-import os
 
 README_PATH = "README.md"
 GRAPH_DIR = "outputs/graphs"
 BADGE_DIR = "outputs/badges"
 DB_PATH = "data/controls.db"
 
-ZERO_TRUST_DOMAINS = ["Identity", "Device", "Network", "Application", "Data"]
 ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
 
 def fetch_metrics():
@@ -20,80 +19,55 @@ def fetch_metrics():
 def generate_graphs_section():
     return (
         "### Latest Zero Trust Posture\n"
-        "- Updated daily, showing actionable insight for analysts and leadership.\n"
-        '<div style="text-align:center;">\n'
-        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="60%" '
-        'style="display:inline-block; margin-right:10px;"/>\n'
-        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="35%" '
-        'style="display:inline-block;"/>\n'
+        "- Updated daily.\n"
+        f'<div style="text-align:center;">\n'
+        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="60%" style="display:inline-block; margin-right:10px;"/>\n'
+        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="35%" style="display:inline-block;"/>\n'
         "</div>\n\n"
     )
 
 def generate_badges_section(metrics):
-    md = "### Real-Time Badges\n- Summarizes individual control statuses with dynamic updates.\n"
-    md += '<div style="text-align:center;">\n'
+    md = "### Real-Time Badges\n- Summarizes control statuses.\n<div style='text-align:center;'>\n"
     for control, _, _ in metrics:
         md += f'  <img src="{BADGE_DIR}/{control}.svg" alt="{control}" style="height:20px; margin:2px;"/>\n'
     md += "</div>\n\n"
     return md
 
 def generate_table_section(metrics):
-    md = "### 🗂 Metrics Table\n"
-    md += "| Control | Domain | Score (%) |\n"
-    md += "|---------|--------|-----------|\n"
+    md = "### 🗂 Metrics Table\n| Control | Domain | Score (%) |\n|---------|--------|-----------|\n"
     for control, domain, score in metrics:
         md += f"| {control} | {domain} | {score} |\n"
-    md += "\n"
-    return md
+    return md + "\n"
 
 def generate_color_codes_box():
-    return """
-## 🚦 Color Codes
-
-| Color    | Meaning                                  |
-|----------|-----------------------------------------|
-| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
-| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
-| 🟢 Green | Healthy (80-100%)                        |
-| 🔵 Blue  | Compliant / Covered ISO                  |
-"""
+    return (
+        "## 🚦 Color Codes\n\n"
+        "| Color    | Meaning |\n"
+        "|----------|---------|\n"
+        "| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |\n"
+        "| 🟠 Orange| Warning (60-79%) / Partial / In Progress |\n"
+        "| 🟢 Green | Healthy (80-100%) |\n"
+        "| 🔵 Blue  | Compliant / Covered ISO |\n"
+    )
 
 def update_readme():
     with open(README_PATH, "r", encoding="utf-8") as f:
         lines = f.readlines()
 
     metrics = fetch_metrics()
-
-    graphs_sec = generate_graphs_section()
-    badges_sec = generate_badges_section(metrics)
-    table_sec = generate_table_section(metrics)
-    color_codes_box = generate_color_codes_box()
-
-    # Find section boundaries for dashboards
-    start = None
-    end = None
-    for i, line in enumerate(lines):
-        if line.strip() == "## 📊 Dashboards and Badges":
-            start = i
-            break
-    if start is None:
-        raise RuntimeError("Could not find '## 📊 Dashboards and Badges' in README.md")
-
-    for j in range(start + 1, len(lines)):
-        if lines[j].startswith("## ") and j > start:
-            end = j
-            break
-    if end is None:
-        end = len(lines)
-
     new_section = (
         "## 📊 Dashboards and Badges\n\n"
-        + graphs_sec
-        + badges_sec
-        + table_sec
-        + color_codes_box
+        + generate_graphs_section()
+        + generate_badges_section(metrics)
+        + generate_table_section(metrics)
+        + generate_color_codes_box()
     )
 
+    # Replace old section
+    start = next((i for i, line in enumerate(lines) if line.strip() == "## 📊 Dashboards and Badges"), None)
+    if start is None:
+        raise RuntimeError("Could not find '## 📊 Dashboards and Badges' in README.md")
+    end = next((i for i in range(start + 1, len(lines)) if lines[i].startswith("## ")), len(lines))
     updated_lines = lines[:start] + [new_section] + lines[end:]
 
     with open(README_PATH, "w", encoding="utf-8") as f:
