@@ -57,7 +57,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 ## 📊 Security Dashboard 🗂️
 
-### Latest Zero Trust & ISO 27001 Data
+### Latest Zero Trust Posture
 - Updated daily, showing actionable insight for analysts and leadership.
 <div style="text-align:center;">
   <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" style="display:block; margin: 10px auto;"/>
@@ -82,15 +82,15 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.5.1 | InfoSec Policies | 73 |
-| A.6.1 | Org InfoSec | 66 |
-| A.8.2 | Risk Management | 8 |
-| A.9.2 | Access Control | 9 |
-| Application | Application | 32 |
-| Data | Data | 9 |
-| Device | Device | 96 |
-| Identity | Identity | 51 |
-| Network | Network | 20 |
+| A.5.1 | InfoSec Policies | 1 |
+| A.6.1 | Org InfoSec | 83 |
+| A.8.2 | Risk Management | 1 |
+| A.9.2 | Access Control | 18 |
+| Application | Application | 77 |
+| Data | Data | 40 |
+| Device | Device | 36 |
+| Identity | Identity | 82 |
+| Network | Network | 80 |
 
 ## 🚦 Color Codes
 
