@@ -1,9 +1,9 @@
-name: ZeroTrust Dashboard Update
+name: Update Zero Trust Dashboard
 
 on:
   schedule:
-    - cron: "0 0,12 * * *"  # auto update twice daily at 00:00 and 12:00 UTC
-  workflow_dispatch:       # allows manual runs
+    - cron: "0 */12 * * *"  # every 12 hours
+  workflow_dispatch:         # allows manual trigger
 
 jobs:
   update-dashboard:
@@ -23,19 +23,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install matplotlib pybadges
 
-      - name: Generate graphs
-        run: python scripts/generate_graphs.py
+      - name: Create / update SQLite DB
+        run: |
+          python scripts/create_controls_db.py
 
       - name: Generate badges
-        run: python scripts/generate_badges.py
+        run: |
+          python scripts/generate_badges.py
+
+      - name: Generate graphs
+        run: |
+          python scripts/generate_graphs.py
 
       - name: Update README
-        run: python scripts/update_readme.py
+        run: |
+          python scripts/update_readme.py
 
-      - name: Commit and push updates
+      - name: Commit & push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md outputs/graphs/*.png outputs/badges/*.svg
-          git commit -m "Auto-update dashboard, graphs, and badges" || echo "No changes to commit"
+          git add README.md outputs/graphs outputs/badges
+          git commit -m "Automated dashboard update" || echo "No changes to commit"
           git push
