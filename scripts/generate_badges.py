@@ -10,9 +10,11 @@ os.makedirs(BADGE_DIR, exist_ok=True)
 # Database path
 DB_PATH = "data/controls.db"
 
-# Define ISO controls + Zero Trust domains
-ALL_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2",
-                "Application", "Data", "Device", "Identity", "Network"]
+# Define all controls: ISO + Zero Trust domains
+ALL_CONTROLS = [
+    "A.5.1", "A.6.1", "A.8.2", "A.9.2",
+    "Application", "Data", "Device", "Identity", "Network"
+]
 
 # Connect to DB and fetch scores
 conn = sqlite3.connect(DB_PATH)
