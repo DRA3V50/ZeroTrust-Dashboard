@@ -60,8 +60,8 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ### Latest Zero Trust Posture
 - Updated daily, showing actionable insight for analysts and leadership.
 <div style="text-align:center;">
-  <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" style="display:block; margin: 0 auto 15px auto;"/>
-  <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="80%" style="display:block; margin: 0 auto;"/>
+  <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" style="display:block; margin: 10px auto;"/>
+  <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="80%" style="display:block; margin: 10px auto;"/>
 </div>
 
 ### Real-Time Badges
@@ -81,17 +81,25 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.5.1 | InfoSec Policies | 87 |
-| A.6.1 | Org InfoSec | 60 |
-| A.8.2 | Risk Management | 81 |
-| A.9.2 | Access Control | 73 |
-| Application | Application | 24 |
-| Data | Data | 56 |
-| Device | Device | 53 |
-| Identity | Identity | 88 |
-| Network | Network | 58 |
+| A.5.1 | InfoSec Policies | 55 |
+| A.6.1 | Org InfoSec | 2 |
+| A.8.2 | Risk Management | 43 |
+| A.9.2 | Access Control | 81 |
+| Application | Application | 75 |
+| Data | Data | 69 |
+| Device | Device | 78 |
+| Identity | Identity | 68 |
+| Network | Network | 47 |
 
 
+## 🚦 Color Codes
+
+| Color    | Meaning                                  |
+|----------|-----------------------------------------|
+| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
+| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
+| 🟢 Green | Healthy (80-100%)                        |
+| 🔵 Blue  | Compliant / Covered ISO                  |
 ## 🚦 Color Codes
 
 | Color    | Meaning                                  |
