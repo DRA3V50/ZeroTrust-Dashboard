@@ -22,8 +22,10 @@ def generate_graphs_section():
         "### Latest Zero Trust Posture\n"
         "- Updated daily, showing actionable insight for analysts and leadership.\n"
         f'<div style="text-align:center;">\n'
-        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" style="display:block; margin: 0 auto 15px auto;"/>\n'
-        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="80%" style="display:block; margin: 0 auto;"/>\n'
+        f'  <img src="{GRAPH_DIR}/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" '
+        'style="display:block; margin: 10px auto;"/>\n'
+        f'  <img src="{GRAPH_DIR}/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="80%" '
+        'style="display:block; margin: 10px auto;"/>\n'
         "</div>\n\n"
     )
 
@@ -76,6 +78,7 @@ def update_readme():
     if start is None:
         raise RuntimeError("Could not find '## 📊 Dashboards and Badges' in README.md")
 
+    # Find next section header after start (to mark end of current section)
     for j in range(start + 1, len(lines)):
         if lines[j].startswith("## ") and j > start:
             end = j
@@ -83,6 +86,7 @@ def update_readme():
     if end is None:
         end = len(lines)
 
+    # Replace entire section with new content
     new_section = (
         "## 📊 Dashboards and Badges\n\n"
         + graphs_sec
