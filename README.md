@@ -8,7 +8,7 @@ The **Zero Trust Dashboard** provides a visual and automated view of your organi
 
 ---
 
-## 🗃️ Overview
+## 🔍 Overview
 
 The **Zero Trust Dashboard** provides an automated, real-time view of an organization's **Zero Trust security posture** and **ISO 27001 compliance**. It leverages **Python**, **SQLite**, and **GitHub Actions** to automatically update metrics, reports, badges, and visualizations twice daily.
 
@@ -55,17 +55,25 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 ---
 
-## 📊 Dashboards and Badges
+## 📊 Security Dashboard 🗂️
 
-### Latest Zero Trust Posture
-- Updated daily, showing actionable insight for analysts and leadership.
+### **Latest Zero Trust Posture**  
+- **Provides a visual summary of your organization’s Zero Trust security posture and ISO 27001 compliance.**  
+- **Graphs update automatically twice daily**, showing the current state of each domain and key control coverage.  
+- Designed for **analysts, security teams, and leadership** to quickly identify weak points and track improvements over time.  
+
 <div style="text-align:center;">
   <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" style="display:block; margin: 10px auto;"/>
   <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="80%" style="display:block; margin: 10px auto;"/>
 </div>
 
-### Real-Time Badges
-- Summarizes individual control statuses with dynamic updates.
+---
+
+### **Real-Time Badges**  
+- **Displays the current score/status of each control or domain as dynamic badges**, updated automatically whenever metrics change.  
+- **Green, orange, and red colors** provide immediate visual insight into compliance and risk levels.  
+- Helps teams **prioritize remediation and monitor trends** at a glance.  
+
 <div style="text-align:center;">
   <img src="outputs/badges/A.5.1.svg" alt="A.5.1" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
@@ -78,7 +86,8 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
   <img src="outputs/badges/Network.svg" alt="Network" style="height:20px; margin:2px;"/>
 </div>
 
-### 🗂 Metrics Table
+
+### 📋 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
 | A.5.1 | InfoSec Policies | 55 |
