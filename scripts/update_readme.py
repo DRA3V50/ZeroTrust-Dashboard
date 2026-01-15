@@ -8,6 +8,8 @@ BADGE_DIR = "outputs/badges"
 DB_PATH = "data/controls.db"
 
 ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
+ZERO_TRUST_DOMAINS = ["Application", "Data", "Device", "Identity", "Network"]
+ALL_CONTROLS = ISO_CONTROLS + ZERO_TRUST_DOMAINS
 
 def fetch_metrics():
     conn = sqlite3.connect(DB_PATH)
@@ -30,10 +32,23 @@ def generate_graphs_section():
     )
 
 def generate_badges_section(metrics):
+    """
+    Generate badges section with Zero Trust badges on top and ISO badges below.
+    """
     md = "### Real-Time Badges\n- Summarizes individual control statuses with dynamic updates.\n"
     md += '<div style="text-align:center;">\n'
-    for control, _, _ in metrics:
+
+    # First row: Zero Trust badges
+    for control in ZERO_TRUST_DOMAINS:
         md += f'  <img src="{BADGE_DIR}/{control}.svg" alt="{control}" style="height:20px; margin:2px;"/>\n'
+
+    # Line break between rows
+    md += '  <br/>\n'
+
+    # Second row: ISO badges
+    for control in ISO_CONTROLS:
+        md += f'  <img src="{BADGE_DIR}/{control}.svg" alt="{control}" style="height:20px; margin:2px;"/>\n'
+
     md += "</div>\n\n"
     return md
 
@@ -86,7 +101,8 @@ def update_readme():
     with open(README_PATH, "w", encoding="utf-8") as f:
         f.writelines(updated_lines)
 
-    print("README.md updated with latest graphs, badges, and table (Color Codes removed from dynamic update).")
+    print("README.md updated with latest graphs, badges (Zero Trust on top, ISO below), and table.")
 
 if __name__ == "__main__":
     update_readme()
+
