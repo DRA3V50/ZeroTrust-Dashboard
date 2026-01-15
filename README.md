@@ -71,17 +71,35 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
   <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/A.8.2.svg" alt="A.8.2" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/A.9.2.svg" alt="A.9.2" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/Application.svg" alt="Application" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/Data.svg" alt="Data" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/Device.svg" alt="Device" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/Identity.svg" alt="Identity" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/Network.svg" alt="Network" style="height:20px; margin:2px;"/>
 </div>
 
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.5.1 | InfoSec Policies | 87 |
-| A.6.1 | Org InfoSec | 92 |
-| A.8.2 | Risk Management | 79 |
-| A.9.2 | Access Control | 85 |
+| A.5.1 | InfoSec Policies | 53 |
+| A.6.1 | Org InfoSec | 10 |
+| A.8.2 | Risk Management | 48 |
+| A.9.2 | Access Control | 96 |
+| Application | Application | 58 |
+| Data | Data | 40 |
+| Device | Device | 73 |
+| Identity | Identity | 50 |
+| Network | Network | 72 |
 
 
+## 🚦 Color Codes
+
+| Color    | Meaning                                  |
+|----------|-----------------------------------------|
+| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
+| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
+| 🟢 Green | Healthy (80-100%)                        |
+| 🔵 Blue  | Compliant / Covered ISO                  |
 ## 🚦 Color Codes
 
 | Color    | Meaning                                  |
