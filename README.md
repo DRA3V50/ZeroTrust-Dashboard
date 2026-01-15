@@ -60,8 +60,8 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ### Latest Zero Trust Posture
 - Updated daily, showing actionable insight for analysts and leadership.
 <div style="text-align:center;">
-  <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="60%" style="display:inline-block; margin-right:10px;"/>
-  <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="35%" style="display:inline-block;"/>
+  <img src="outputs/graphs/zero_trust_posture.png" alt="Zero Trust Scores" width="80%" style="display:block; margin: 0 auto 15px auto;"/>
+  <img src="outputs/graphs/iso_27001_coverage.png" alt="ISO 27001 Coverage" width="80%" style="display:block; margin: 0 auto;"/>
 </div>
 
 ### Real-Time Badges
@@ -71,27 +71,35 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
   <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/A.8.2.svg" alt="A.8.2" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/A.9.2.svg" alt="A.9.2" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/Identity.svg" alt="Identity" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/Device.svg" alt="Device" style="height:20px; margin:2px;"/>
-  <img src="outputs/badges/Network.svg" alt="Network" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/Application.svg" alt="Application" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/Data.svg" alt="Data" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/Device.svg" alt="Device" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/Identity.svg" alt="Identity" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/Network.svg" alt="Network" style="height:20px; margin:2px;"/>
 </div>
 
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.5.1 | InfoSec Policies | 94 |
-| A.6.1 | Org InfoSec | 58 |
-| A.8.2 | Risk Management | 27 |
-| A.9.2 | Access Control | 24 |
-| Application | Application | 11 |
-| Data | Data | 78 |
-| Device | Device | 77 |
-| Identity | Identity | 84 |
-| Network | Network | 71 |
+| A.5.1 | InfoSec Policies | 87 |
+| A.6.1 | Org InfoSec | 60 |
+| A.8.2 | Risk Management | 81 |
+| A.9.2 | Access Control | 73 |
+| Application | Application | 24 |
+| Data | Data | 56 |
+| Device | Device | 53 |
+| Identity | Identity | 88 |
+| Network | Network | 58 |
 
 
+## 🚦 Color Codes
+
+| Color    | Meaning                                  |
+|----------|-----------------------------------------|
+| 🔴 Red   | Critical (0-59%) / Non-compliant / Missing |
+| 🟠 Orange| Warning (60-79%) / Partial / In Progress   |
+| 🟢 Green | Healthy (80-100%)                        |
+| 🔵 Blue  | Compliant / Covered ISO                  |
 ## 🚦 Color Codes
 
 | Color    | Meaning                                  |
