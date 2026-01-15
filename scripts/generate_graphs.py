@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import sqlite3
 import os
+import matplotlib
+matplotlib.use("Agg")  # Headless
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
@@ -24,51 +26,30 @@ domain_scores = {row[1]: row[2] for row in rows if row[1] in ZERO_TRUST_DOMAINS}
 # Zero Trust Graph
 plt.style.use('dark_background')
 fig, ax = plt.subplots(figsize=(10,5))
-
-colors = []
-scores_list = []
-for domain in ZERO_TRUST_DOMAINS:
-    score = domain_scores.get(domain, 0)
-    scores_list.append(score)
-    if score < 60:
-        colors.append("#FF4136")
-    elif score < 80:
-        colors.append("#FF851B")
-    else:
-        colors.append("#2ECC40")
-
-ax.bar(ZERO_TRUST_DOMAINS, scores_list, color=colors)
-ax.set_ylim(0, 100)
+scores = [domain_scores.get(d, 0) for d in ZERO_TRUST_DOMAINS]
+colors = ["#FF4136" if s < 60 else "#FF851B" if s < 80 else "#2ECC40" for s in scores]
+ax.bar(ZERO_TRUST_DOMAINS, scores, color=colors)
+ax.set_ylim(0,100)
 ax.set_ylabel("Score (%)")
 ax.set_title("Zero Trust Posture")
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
-for i, v in enumerate(scores_list):
-    ax.text(i, v + 2, str(v), ha='center', fontweight='bold')
+for i, v in enumerate(scores):
+    ax.text(i, v+2, str(v), ha='center', fontweight='bold')
 plt.tight_layout()
 plt.savefig(f"{GRAPH_DIR}/zero_trust_posture.png")
 plt.close()
 
 # ISO 27001 Graph
 fig, ax = plt.subplots(figsize=(10,5))
-iso_colors = []
-iso_scores = []
-for control in ISO_CONTROLS:
-    score = control_scores.get(control, 0)
-    iso_scores.append(score)
-    if score < 60:
-        iso_colors.append("#FF4136")
-    elif score < 80:
-        iso_colors.append("#FF851B")
-    else:
-        iso_colors.append("#0074D9")
-
+iso_scores = [control_scores.get(c,0) for c in ISO_CONTROLS]
+iso_colors = ["#FF4136" if s < 60 else "#FF851B" if s < 80 else "#0074D9" for s in iso_scores]
 ax.bar(ISO_CONTROLS, iso_scores, color=iso_colors)
-ax.set_ylim(0, 100)
+ax.set_ylim(0,100)
 ax.set_ylabel("Score (%)")
 ax.set_title("ISO 27001 Compliance Coverage")
 ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 for i, v in enumerate(iso_scores):
-    ax.text(i, v + 2, str(v), ha='center', fontweight='bold')
+    ax.text(i, v+2, str(v), ha='center', fontweight='bold')
 plt.tight_layout()
 plt.savefig(f"{GRAPH_DIR}/iso_27001_coverage.png")
 plt.close()
