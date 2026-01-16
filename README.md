@@ -27,7 +27,7 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 
 ---
 
-## 📊 Key Metrics
+## 📋 Key Metrics
 
 ### Zero Trust Domains
 - **Identity** - Ensures secure access and user verification.  
