@@ -77,20 +77,22 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
   <img src="outputs/badges/A.6.1.svg" alt="A.6.1" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/A.8.2.svg" alt="A.8.2" style="height:20px; margin:2px;"/>
   <img src="outputs/badges/A.9.2.svg" alt="A.9.2" style="height:20px; margin:2px;"/>
+  <img src="outputs/badges/A.12.7.svg" alt="A.12.7" style="height:20px; margin:2px;"/>
 </div>
 
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.5.1 | InfoSec Policies | 81 |
-| A.6.1 | Org InfoSec | 80 |
-| A.8.2 | Risk Management | 32 |
-| A.9.2 | Access Control | 80 |
-| Application | Application | 2 |
-| Data | Data | 82 |
-| Device | Device | 7 |
-| Identity | Identity | 87 |
-| Network | Network | 89 |
+| A.12.7 | Technical Vulnerability Management | 89 |
+| A.5.1 | InfoSec Policies | 50 |
+| A.6.1 | Org InfoSec | 18 |
+| A.8.2 | Risk Management | 50 |
+| A.9.2 | Access Control | 36 |
+| Application | Application | 8 |
+| Data | Data | 31 |
+| Device | Device | 84 |
+| Identity | Identity | 39 |
+| Network | Network | 84 |
 
 ## 🚦 Color Codes
 
