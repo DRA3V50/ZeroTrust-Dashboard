@@ -40,7 +40,8 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 - **A.5.1** – Information Security Policies  
 - **A.6.1** – Organization of Information Security  
 - **A.8.2** – Risk Management  
-- **A.9.2** – Access Control  
+- **A.9.2** – Access Control
+- **A.12.7** - Technical Vulnerability Management  
 
 ---
 
