@@ -10,7 +10,7 @@ GRAPH_DIR = "outputs/graphs"
 BADGE_DIR = "outputs/badges"
 
 ZERO_TRUST_DOMAINS = ["Identity", "Device", "Network", "Application", "Data"]
-ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
+ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2", "A.12.7"]
 
 os.makedirs(GRAPH_DIR, exist_ok=True)
 os.makedirs(BADGE_DIR, exist_ok=True)
