@@ -7,7 +7,7 @@ GRAPH_DIR = "outputs/graphs"
 BADGE_DIR = "outputs/badges"
 DB_PATH = "data/controls.db"
 
-ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2"]
+ISO_CONTROLS = ["A.5.1", "A.6.1", "A.8.2", "A.9.2", "A.12.7"]
 ZERO_TRUST_DOMAINS = ["Application", "Data", "Device", "Identity", "Network"]
 ALL_CONTROLS = ISO_CONTROLS + ZERO_TRUST_DOMAINS
 
