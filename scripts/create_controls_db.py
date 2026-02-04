@@ -24,7 +24,8 @@ iso_controls = [
     ("A.5.1", "InfoSec Policies"),
     ("A.6.1", "Org InfoSec"),
     ("A.8.2", "Risk Management"),
-    ("A.9.2", "Access Control")
+    ("A.9.2", "Access Control"),
+    ("A.12.6", "Technical Vulnerability Management")
 ]
 
 # Zero Trust domains as "pseudo-controls" for dashboard purposes
