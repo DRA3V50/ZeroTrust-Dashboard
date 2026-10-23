@@ -61,4 +61,3 @@ for control in ALL_CONTROLS:
         f.write(badge_svg)
 
 print("All badges generated and updated successfully with ISO blue and Zero Trust green.")
-
