@@ -84,16 +84,16 @@ The **Zero Trust Dashboard** provides an automated, real-time view of an organiz
 ### 🗂 Metrics Table
 | Control | Domain | Score (%) |
 |---------|--------|-----------|
-| A.12.7 | Technical Vulnerability Management | 6 |
-| A.5.1 | InfoSec Policies | 16 |
-| A.6.1 | Org InfoSec | 44 |
-| A.8.2 | Risk Management | 94 |
-| A.9.2 | Access Control | 23 |
-| Application | Application | 79 |
-| Data | Data | 66 |
-| Device | Device | 3 |
-| Identity | Identity | 52 |
-| Network | Network | 14 |
+| A.12.7 | Technical Vulnerability Management | 98 |
+| A.5.1 | InfoSec Policies | 19 |
+| A.6.1 | Org InfoSec | 55 |
+| A.8.2 | Risk Management | 66 |
+| A.9.2 | Access Control | 42 |
+| Application | Application | 78 |
+| Data | Data | 37 |
+| Device | Device | 21 |
+| Identity | Identity | 92 |
+| Network | Network | 58 |
 
 ## 🚦 Color Codes
 
